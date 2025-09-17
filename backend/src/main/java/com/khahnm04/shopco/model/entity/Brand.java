@@ -1,18 +1,15 @@
 package com.khahnm04.shopco.model.entity;
 
-import com.khahnm04.shopco.enums.Status;
+import com.khahnm04.shopco.common.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
 import java.util.List;
 import java.util.ArrayList;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "brands")
@@ -35,19 +32,19 @@ public class Brand extends BaseEntity {
     @Column(name = "website")
     private String website;
 
-    @ColumnDefault("'Vietnam'")
     @Column(name = "country")
     private String country;
 
     @Column(name = "short_description", length = 500)
     private String shortDescription;
 
+    @Lob
     @Column(name = "description")
     private String description;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status = Status.ACTIVE;
+    private Status status;
 
     @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Product> products = new ArrayList<>();

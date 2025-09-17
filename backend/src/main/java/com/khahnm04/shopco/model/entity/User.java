@@ -1,7 +1,7 @@
 package com.khahnm04.shopco.model.entity;
 
-import com.khahnm04.shopco.enums.Gender;
-import com.khahnm04.shopco.enums.Status;
+import com.khahnm04.shopco.common.Gender;
+import com.khahnm04.shopco.common.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -54,7 +54,7 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private Status status = Status.ACTIVE;
+    private UserStatus status = UserStatus.ACTIVE;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserAddress> userAddresses = new ArrayList<>();

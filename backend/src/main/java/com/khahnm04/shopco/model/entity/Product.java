@@ -1,6 +1,6 @@
 package com.khahnm04.shopco.model.entity;
 
-import com.khahnm04.shopco.enums.Status;
+import com.khahnm04.shopco.common.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

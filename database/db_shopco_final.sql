@@ -70,6 +70,13 @@ CREATE TABLE brands (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+ALTER TABLE brands
+    MODIFY country VARCHAR(255) NOT NULL,
+    MODIFY short_description VARCHAR(500) NOT NULL,
+    MODIFY description TEXT NOT NULL;
+ALTER TABLE brands MODIFY COLUMN status ENUM('ACTIVE','INACTIVE') DEFAULT 'ACTIVE';
+UPDATE brands SET status = UPPER(status);
+SET SQL_SAFE_UPDATES = 0;
 
 -- CATEGORIES
 CREATE TABLE categories (
@@ -178,3 +185,12 @@ CREATE TABLE orders_details (
     CONSTRAINT fk_orders_details_orders_id FOREIGN KEY (order_id) REFERENCES orders(id),
     CONSTRAINT fk_orders_details_products_variants_id FOREIGN KEY (product_variant_id) REFERENCES products_variants(id)
 );
+
+ALTER TABLE brands MODIFY COLUMN description TEXT;
+
+/*
+Hibernate: alter table brands modify column description varchar(255)
+Hibernate: alter table categories modify column description varchar(255)
+Hibernate: alter table orders modify column note varchar(255)
+Hibernate: alter table products modify column description varchar(255)
+*/

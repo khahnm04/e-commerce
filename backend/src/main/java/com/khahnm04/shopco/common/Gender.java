@@ -1,4 +1,4 @@
-package com.khahnm04.shopco.enums;
+package com.khahnm04.shopco.common;
 
 public enum Gender {
 
