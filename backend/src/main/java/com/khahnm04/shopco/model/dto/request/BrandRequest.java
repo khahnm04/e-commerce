@@ -1,7 +1,7 @@
 package com.khahnm04.shopco.model.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.khahnm04.shopco.common.Status;
+import com.khahnm04.shopco.common.enums.Status;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 

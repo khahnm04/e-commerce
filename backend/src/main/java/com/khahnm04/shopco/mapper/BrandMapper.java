@@ -11,7 +11,7 @@ public interface BrandMapper {
 
     @Mapping(
         target = "status",
-        expression = "java(request.getStatus() != null ? request.getStatus() : com.khahnm04.shopco.common.Status.ACTIVE)"
+        expression = "java(request.getStatus() != null ? request.getStatus() : com.khahnm04.shopco.common.enums.Status.ACTIVE)"
     )
     Brand toBrand(BrandRequest request);
 

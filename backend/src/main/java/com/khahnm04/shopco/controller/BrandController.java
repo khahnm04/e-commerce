@@ -20,10 +20,10 @@ public class BrandController {
     public ApiResponse<BrandResponse> createBrand(
         @Valid @ModelAttribute BrandRequest request,
         @RequestPart(value = "logo_url", required = false) MultipartFile logoFile
-    ) throws Exception {
-        ApiResponse<BrandResponse> response = new ApiResponse<>();
-        response.setResult(brandService.createBrand(request, logoFile));
-        return response;
+    ) {
+        return ApiResponse.<BrandResponse>builder()
+                .result(brandService.createBrand(request, logoFile))
+                .build();
     }
 
 }
