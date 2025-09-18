@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,10 +20,47 @@ public class BrandController {
     @PostMapping(consumes = {"multipart/form-data"})
     public ApiResponse<BrandResponse> createBrand(
         @Valid @ModelAttribute BrandRequest request,
-        @RequestPart(value = "logo_url", required = false) MultipartFile logoFile
+        @RequestPart(value = "logo_url", required = false) MultipartFile file
     ) {
         return ApiResponse.<BrandResponse>builder()
-                .result(brandService.createBrand(request, logoFile))
+                .result(brandService.createBrand(request, file))
+                .build();
+    }
+
+    @GetMapping("/{slug}")
+    public ApiResponse<BrandResponse> getBrand(
+        @PathVariable String slug
+    ) {
+        return ApiResponse.<BrandResponse>builder()
+                .result(brandService.getBrand(slug))
+                .build();
+    }
+
+    @GetMapping("")
+    public ApiResponse<List<BrandResponse>> getBrands() {
+        return ApiResponse.<List<BrandResponse>>builder()
+                .result(brandService.getBrands())
+                .build();
+    }
+
+    @PutMapping("/{slug}")
+    public ApiResponse<BrandResponse> updateBrand(
+        @PathVariable String slug,
+        @ModelAttribute BrandRequest request,
+        @RequestPart(value = "logo_url", required = false) MultipartFile file
+    ) {
+        return ApiResponse.<BrandResponse>builder()
+                .result(brandService.updateBrand(slug, request, file))
+                .build();
+    }
+
+    @DeleteMapping("/{slug}")
+    public ApiResponse<BrandResponse> deleteBrand(
+        @PathVariable String slug
+    ) {
+        brandService.deleteBrand(slug);
+        return ApiResponse.<BrandResponse>builder()
+                .message("Brand deleted successfully")
                 .build();
     }
 

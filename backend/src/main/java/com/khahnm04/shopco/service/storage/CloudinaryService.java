@@ -1,4 +1,4 @@
-package com.khahnm04.shopco.service.cloudinary;
+package com.khahnm04.shopco.service.storage;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

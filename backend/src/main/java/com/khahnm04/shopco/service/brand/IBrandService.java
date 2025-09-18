@@ -9,12 +9,12 @@ public interface IBrandService {
 
     BrandResponse createBrand(BrandRequest request, MultipartFile logoFile);
 
-    BrandResponse getBrand(Integer id);
+    BrandResponse getBrand(String slug);
 
     List<BrandResponse> getBrands();
 
-    BrandResponse updateBrand(Integer id, BrandRequest request);
+    BrandResponse updateBrand(String slug, BrandRequest request, MultipartFile logoFile);
 
-    BrandResponse deleteBrand(Integer id);
+    void deleteBrand(String slug);
 
 }
