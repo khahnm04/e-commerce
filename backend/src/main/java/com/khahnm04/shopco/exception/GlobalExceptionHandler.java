@@ -1,7 +1,7 @@
 package com.khahnm04.shopco.exception;
 
-import com.khahnm04.shopco.common.enums.ErrorCode;
-import com.khahnm04.shopco.model.dto.response.ApiResponse;
+import com.khahnm04.shopco.enums.ErrorCode;
+import com.khahnm04.shopco.dto.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;

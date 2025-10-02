@@ -1,8 +1,8 @@
 package com.khahnm04.shopco.mapper;
 
-import com.khahnm04.shopco.model.dto.request.BrandRequest;
-import com.khahnm04.shopco.model.dto.response.BrandResponse;
-import com.khahnm04.shopco.model.entity.Brand;
+import com.khahnm04.shopco.dto.request.BrandRequest;
+import com.khahnm04.shopco.dto.response.BrandResponse;
+import com.khahnm04.shopco.entity.Brand;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
@@ -10,7 +10,7 @@ public interface BrandMapper {
 
     @Mapping(
         target = "status",
-        expression = "java(request.getStatus() != null ? request.getStatus() : com.khahnm04.shopco.common.enums.Status.ACTIVE)"
+        expression = "java(request.getStatus() != null ? request.getStatus() : com.khahnm04.shopco.enums.Status.ACTIVE)"
     )
     Brand toBrand(BrandRequest request);
 

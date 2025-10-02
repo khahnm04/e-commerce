@@ -1,6 +1,6 @@
 package com.khahnm04.shopco.exception;
 
-import com.khahnm04.shopco.common.enums.ErrorCode;
+import com.khahnm04.shopco.enums.ErrorCode;
 import lombok.Getter;
 import lombok.Setter;
 

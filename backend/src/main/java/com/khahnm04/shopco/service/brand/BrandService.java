@@ -1,12 +1,12 @@
 package com.khahnm04.shopco.service.brand;
 
-import com.khahnm04.shopco.common.enums.ErrorCode;
-import com.khahnm04.shopco.common.enums.Status;
+import com.khahnm04.shopco.enums.ErrorCode;
+import com.khahnm04.shopco.enums.Status;
 import com.khahnm04.shopco.exception.AppException;
 import com.khahnm04.shopco.mapper.BrandMapper;
-import com.khahnm04.shopco.model.dto.request.BrandRequest;
-import com.khahnm04.shopco.model.dto.response.BrandResponse;
-import com.khahnm04.shopco.model.entity.Brand;
+import com.khahnm04.shopco.dto.request.BrandRequest;
+import com.khahnm04.shopco.dto.response.BrandResponse;
+import com.khahnm04.shopco.entity.Brand;
 import com.khahnm04.shopco.repository.BrandRepository;
 import com.khahnm04.shopco.service.storage.IFileUploadService;
 import lombok.RequiredArgsConstructor;

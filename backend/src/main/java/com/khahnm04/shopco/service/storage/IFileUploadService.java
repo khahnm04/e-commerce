@@ -6,4 +6,6 @@ public interface IFileUploadService {
 
     String uploadFile(MultipartFile file, String folder);
 
+    String uploadFileIfPresent(MultipartFile file, String folder);
+
 }

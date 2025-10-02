@@ -1,7 +1,7 @@
 package com.khahnm04.shopco.service.brand;
 
-import com.khahnm04.shopco.model.dto.request.BrandRequest;
-import com.khahnm04.shopco.model.dto.response.BrandResponse;
+import com.khahnm04.shopco.dto.request.BrandRequest;
+import com.khahnm04.shopco.dto.response.BrandResponse;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 

@@ -1,8 +1,8 @@
 package com.khahnm04.shopco.controller;
 
-import com.khahnm04.shopco.model.dto.request.BrandRequest;
-import com.khahnm04.shopco.model.dto.response.ApiResponse;
-import com.khahnm04.shopco.model.dto.response.BrandResponse;
+import com.khahnm04.shopco.dto.request.BrandRequest;
+import com.khahnm04.shopco.dto.response.ApiResponse;
+import com.khahnm04.shopco.dto.response.BrandResponse;
 import com.khahnm04.shopco.service.brand.IBrandService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

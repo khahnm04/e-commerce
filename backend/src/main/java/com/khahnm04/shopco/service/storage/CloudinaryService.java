@@ -14,14 +14,19 @@ public class CloudinaryService implements IFileUploadService {
 
     public String uploadFile(MultipartFile file, String folder) {
         try {
-            var uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
-                    "folder", folder,
-                    "resource_type", "auto"
-            ));
+            var uploadResult = cloudinary.uploader()
+                    .upload(file.getBytes(), ObjectUtils.asMap(
+                            "folder", folder,
+                            "resource_type", "auto"
+                    ));
             return uploadResult.get("secure_url").toString();
         } catch (Exception e) {
             throw new RuntimeException("Failed to upload file: " + e.getMessage());
         }
+    }
+
+    public String uploadFileIfPresent(MultipartFile file, String folder) {
+        return (file == null || file.isEmpty()) ? null : uploadFile(file, folder);
     }
 
 }
