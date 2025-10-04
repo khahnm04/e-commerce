@@ -11,6 +11,7 @@ import com.khahnm04.exception.ErrorCode;
 import com.khahnm04.mapper.UserMapper;
 import com.khahnm04.repository.UserRepository;
 import com.khahnm04.service.upload.IFileUploadService;
+import com.khahnm04.util.PhoneNumberUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,7 @@ public class UserService implements IUserService {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new AppException(ErrorCode.USER_NAME_EXISTED);
         }
+        request.setPhoneNumber(PhoneNumberUtil.normalizePhoneNumber(request.getPhoneNumber()));
         request.setImage(cloudinaryService.uploadFileIfPresent(file));
         User user = userMapper.toUser(request);
         User userSaved = userRepository.save(user);

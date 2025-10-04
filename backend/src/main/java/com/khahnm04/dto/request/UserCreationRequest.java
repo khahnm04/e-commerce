@@ -2,6 +2,7 @@ package com.khahnm04.dto.request;
 
 import com.khahnm04.enums.Gender;
 import com.khahnm04.enums.Status;
+import com.khahnm04.validator.phone.PhoneNumber;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -21,6 +22,7 @@ public class UserCreationRequest implements Serializable {
 
     private String email;
 
+    @PhoneNumber
     private String phoneNumber;
 
     private String password;
