@@ -1,4 +1,4 @@
-CREATE DATABASE shopco;
+drop DATABASE shopco;
 USE shopco;
 
 -- USERS
@@ -17,6 +17,14 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+ALTER TABLE users DROP COLUMN code;
+ALTER TABLE `shopco`.`users` 
+CHANGE COLUMN `phone_number` `phone_number` VARCHAR(255) NOT NULL;
+-- ALTER gender column
+ALTER TABLE users MODIFY gender ENUM('MALE', 'FEMALE', 'OTHER') DEFAULT 'OTHER';
+-- ALTER status column
+ALTER TABLE users MODIFY status ENUM('ACTIVE', 'INACTIVE', 'BANNED') DEFAULT 'ACTIVE';
+
 
 -- PROVINCES / DISTRICTS / WARDS
 CREATE TABLE provinces (
@@ -46,8 +54,8 @@ CREATE TABLE addresses (
     CONSTRAINT fk_addresses_wards_id FOREIGN KEY (ward_id) REFERENCES wards(id)
 );
 
--- USERS_ADDRESSES (trung gian user - address)
-CREATE TABLE users_addresses (
+-- ADDRESS_USERS (trung gian user - address)
+CREATE TABLE address_users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     address_id INT NOT NULL,

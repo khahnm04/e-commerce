@@ -5,14 +5,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.5</version>
+        <version>3.5.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.khahnm04.shopco</groupId>
-    <artifactId>shopco</artifactId>
+    <groupId>com.khahnm04</groupId>
+    <artifactId>fashion-ecommerce</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>shopco</name>
-    <description>shopco</description>
+    <name>fashion-ecommerce</name>
+    <description>fashion-ecommerce</description>
     <url/>
     <licenses>
         <license/>
@@ -33,6 +33,7 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
         <spotless.version>2.43.0</spotless.version>
     </properties>
+
     <dependencies>
 
         <dependency>
