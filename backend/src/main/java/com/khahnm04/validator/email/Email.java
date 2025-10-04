@@ -1,15 +1,15 @@
-package com.khahnm04.validator.phone;
+package com.khahnm04.validator.email;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = PhoneNumberValidator.class)
+@Constraint(validatedBy = EmailValidator.class)
 @Target( { ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PhoneNumber {
-    String message() default "PHONE_NUMBER_INVALID_FORMAT";
+public @interface Email {
+    String message() default "EMAIL_INVALID_FORMAT";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

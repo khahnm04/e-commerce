@@ -2,6 +2,8 @@ package com.khahnm04.dto.request;
 
 import com.khahnm04.enums.Gender;
 import com.khahnm04.enums.Status;
+import com.khahnm04.validator.email.Email;
+import com.khahnm04.validator.password.Password;
 import com.khahnm04.validator.phone.PhoneNumber;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -20,11 +22,13 @@ public class UserCreationRequest implements Serializable {
     @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "USERNAME_INVALID_FORMAT")
     private String username;
 
+    @Email
     private String email;
 
     @PhoneNumber
     private String phoneNumber;
 
+    @Password
     private String password;
 
     private String fullName;
