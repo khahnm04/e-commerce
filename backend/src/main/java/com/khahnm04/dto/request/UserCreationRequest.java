@@ -2,9 +2,10 @@ package com.khahnm04.dto.request;
 
 import com.khahnm04.enums.Gender;
 import com.khahnm04.enums.Status;
-import com.khahnm04.validator.email.Email;
-import com.khahnm04.validator.password.Password;
-import com.khahnm04.validator.phone.PhoneNumber;
+import com.khahnm04.validation.email.ValidEmail;
+import com.khahnm04.validation.password.ValidPassword;
+import com.khahnm04.validation.phone.ValidPhoneNumber;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -18,19 +19,20 @@ import java.time.LocalDate;
 @Builder
 public class UserCreationRequest implements Serializable {
 
-    @Size(min = 3, max = 50, message = "USERNAME_INVALID_LENGTH")
-    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "USERNAME_INVALID_FORMAT")
+    @Size(min = 3, max = 50, message = "USER_NAME_INVALID_LENGTH")
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "USER_NAME_INVALID_FORMAT")
     private String username;
 
-    @Email
+    @ValidEmail
     private String email;
 
-    @PhoneNumber
+    @ValidPhoneNumber
     private String phoneNumber;
 
-    @Password
+    @ValidPassword
     private String password;
 
+    @NotBlank(message = "FULL_NAME_REQUIRED")
     private String fullName;
 
     private LocalDate dateOfBirth;

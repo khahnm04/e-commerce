@@ -5,6 +5,7 @@ import com.khahnm04.dto.request.UserUpdateRequest;
 import com.khahnm04.dto.response.UserDetailResponse;
 import com.khahnm04.dto.response.UserProfileResponse;
 import com.khahnm04.entity.User;
+import com.khahnm04.enums.Gender;
 import com.khahnm04.enums.Status;
 import com.khahnm04.exception.AppException;
 import com.khahnm04.exception.ErrorCode;
@@ -19,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class UserService implements IUserService {
 
@@ -28,8 +28,13 @@ public class UserService implements IUserService {
     private final IFileUploadService cloudinaryService;
 
     @Override
+    @Transactional
     public UserProfileResponse createUser(UserCreationRequest request, MultipartFile file) {
-        if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+        String normalizePhoneNumber = "";
+        if (request.getPhoneNumber() != null) {
+            normalizePhoneNumber = PhoneNumberUtil.normalizePhoneNumber(request.getPhoneNumber());
+        }
+        if (userRepository.existsByPhoneNumber(normalizePhoneNumber)) {
             throw new AppException(ErrorCode.PHONE_NUMBER_EXISTED);
         }
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -38,15 +43,18 @@ public class UserService implements IUserService {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new AppException(ErrorCode.USER_NAME_EXISTED);
         }
-        request.setPhoneNumber(PhoneNumberUtil.normalizePhoneNumber(request.getPhoneNumber()));
+
+        request.setPhoneNumber(normalizePhoneNumber);
         request.setImage(cloudinaryService.uploadFileIfPresent(file));
+        request.setStatus(request.getStatus() == null ? Status.ACTIVE : request.getStatus());
+        request.setGender(request.getGender() == null ? Gender.OTHER : request.getGender());
+
         User user = userMapper.toUser(request);
         User userSaved = userRepository.save(user);
         return userMapper.toUserProfileResponse(userSaved);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public UserProfileResponse getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -54,7 +62,6 @@ public class UserService implements IUserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<UserDetailResponse> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toUserDetailResponse)
@@ -62,6 +69,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public UserProfileResponse updateUser(Long id, UserUpdateRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -71,6 +79,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public void changeUserStatus(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
