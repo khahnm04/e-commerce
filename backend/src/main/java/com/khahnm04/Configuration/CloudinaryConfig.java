@@ -1,4 +1,4 @@
-package com.khahnm04.Configuration;
+package com.khahnm04.configuration;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

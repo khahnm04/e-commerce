@@ -1,11 +1,11 @@
 package com.khahnm04.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.khahnm04.dto.request.UserCreationRequest;
 import com.khahnm04.dto.request.UserUpdateRequest;
 import com.khahnm04.dto.response.ApiResponse;
 import com.khahnm04.dto.response.UserDetailResponse;
 import com.khahnm04.dto.response.UserProfileResponse;
+import com.khahnm04.enums.Status;
 import com.khahnm04.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final ObjectMapper objectMapper;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<UserProfileResponse> createUser(
@@ -60,9 +59,12 @@ public class UserController {
                 .build();
     }
 
-    @PatchMapping
-    public ApiResponse<?> changeUserStatus(Long id) {
-        userService.changeUserStatus(id);
+    @PatchMapping("/{id}")
+    public ApiResponse<?> changeUserStatus(
+        @PathVariable Long id,
+        @RequestParam("status") Status status
+    ) {
+        userService.changeUserStatus(id, status);
         return ApiResponse.builder()
                 .message("User status has been changed")
                 .build();

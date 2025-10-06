@@ -14,11 +14,14 @@ import com.khahnm04.repository.UserRepository;
 import com.khahnm04.service.upload.IFileUploadService;
 import com.khahnm04.util.PhoneNumberUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
@@ -26,6 +29,7 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final IFileUploadService cloudinaryService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -44,12 +48,13 @@ public class UserService implements IUserService {
             throw new AppException(ErrorCode.USER_NAME_EXISTED);
         }
 
-        request.setPhoneNumber(normalizePhoneNumber);
-        request.setImage(cloudinaryService.uploadFileIfPresent(file));
-        request.setStatus(request.getStatus() == null ? Status.ACTIVE : request.getStatus());
-        request.setGender(request.getGender() == null ? Gender.OTHER : request.getGender());
-
         User user = userMapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPhoneNumber(normalizePhoneNumber);
+        user.setImage(cloudinaryService.uploadFileIfPresent(file));
+        user.setStatus(request.getStatus() == null ? Status.ACTIVE : request.getStatus());
+        user.setGender(request.getGender() == null ? Gender.OTHER : request.getGender());
+
         User userSaved = userRepository.save(user);
         return userMapper.toUserProfileResponse(userSaved);
     }
@@ -80,10 +85,11 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public void changeUserStatus(Long id) {
+    public void changeUserStatus(Long id, Status status) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        user.setStatus(Status.INACTIVE);
+        user.setStatus(status);
+        log.info("user status changed to {}", status);
     }
 
 }
