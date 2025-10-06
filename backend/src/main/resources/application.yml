@@ -19,6 +19,9 @@ api:
 
 # Cloudinary Configuration
 cloudinary:
-  cloud-name: dgfldqsvl
-  api-key: 149749422811854
-  api-secret: kNpkSzGEKlMZCy0nohQ3ILHm7pw
+  cloud-name: "${CLOUD_NAME}"
+  api-key: "${API_KEY}"
+  api-secret: "${API_SECRET}"
+
+jwt:
+  signerKey: "${SIGNER_KEY}"

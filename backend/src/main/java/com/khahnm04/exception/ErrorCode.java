@@ -11,6 +11,7 @@ public enum ErrorCode {
 
     INVALID_KEY(1001, "Uncategorized error", HttpStatus.BAD_REQUEST),
     UNCATEGORIZED_EXCEPTION(1002, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
+    UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
 
     // ========== 2xxx: USER ==========
     // user

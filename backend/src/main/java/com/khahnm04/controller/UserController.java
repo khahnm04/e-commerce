@@ -6,7 +6,7 @@ import com.khahnm04.dto.response.ApiResponse;
 import com.khahnm04.dto.response.UserDetailResponse;
 import com.khahnm04.dto.response.UserProfileResponse;
 import com.khahnm04.enums.Status;
-import com.khahnm04.service.user.UserService;
+import com.khahnm04.service.user.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<UserProfileResponse> createUser(

@@ -21,7 +21,8 @@ public class SecurityConfig {
     public SecurityConfig(@Value("${api.prefix}") String apiPrefix) {
         this.PUBLIC_ENDPOINTS = new String[]{
                 apiPrefix + "/users",
-                apiPrefix + "/auth/login"
+                apiPrefix + "/auth/login",
+                apiPrefix + "/auth/introspect"
         };
     }
 
