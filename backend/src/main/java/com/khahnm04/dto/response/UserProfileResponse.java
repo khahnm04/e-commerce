@@ -14,6 +14,7 @@ import java.util.Set;
 @Builder
 public class UserProfileResponse implements Serializable {
 
+    private Long id;
     private String username;
     private String email;
     private String phoneNumber;

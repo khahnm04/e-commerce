@@ -16,6 +16,9 @@ import com.khahnm04.service.upload.IFileUploadService;
 import com.khahnm04.util.PhoneNumberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +70,15 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserDetailResponse> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(userMapper::toUserDetailResponse)
+                .toList();
+    }
+
+    @Override
+    @PostAuthorize("returnObject.phoneNumber == authentication.name")
     public UserProfileResponse getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
@@ -74,10 +86,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<UserDetailResponse> getAllUsers() {
-        return userRepository.findAll().stream()
-                .map(userMapper::toUserDetailResponse)
-                .toList();
+    public UserProfileResponse getMyInfo() {
+        var context = SecurityContextHolder.getContext();
+        String phoneNumber = context.getAuthentication().getName();
+        User user = userRepository.findByPhoneNumber(phoneNumber);
+        if (user == null) {
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        }
+        return userMapper.toUserProfileResponse(user);
     }
 
     @Override

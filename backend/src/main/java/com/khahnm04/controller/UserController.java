@@ -33,6 +33,13 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping
+    public ApiResponse<List<UserDetailResponse>> getAllUsers() {
+        return ApiResponse.<List<UserDetailResponse>>builder()
+                .data(userService.getAllUsers())
+                .build();
+    }
+
     @GetMapping("/{id}")
     public ApiResponse<UserProfileResponse> getUserById(
         @PathVariable Long id
@@ -42,10 +49,10 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping
-    public ApiResponse<List<UserDetailResponse>> getAllUsers() {
-        return ApiResponse.<List<UserDetailResponse>>builder()
-                .data(userService.getAllUsers())
+    @GetMapping("/my-info")
+    public ApiResponse<UserProfileResponse> getMyInfo() {
+        return ApiResponse.<UserProfileResponse>builder()
+                .data(userService.getMyInfo())
                 .build();
     }
 

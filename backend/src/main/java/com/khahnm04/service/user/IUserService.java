@@ -12,8 +12,9 @@ import java.util.List;
 public interface IUserService {
 
     UserProfileResponse createUser(UserCreationRequest request, MultipartFile file);
-    UserProfileResponse getUserById(Long id);
     List<UserDetailResponse> getAllUsers();
+    UserProfileResponse getUserById(Long id);
+    UserProfileResponse getMyInfo();
     UserProfileResponse updateUser(Long id, UserUpdateRequest request);
     void changeUserStatus(Long id, Status status);
 
