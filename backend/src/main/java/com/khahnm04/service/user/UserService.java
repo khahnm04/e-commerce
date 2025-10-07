@@ -6,6 +6,7 @@ import com.khahnm04.dto.response.UserDetailResponse;
 import com.khahnm04.dto.response.UserProfileResponse;
 import com.khahnm04.entity.User;
 import com.khahnm04.enums.Gender;
+import com.khahnm04.enums.Role;
 import com.khahnm04.enums.Status;
 import com.khahnm04.exception.AppException;
 import com.khahnm04.exception.ErrorCode;
@@ -19,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashSet;
 import java.util.List;
 
 @Slf4j
@@ -54,6 +57,10 @@ public class UserService implements IUserService {
         user.setImage(cloudinaryService.uploadFileIfPresent(file));
         user.setStatus(request.getStatus() == null ? Status.ACTIVE : request.getStatus());
         user.setGender(request.getGender() == null ? Gender.OTHER : request.getGender());
+
+        HashSet<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
+        user.setRoles(roles);
 
         User userSaved = userRepository.save(user);
         return userMapper.toUserProfileResponse(userSaved);

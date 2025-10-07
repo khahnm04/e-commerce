@@ -1,8 +1,8 @@
 package com.khahnm04.service.auth;
 
-import com.khahnm04.dto.request.AuthenticationRequest;
+import com.khahnm04.dto.request.AuthRequest;
 import com.khahnm04.dto.request.IntrospectRequest;
-import com.khahnm04.dto.response.AuthenticationResponse;
+import com.khahnm04.dto.response.AuthResponse;
 import com.khahnm04.dto.response.IntrospectResponse;
 import com.khahnm04.entity.User;
 import com.khahnm04.exception.AppException;
@@ -18,16 +18,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.StringJoiner;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService implements IAuthenticationService {
+public class AuthService implements IAuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -48,7 +50,7 @@ public class AuthenticationService implements IAuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse login(AuthenticationRequest request) {
+    public AuthResponse login(AuthRequest request) {
         User user = userRepository.findByPhoneNumber(request.getPhoneNumber());
         if (user == null) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
@@ -57,23 +59,23 @@ public class AuthenticationService implements IAuthenticationService {
         if (!checkPassword) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
-        var token = generateToken(request.getPhoneNumber());
-        return AuthenticationResponse.builder()
+        var token = generateToken(user);
+        return AuthResponse.builder()
                 .token(token)
                 .authenticated(true)
                 .build();
     }
 
-    private String generateToken(String phoneNumber) {
+    private String generateToken(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(phoneNumber)
+                .subject(user.getPhoneNumber())
                 .issuer("khahnm04.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
-                .claim("userID","Custom")
+                .claim("scope", buildScope(user))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
         JWSObject jwsObject = new JWSObject(header,payload);
@@ -84,6 +86,14 @@ public class AuthenticationService implements IAuthenticationService {
             log.error("Cannot create token", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private String buildScope(User user) {
+        StringJoiner scope = new StringJoiner(" ");
+        if (!CollectionUtils.isEmpty(user.getRoles())) {
+            user.getRoles().forEach(scope::add);
+        }
+        return scope.toString();
     }
 
 }

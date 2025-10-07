@@ -5,9 +5,9 @@ import com.khahnm04.enums.Status;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,5 +22,6 @@ public class UserProfileResponse implements Serializable {
     private Gender gender;
     private String image;
     private Status status;
+    private Set<String> roles;
 
 }

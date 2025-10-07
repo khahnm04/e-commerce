@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationResponse {
+public class AuthResponse {
 
     private String token;
     private boolean authenticated;

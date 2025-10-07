@@ -5,10 +5,10 @@ import com.khahnm04.enums.Status;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -26,5 +26,6 @@ public class UserDetailResponse implements Serializable {
     private Instant lastLoginAt;
     private Instant createdAt;
     private Instant updatedAt;
+    private Set<String> roles;
 
 }
