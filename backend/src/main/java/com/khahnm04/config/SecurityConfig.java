@@ -43,16 +43,19 @@ public class SecurityConfig {
         http
             .sessionManagement(session ->
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
             .authorizeHttpRequests(request ->
                     request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                            //.requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole(Role.ADMIN.name())
-                            .anyRequest().authenticated());
-        http.oauth2ResourceServer(oauth2 ->
+                            .anyRequest().authenticated())
+
+            .oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer -> jwtConfigurer
                         .decoder(jwtDecoder())
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter())
-                ));
-        http.csrf(AbstractHttpConfigurer::disable);
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())) // Catch exception when Unauthenticated
+
+            .csrf(AbstractHttpConfigurer::disable);
+
         return http.build();
     }
 
