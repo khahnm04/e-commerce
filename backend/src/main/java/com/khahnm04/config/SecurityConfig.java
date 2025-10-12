@@ -1,6 +1,6 @@
 package com.khahnm04.config;
 
-import com.khahnm04.enums.Role;
+import com.khahnm04.exception.JwtAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

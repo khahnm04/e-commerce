@@ -1,4 +1,4 @@
-package com.khahnm04.service.upload;
+package com.khahnm04.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-public class CloudinaryService implements IFileUploadService {
+public class CloudinaryService {
 
     private final Cloudinary cloudinary;
 

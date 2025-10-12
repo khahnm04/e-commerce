@@ -1,4 +1,4 @@
-package com.khahnm04.enums;
+package com.khahnm04.constant;
 
 public enum Role {
     ADMIN,

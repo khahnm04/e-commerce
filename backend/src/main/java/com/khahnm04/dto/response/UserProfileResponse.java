@@ -1,7 +1,8 @@
 package com.khahnm04.dto.response;
 
-import com.khahnm04.enums.Gender;
-import com.khahnm04.enums.Status;
+import com.khahnm04.constant.Gender;
+import com.khahnm04.constant.Status;
+import com.khahnm04.entity.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,6 @@ public class UserProfileResponse implements Serializable {
     private Gender gender;
     private String image;
     private Status status;
-    private Set<String> roles;
+    private Set<Role> roles;
 
 }

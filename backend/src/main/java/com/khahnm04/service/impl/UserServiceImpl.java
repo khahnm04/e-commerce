@@ -1,18 +1,19 @@
-package com.khahnm04.service.user;
+package com.khahnm04.service.impl;
 
 import com.khahnm04.dto.request.UserCreationRequest;
 import com.khahnm04.dto.request.UserUpdateRequest;
 import com.khahnm04.dto.response.UserDetailResponse;
 import com.khahnm04.dto.response.UserProfileResponse;
 import com.khahnm04.entity.User;
-import com.khahnm04.enums.Gender;
-import com.khahnm04.enums.Role;
-import com.khahnm04.enums.Status;
+import com.khahnm04.constant.Gender;
+import com.khahnm04.constant.Role;
+import com.khahnm04.constant.Status;
 import com.khahnm04.exception.AppException;
 import com.khahnm04.exception.ErrorCode;
 import com.khahnm04.mapper.UserMapper;
 import com.khahnm04.repository.UserRepository;
-import com.khahnm04.service.upload.IFileUploadService;
+import com.khahnm04.service.CloudinaryService;
+import com.khahnm04.service.UserService;
 import com.khahnm04.util.PhoneNumberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +31,11 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserService implements IUserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final IFileUploadService cloudinaryService;
+    private final CloudinaryService cloudinaryService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -63,7 +64,7 @@ public class UserService implements IUserService {
 
         HashSet<String> roles = new HashSet<>();
         roles.add(Role.USER.name());
-        user.setRoles(roles);
+        //user.setRoles(roles);
 
         User userSaved = userRepository.save(user);
         return userMapper.toUserProfileResponse(userSaved);

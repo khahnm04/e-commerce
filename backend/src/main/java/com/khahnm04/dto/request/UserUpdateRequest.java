@@ -1,7 +1,7 @@
 package com.khahnm04.dto.request;
 
-import com.khahnm04.enums.Gender;
-import com.khahnm04.enums.Status;
+import com.khahnm04.constant.Gender;
+import com.khahnm04.constant.Status;
 
 import java.io.Serializable;
 import java.time.LocalDate;

@@ -1,7 +1,7 @@
 package com.khahnm04.dto.request;
 
-import com.khahnm04.enums.Gender;
-import com.khahnm04.enums.Status;
+import com.khahnm04.constant.Gender;
+import com.khahnm04.constant.Status;
 import com.khahnm04.validation.email.ValidEmail;
 import com.khahnm04.validation.password.ValidPassword;
 import com.khahnm04.validation.phone.ValidPhoneNumber;

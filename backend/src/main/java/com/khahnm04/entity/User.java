@@ -1,9 +1,8 @@
 package com.khahnm04.entity;
 
-import com.khahnm04.enums.Gender;
-import com.khahnm04.enums.Status;
+import com.khahnm04.constant.Gender;
+import com.khahnm04.constant.Status;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.Instant;
@@ -53,6 +52,7 @@ public class User extends BaseEntity {
     @Column(name = "last_login_at")
     private Instant lastLoginAt;
 
-    private Set<String> roles;
+    @ManyToMany
+    private Set<Role> roles;
 
 }

@@ -1,7 +1,7 @@
 package com.khahnm04.config;
 
 import com.khahnm04.entity.User;
-import com.khahnm04.enums.Role;
+import com.khahnm04.constant.Role;
 import com.khahnm04.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class ApplicationInitConfig {
                 user.setUsername("admin");
                 user.setFullName("admin");
                 user.setPhoneNumber("0811111111");
-                user.setRoles(roles);
+                //user.setRoles(roles);
                 user.setPassword(passwordEncoder.encode("admin"));
 
                 userRepository.save(user);

@@ -1,8 +1,7 @@
-package com.khahnm04.config;
+package com.khahnm04.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.khahnm04.dto.response.ApiResponse;
-import com.khahnm04.exception.ErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

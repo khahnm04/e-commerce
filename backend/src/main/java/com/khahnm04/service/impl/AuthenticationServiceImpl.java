@@ -1,13 +1,14 @@
-package com.khahnm04.service.auth;
+package com.khahnm04.service.impl;
 
-import com.khahnm04.dto.request.AuthRequest;
+import com.khahnm04.dto.request.AuthenticationRequest;
 import com.khahnm04.dto.request.IntrospectRequest;
-import com.khahnm04.dto.response.AuthResponse;
+import com.khahnm04.dto.response.AuthenticationResponse;
 import com.khahnm04.dto.response.IntrospectResponse;
 import com.khahnm04.entity.User;
 import com.khahnm04.exception.AppException;
 import com.khahnm04.exception.ErrorCode;
 import com.khahnm04.repository.UserRepository;
+import com.khahnm04.service.AuthenticationService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -18,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.text.ParseException;
 import java.time.Instant;
@@ -29,7 +29,7 @@ import java.util.StringJoiner;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthService implements IAuthService {
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -50,7 +50,7 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public AuthResponse login(AuthRequest request) {
+    public AuthenticationResponse login(AuthenticationRequest request) {
         User user = userRepository.findByPhoneNumber(request.getPhoneNumber());
         if (user == null) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
@@ -60,7 +60,7 @@ public class AuthService implements IAuthService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         var token = generateToken(user);
-        return AuthResponse.builder()
+        return AuthenticationResponse.builder()
                 .token(token)
                 .authenticated(true)
                 .build();
@@ -90,9 +90,9 @@ public class AuthService implements IAuthService {
 
     private String buildScope(User user) {
         StringJoiner scope = new StringJoiner(" ");
-        if (!CollectionUtils.isEmpty(user.getRoles())) {
-            user.getRoles().forEach(scope::add);
-        }
+//        if (!CollectionUtils.isEmpty(user.getRoles())) {
+//            user.getRoles().forEach(scope::add);
+//        }
         return scope.toString();
     }
 
