@@ -1,0 +1,39 @@
+package com.khahnm04.fashionecommerce.service.impl;
+
+import com.khahnm04.fashionecommerce.dto.request.PermissionRequest;
+import com.khahnm04.fashionecommerce.dto.response.PermissionResponse;
+import com.khahnm04.fashionecommerce.entity.Permission;
+import com.khahnm04.fashionecommerce.mapper.PermissionMapper;
+import com.khahnm04.fashionecommerce.repository.PermissionRepository;
+import com.khahnm04.fashionecommerce.service.PermissionService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class PermissionServiceImpl implements PermissionService {
+
+    private final PermissionRepository permissionRepository;
+    private final PermissionMapper permissionMapper;
+
+    public PermissionResponse createPermission(PermissionRequest request) {
+        Permission permission = permissionMapper.toPermission(request);
+        permission = permissionRepository.save(permission);
+        return permissionMapper.toPermissionResponse(permission);
+    }
+
+    public List<PermissionResponse> getAllPermissions() {
+        var permissions = permissionRepository.findAll();
+        return permissions.stream()
+                .map(permissionMapper::toPermissionResponse)
+                .toList();
+    }
+
+    public void deletePermission(String permission) {
+        permissionRepository.deleteById(permission);
+    }
+
+}
