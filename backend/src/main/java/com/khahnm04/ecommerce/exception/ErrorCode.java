@@ -13,6 +13,7 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(1002, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
+    VALIDATION_EXCEPTION(1008, "Validation error", HttpStatus.BAD_REQUEST),
 
     // ========== 2xxx: USER ==========
     // user
