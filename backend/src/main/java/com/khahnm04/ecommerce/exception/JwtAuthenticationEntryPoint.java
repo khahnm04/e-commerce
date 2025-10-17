@@ -1,15 +1,20 @@
 package com.khahnm04.ecommerce.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
+import com.khahnm04.ecommerce.dto.response.ErrorResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
@@ -24,13 +29,18 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(errorCode.getStatusCode().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        ApiResponse<?> apiResponse = ApiResponse.builder()
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
+                .path(request.getRequestURI())
+                .method(request.getMethod())
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
-        response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
         response.flushBuffer();
     }
 

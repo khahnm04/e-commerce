@@ -28,8 +28,6 @@ public class GlobalExceptionHandler {
     ResponseEntity<ErrorResponse> handlingRuntimeException(RuntimeException exception, HttpServletRequest request) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
                 .code(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode())
                 .message(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage())
                 .path(request.getRequestURI())
@@ -44,8 +42,6 @@ public class GlobalExceptionHandler {
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .status(errorCode.getStatusCode().value())
-                .error(((HttpStatus) errorCode.getStatusCode()).getReasonPhrase())
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .path(request.getRequestURI())
@@ -62,8 +58,6 @@ public class GlobalExceptionHandler {
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .status(errorCode.getStatusCode().value())
-                .error(((HttpStatus) errorCode.getStatusCode()).getReasonPhrase())
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
                 .path(request.getRequestURI())
@@ -104,8 +98,6 @@ public class GlobalExceptionHandler {
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .code(ErrorCode.VALIDATION_EXCEPTION.getCode())
                 .message(ErrorCode.VALIDATION_EXCEPTION.getMessage())
                 .path(request.getRequestURI())

@@ -11,9 +11,10 @@ public enum ErrorCode {
 
     INVALID_KEY(1001, "Uncategorized error", HttpStatus.BAD_REQUEST),
     UNCATEGORIZED_EXCEPTION(1002, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
-    UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
-    UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
-    VALIDATION_EXCEPTION(1008, "Validation error", HttpStatus.BAD_REQUEST),
+    UNAUTHENTICATED(1003, "Unauthenticated", HttpStatus.UNAUTHORIZED),
+    UNAUTHORIZED(1004, "You do not have permission", HttpStatus.FORBIDDEN),
+    VALIDATION_EXCEPTION(1005, "Validation error", HttpStatus.BAD_REQUEST),
+    TOKEN_INVALID(1006, "Token invalid", HttpStatus.UNAUTHORIZED),
 
     // ========== 2xxx: USER ==========
     // user
@@ -43,7 +44,7 @@ public enum ErrorCode {
     STATUS_REQUIRED(2500, "status cannot be blank", HttpStatus.BAD_REQUEST),
     STATUS_INVALID_FORMAT(2501, "status format is invalid", HttpStatus.BAD_REQUEST),
     // genderEnum
-    GENDER_REQUIRED(2600, "genderEnum cannot be blank", HttpStatus.BAD_REQUEST),
+    GENDER_REQUIRED(2600, "gender cannot be blank", HttpStatus.BAD_REQUEST),
     // ========== END USER ==========
     ;
 

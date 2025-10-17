@@ -1,5 +1,6 @@
 package com.khahnm04.ecommerce.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,9 +14,13 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
 
-    private LocalDateTime timestamp;
-    private int status;
-    private String error;
+    @Builder.Default
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime timestamp = LocalDateTime.now();
+
+    @Builder.Default
+    private boolean success = false;
+
     private int code;
     private String message;
     private String path;

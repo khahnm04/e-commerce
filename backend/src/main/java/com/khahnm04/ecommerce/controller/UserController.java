@@ -10,6 +10,7 @@ import com.khahnm04.ecommerce.service.contract.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,11 +25,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<UserProfileResponse> createUser(
         @Valid @RequestPart("data") UserCreationRequest request,
         @RequestPart(value = "avatar", required = false) MultipartFile file
     ) {
         return ApiResponse.<UserProfileResponse>builder()
+                .message("user created")
                 .data(userService.createUser(request, file))
                 .build();
     }
@@ -37,6 +40,7 @@ public class UserController {
     public ApiResponse<List<UserDetailResponse>> getAllUsers() {
         return ApiResponse.<List<UserDetailResponse>>builder()
                 .data(userService.getAllUsers())
+                .message("get all users")
                 .build();
     }
 
@@ -46,6 +50,7 @@ public class UserController {
     ) {
         return ApiResponse.<UserProfileResponse>builder()
                 .data(userService.getUserById(id))
+                .message("get user by id")
                 .build();
     }
 
@@ -53,6 +58,7 @@ public class UserController {
     public ApiResponse<UserProfileResponse> getMyInfo() {
         return ApiResponse.<UserProfileResponse>builder()
                 .data(userService.getMyInfo())
+                .message("get my info")
                 .build();
     }
 
@@ -63,6 +69,7 @@ public class UserController {
     ) {
         return ApiResponse.<UserDetailResponse>builder()
                 .data(userService.updateUser(id, request))
+                .message("update user")
                 .build();
     }
 
@@ -73,7 +80,7 @@ public class UserController {
     ) {
         userService.changeUserStatus(id, status);
         return ApiResponse.builder()
-                .message("User status has been changed")
+                .message("user status has been changed")
                 .build();
     }
 
