@@ -26,9 +26,9 @@ public class UserResponse implements Serializable {
     private StatusEnum status;
     private Instant lastLoginAt;
     private Instant createdAt;
-    private String createdBy;
+    private Long createdBy;
     private Instant updatedAt;
-    private String updatedBy;
+    private Long updatedBy;
     private Set<RoleResponse> roles;
 
 }

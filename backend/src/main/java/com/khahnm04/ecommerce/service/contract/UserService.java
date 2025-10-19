@@ -1,6 +1,8 @@
 package com.khahnm04.ecommerce.service.contract;
 
+import com.khahnm04.ecommerce.dto.request.MyInfoRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
+import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
 import com.khahnm04.ecommerce.constant.StatusEnum;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +15,7 @@ public interface UserService {
     List<UserResponse> getAllUsers();
     UserResponse getUserById(Long id);
     UserResponse getMyInfo();
+    MyInfoResponse updateMyInfo(MyInfoRequest request);
     UserResponse updateUser(Long id, UserRequest request);
     void changeUserStatus(Long id, StatusEnum status);
     void softDeleteUserById(Long id);

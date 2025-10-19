@@ -1,7 +1,9 @@
 package com.khahnm04.ecommerce.controller;
 
+import com.khahnm04.ecommerce.dto.request.MyInfoRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
+import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
 import com.khahnm04.ecommerce.constant.StatusEnum;
 import com.khahnm04.ecommerce.service.contract.UserService;
@@ -52,11 +54,21 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/my-info")
+    @GetMapping("/profile")
     public ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
                 .data(userService.getMyInfo())
                 .message("get my info")
+                .build();
+    }
+
+    @PutMapping("/profile/update")
+    public ApiResponse<MyInfoResponse> updateMyInfo(
+        @Valid @RequestBody MyInfoRequest request
+    ) {
+        return ApiResponse.<MyInfoResponse>builder()
+                .data(userService.updateMyInfo(request))
+                .message("update my info")
                 .build();
     }
 

@@ -1,7 +1,9 @@
 package com.khahnm04.ecommerce.service.impl;
 
 import com.khahnm04.ecommerce.constant.GenderEnum;
+import com.khahnm04.ecommerce.dto.request.MyInfoRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
+import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
 import com.khahnm04.ecommerce.entity.Role;
 import com.khahnm04.ecommerce.entity.User;
@@ -14,6 +16,7 @@ import com.khahnm04.ecommerce.repository.UserRepository;
 import com.khahnm04.ecommerce.service.CloudinaryService;
 import com.khahnm04.ecommerce.service.contract.UserService;
 import com.khahnm04.ecommerce.util.PhoneNumberUtils;
+import com.khahnm04.ecommerce.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -67,14 +70,14 @@ public class UserServiceImpl implements UserService {
         user.setRoles(new HashSet<>(roles));
 
         User userSaved = userRepository.save(user);
-        return userMapper.toUserProfileResponse(userSaved);
+        return userMapper.toUserResponse(userSaved);
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(userMapper::toUserDetailResponse)
+                .map(userMapper::toUserResponse)
                 .toList();
     }
 
@@ -83,7 +86,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        return userMapper.toUserProfileResponse(user);
+        return userMapper.toUserResponse(user);
     }
 
     @Override
@@ -92,7 +95,22 @@ public class UserServiceImpl implements UserService {
         String phoneNumber = context.getAuthentication().getName();
         User user = userRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        return userMapper.toUserProfileResponse(user);
+        return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    public MyInfoResponse updateMyInfo(MyInfoRequest request) {
+        var context = SecurityContextHolder.getContext();
+        String phoneNumber = context.getAuthentication().getName();
+        User user = userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        user.setFullName(request.getFullName());
+        user.setUsername(request.getUsername());
+        user.setGender(request.getGender());
+        user.setDateOfBirth(request.getDateOfBirth());
+
+        return userMapper.toMyInfoResponse(userRepository.save(user));
     }
 
     @Override
@@ -108,7 +126,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(new HashSet<>(roles));
 
         User userSaved = userRepository.save(user);
-        return userMapper.toUserDetailResponse(userSaved);
+        return userMapper.toUserResponse(userSaved);
     }
 
     @Override
