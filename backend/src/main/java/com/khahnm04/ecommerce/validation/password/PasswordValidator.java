@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.validation.password;
 
 import com.khahnm04.ecommerce.exception.ErrorCode;
-import com.khahnm04.ecommerce.util.ValidationUtil;
+import com.khahnm04.ecommerce.util.ValidationUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -28,37 +28,37 @@ public class PasswordValidator implements ConstraintValidator<ValidPassword, Str
 
         // Null/empty check
         if (password == null || password.isEmpty()) {
-            ValidationUtil.buildError(ErrorCode.PASSWORD_REQUIRED, context);
+            ValidationUtils.buildError(ErrorCode.PASSWORD_REQUIRED, context);
             return false;
         }
 
         // Length checks
         if (password.length() < minLength) {
-            ValidationUtil.buildError(ErrorCode.PASSWORD_TOO_SHORT, context);
+            ValidationUtils.buildError(ErrorCode.PASSWORD_TOO_SHORT, context);
             return false;
         }
 
         // Uppercase check
         if (requireUppercase && password.chars().noneMatch(Character::isUpperCase)) {
-            ValidationUtil.buildError(ErrorCode.PASSWORD_MISSING_UPPERCASE, context);
+            ValidationUtils.buildError(ErrorCode.PASSWORD_MISSING_UPPERCASE, context);
             return false;
         }
 
         // Lowercase check
         if (requireLowercase && password.chars().noneMatch(Character::isLowerCase)) {
-            ValidationUtil.buildError(ErrorCode.PASSWORD_MISSING_LOWERCASE, context);
+            ValidationUtils.buildError(ErrorCode.PASSWORD_MISSING_LOWERCASE, context);
             return false;
         }
 
         // Digit check
         if (requireDigit && password.chars().noneMatch(Character::isDigit)) {
-            ValidationUtil.buildError(ErrorCode.PASSWORD_MISSING_NUMBER, context);
+            ValidationUtils.buildError(ErrorCode.PASSWORD_MISSING_NUMBER, context);
             return false;
         }
 
         // Special character check
         if (requireSpecialChar && !password.matches(".*[^A-Za-z0-9].*")) {
-            ValidationUtil.buildError(ErrorCode.PASSWORD_MISSING_SPECIAL_CHAR, context);
+            ValidationUtils.buildError(ErrorCode.PASSWORD_MISSING_SPECIAL_CHAR, context);
             return false;
         }
 

@@ -12,6 +12,6 @@ public class LoginResponse implements Serializable {
 
     private String accessToken;
     private String refreshToken;
-    private UserProfileResponse user;
+    private UserResponse user;
 
 }

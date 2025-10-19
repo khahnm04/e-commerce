@@ -3,7 +3,6 @@ package com.khahnm04.ecommerce.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +10,6 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse <T> {
 
@@ -22,8 +20,8 @@ public class ApiResponse <T> {
     @Builder.Default
     private boolean success = true;
 
-    String message;
+    private String message;
 
-    T data;
+    private T data;
 
 }

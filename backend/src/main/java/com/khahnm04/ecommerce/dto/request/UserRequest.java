@@ -13,11 +13,12 @@ import lombok.Getter;
 import lombok.Setter;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
 @Builder
-public class UserCreationRequest implements Serializable {
+public class UserRequest implements Serializable {
 
     @Size(min = 3, max = 50, message = "USER_NAME_INVALID_LENGTH")
     @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "USER_NAME_INVALID_FORMAT")
@@ -42,5 +43,7 @@ public class UserCreationRequest implements Serializable {
     private String image;
 
     private StatusEnum status;
+
+    private Set<String> roles;
 
 }

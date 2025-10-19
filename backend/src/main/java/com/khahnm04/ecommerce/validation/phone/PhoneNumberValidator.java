@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.validation.phone;
 
 import com.khahnm04.ecommerce.exception.ErrorCode;
-import com.khahnm04.ecommerce.util.ValidationUtil;
+import com.khahnm04.ecommerce.util.ValidationUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ public class PhoneNumberValidator implements ConstraintValidator<ValidPhoneNumbe
     @Override
     public boolean isValid(String phoneNumber, ConstraintValidatorContext context) {
         if(phoneNumber == null || phoneNumber.isEmpty()) {
-            ValidationUtil.buildError(ErrorCode.PHONE_NUMBER_REQUIRED, context);
+            ValidationUtils.buildError(ErrorCode.PHONE_NUMBER_REQUIRED, context);
             return false;
         }
         String normalized = phoneNumber.replaceAll(" ", "");
@@ -22,11 +22,11 @@ public class PhoneNumberValidator implements ConstraintValidator<ValidPhoneNumbe
             normalized = normalized.replaceFirst("\\+84", "0");
         }
         if (normalized.length() != 10) {
-            ValidationUtil.buildError(ErrorCode.PHONE_NUMBER_INVALID_LENGTH, context);
+            ValidationUtils.buildError(ErrorCode.PHONE_NUMBER_INVALID_LENGTH, context);
             return false;
         }
         if (!normalized.matches(PHONE_REGEX)) {
-            ValidationUtil.buildError(ErrorCode.PHONE_NUMBER_INVALID_FORMAT, context);
+            ValidationUtils.buildError(ErrorCode.PHONE_NUMBER_INVALID_FORMAT, context);
             return false;
         }
         return true;

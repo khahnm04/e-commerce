@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.validation.email;
 
 import com.khahnm04.ecommerce.exception.ErrorCode;
-import com.khahnm04.ecommerce.util.ValidationUtil;
+import com.khahnm04.ecommerce.util.ValidationUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -12,7 +12,7 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
         if (!email.matches(EMAIL_REGEX)) {
-            ValidationUtil.buildError(ErrorCode.EMAIL_INVALID_FORMAT, context);
+            ValidationUtils.buildError(ErrorCode.EMAIL_INVALID_FORMAT, context);
             return false;
         }
         return true;

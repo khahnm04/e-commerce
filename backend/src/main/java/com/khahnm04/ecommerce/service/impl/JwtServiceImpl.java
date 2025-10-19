@@ -58,6 +58,7 @@ public class JwtServiceImpl implements JwtService {
                 .jwtID(jwtId)
                 .claim("scope", buildScope(user))
                 .claim("type", "access_token")
+                .claim("userId", user.getId())
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());

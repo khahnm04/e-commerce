@@ -1,11 +1,8 @@
 package com.khahnm04.ecommerce.service.impl;
 
 import com.khahnm04.ecommerce.constant.GenderEnum;
-import com.khahnm04.ecommerce.constant.RoleEnum;
-import com.khahnm04.ecommerce.dto.request.UserCreationRequest;
-import com.khahnm04.ecommerce.dto.request.UserUpdateRequest;
-import com.khahnm04.ecommerce.dto.response.UserDetailResponse;
-import com.khahnm04.ecommerce.dto.response.UserProfileResponse;
+import com.khahnm04.ecommerce.dto.request.UserRequest;
+import com.khahnm04.ecommerce.dto.response.UserResponse;
 import com.khahnm04.ecommerce.entity.Role;
 import com.khahnm04.ecommerce.entity.User;
 import com.khahnm04.ecommerce.constant.StatusEnum;
@@ -16,7 +13,7 @@ import com.khahnm04.ecommerce.repository.RoleRepository;
 import com.khahnm04.ecommerce.repository.UserRepository;
 import com.khahnm04.ecommerce.service.CloudinaryService;
 import com.khahnm04.ecommerce.service.contract.UserService;
-import com.khahnm04.ecommerce.util.PhoneNumberUtil;
+import com.khahnm04.ecommerce.util.PhoneNumberUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -26,6 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 
@@ -42,10 +41,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserProfileResponse createUser(UserCreationRequest request, MultipartFile file) {
+    public UserResponse createUser(UserRequest request, MultipartFile file) {
         String normalizePhoneNumber = "";
         if (request.getPhoneNumber() != null) {
-            normalizePhoneNumber = PhoneNumberUtil.normalizePhoneNumber(request.getPhoneNumber());
+            normalizePhoneNumber = PhoneNumberUtils.normalizePhoneNumber(request.getPhoneNumber());
         }
         if (userRepository.existsByPhoneNumber(normalizePhoneNumber)) {
             throw new AppException(ErrorCode.PHONE_NUMBER_EXISTED);
@@ -64,9 +63,8 @@ public class UserServiceImpl implements UserService {
         user.setStatus(request.getStatus() == null ? StatusEnum.ACTIVE : request.getStatus());
         user.setGender(request.getGenderEnum() == null ? GenderEnum.OTHER : request.getGenderEnum());
 
-        HashSet<String> roles = new HashSet<>();
-        roles.add(RoleEnum.USER.name());
-        //user.setRoles(roles);
+        List<Role> roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
 
         User userSaved = userRepository.save(user);
         return userMapper.toUserProfileResponse(userSaved);
@@ -74,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public List<UserDetailResponse> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toUserDetailResponse)
                 .toList();
@@ -82,14 +80,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PostAuthorize("returnObject.phoneNumber == authentication.name")
-    public UserProfileResponse getUserById(Long id) {
+    public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         return userMapper.toUserProfileResponse(user);
     }
 
     @Override
-    public UserProfileResponse getMyInfo() {
+    public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String phoneNumber = context.getAuthentication().getName();
         User user = userRepository.findByPhoneNumber(phoneNumber)
@@ -99,7 +97,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDetailResponse updateUser(Long id, UserUpdateRequest request) {
+    public UserResponse updateUser(Long id, UserRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
@@ -120,6 +118,15 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         user.setStatus(status);
         log.info("user status changed to {}", status);
+    }
+
+    @Override
+    @Transactional
+    public void softDeleteUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        user.setDeletedAt(Instant.now());
+        log.info("user soft deleted successfully");
     }
 
 }

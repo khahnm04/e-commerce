@@ -13,7 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
-public class UserDetailResponse implements Serializable {
+public class UserResponse implements Serializable {
 
     private Long id;
     private String username;
@@ -26,7 +26,9 @@ public class UserDetailResponse implements Serializable {
     private StatusEnum status;
     private Instant lastLoginAt;
     private Instant createdAt;
+    private String createdBy;
     private Instant updatedAt;
+    private String updatedBy;
     private Set<RoleResponse> roles;
 
 }

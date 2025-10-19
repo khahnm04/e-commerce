@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.config;
 
 import com.khahnm04.ecommerce.exception.JwtAuthenticationEntryPoint;
-import com.khahnm04.ecommerce.service.UserDetailsServiceCustomizer;
+import com.khahnm04.ecommerce.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +34,7 @@ public class SecurityConfig {
 
     private final JwtDecoderConfig jwtDecoderConfig;
     private final PasswordEncoder passwordEncoder;
-    private final UserDetailsServiceCustomizer userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

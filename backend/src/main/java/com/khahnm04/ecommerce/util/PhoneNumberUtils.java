@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.util;
 
-public class PhoneNumberUtil {
+public class PhoneNumberUtils {
 
     public static String normalizePhoneNumber(String phoneNumber) {
         if (phoneNumber == null || phoneNumber.isEmpty()) {
