@@ -26,8 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 
@@ -143,7 +142,7 @@ public class UserServiceImpl implements UserService {
     public void softDeleteUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        user.setDeletedAt(Instant.now());
+        user.setDeletedAt(LocalDateTime.now());
         log.info("user soft deleted successfully");
     }
 

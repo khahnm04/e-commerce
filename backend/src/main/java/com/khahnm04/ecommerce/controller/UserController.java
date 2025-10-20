@@ -31,8 +31,8 @@ public class UserController {
         @RequestPart(value = "avatar", required = false) MultipartFile file
     ) {
         return ApiResponse.<UserResponse>builder()
-                .message("user created")
                 .data(userService.createUser(request, file))
+                .message("user created")
                 .build();
     }
 

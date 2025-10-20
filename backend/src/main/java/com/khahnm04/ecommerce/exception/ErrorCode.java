@@ -46,6 +46,12 @@ public enum ErrorCode {
     // genderEnum
     GENDER_REQUIRED(2600, "gender cannot be blank", HttpStatus.BAD_REQUEST),
     // ========== END USER ==========
+
+    CATEGORY_NAME_REQUIRED(3000, "category name cannot be blank", HttpStatus.BAD_REQUEST),
+    CATEGORY_NAME_EXISTED(3001, "category name existed", HttpStatus.CONFLICT),
+    CATEGORY_PARENT_NOT_EXISTED(3002, "category parent not existed", HttpStatus.CONFLICT),
+    CATEGORY_NOT_FOUND(3003, "category not found", HttpStatus.NOT_FOUND),
+
     ;
 
     private int code;

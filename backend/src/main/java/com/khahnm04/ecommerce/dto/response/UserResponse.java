@@ -8,6 +8,7 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -25,10 +26,11 @@ public class UserResponse implements Serializable {
     private String image;
     private StatusEnum status;
     private Instant lastLoginAt;
-    private Instant createdAt;
+    private LocalDateTime createdAt;
     private Long createdBy;
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
     private Long updatedBy;
+    private LocalDateTime deletedAt;
     private Set<RoleResponse> roles;
 
 }
