@@ -42,8 +42,11 @@ public class CategoryServiceImpl implements CategoryService {
         category.setImage(cloudinaryService.uploadFileIfPresent(file));
         category.setStatus(request.getStatus() == null ? StatusEnum.ACTIVE : request.getStatus());
 
-        CategoryResponse response = categoryMapper.toCategoryResponse(categoryRepository.save(category));
-        response.setParentId(category.getParent().getId());
+        Category savedCategory = categoryRepository.save(category);
+        CategoryResponse response = categoryMapper.toCategoryResponse(savedCategory);
+        if (category.getParent() != null) {
+            response.setParentId(category.getParent().getId());
+        }
         return response;
     }
 
