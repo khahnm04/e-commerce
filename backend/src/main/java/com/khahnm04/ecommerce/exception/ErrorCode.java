@@ -51,6 +51,8 @@ public enum ErrorCode {
     CATEGORY_NAME_EXISTED(3001, "category name existed", HttpStatus.CONFLICT),
     CATEGORY_PARENT_NOT_EXISTED(3002, "category parent not existed", HttpStatus.CONFLICT),
     CATEGORY_NOT_FOUND(3003, "category not found", HttpStatus.NOT_FOUND),
+    CATEGORY_HAS_CHILDREN(3004, "Cannot delete category because it has child categories.", HttpStatus.BAD_REQUEST),
+
 
     ;
 

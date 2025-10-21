@@ -1,5 +1,6 @@
 package com.khahnm04.ecommerce.service.impl;
 
+import com.khahnm04.ecommerce.constant.StatusEnum;
 import com.khahnm04.ecommerce.dto.request.CategoryRequest;
 import com.khahnm04.ecommerce.dto.response.CategoryResponse;
 import com.khahnm04.ecommerce.entity.Category;
@@ -7,10 +8,12 @@ import com.khahnm04.ecommerce.exception.AppException;
 import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.mapper.CategoryMapper;
 import com.khahnm04.ecommerce.repository.CategoryRepository;
+import com.khahnm04.ecommerce.service.CloudinaryService;
 import com.khahnm04.ecommerce.service.contract.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,42 +25,68 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final CloudinaryService cloudinaryService;
 
     @Override
-    public CategoryResponse createCategory(CategoryRequest request) {
+    public CategoryResponse createCategory(CategoryRequest request, MultipartFile file) {
         if (categoryRepository.existsByName(request.getName())) {
             throw new AppException(ErrorCode.CATEGORY_NAME_EXISTED);
         }
         Category category = categoryMapper.toCategory(request);
-        Category categoryParent = categoryRepository.findByParentId(request.getParentId())
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_PARENT_NOT_EXISTED));
-        category.setParent(categoryParent);
-        return categoryMapper.toCategoryResponse(categoryRepository.save(category));
+
+        if (request.getParentId() != null) {
+            Category categoryParent = categoryRepository.findById(request.getParentId())
+                    .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+            category.setParent(categoryParent);
+        }
+        category.setImage(cloudinaryService.uploadFileIfPresent(file));
+        category.setStatus(request.getStatus() == null ? StatusEnum.ACTIVE : request.getStatus());
+
+        CategoryResponse response = categoryMapper.toCategoryResponse(categoryRepository.save(category));
+        response.setParentId(category.getParent().getId());
+        return response;
     }
 
     @Override
     public List<CategoryResponse> getAllCategories() {
-        return categoryRepository.findAll()
+        return categoryRepository.findAllByDeletedAtIsNull()
                 .stream()
                 .map(categoryMapper::toCategoryResponse)
                 .toList();
     }
 
     @Override
-    public CategoryResponse updateCategory(Long id, CategoryRequest request) {
+    public CategoryResponse updateCategory(Long id, CategoryRequest request, MultipartFile file) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+
+        if (categoryRepository.existsByName(request.getName())
+                && !request.getName().equals(category.getName())) {
+            throw new AppException(ErrorCode.CATEGORY_NAME_EXISTED);
+        }
+
+        if (request.getParentId() != null) {
+            Category categoryParent = categoryRepository.findById(request.getParentId())
+                    .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+            category.setParent(categoryParent);
+        }
         categoryMapper.updateCategory(category, request);
-        Category categoryParent = categoryRepository.findByParentId(request.getParentId())
-                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_PARENT_NOT_EXISTED));
-        category.setParent(categoryParent);
-        return categoryMapper.toCategoryResponse(categoryRepository.save(category));
+        category.setImage(cloudinaryService.uploadFileIfPresent(file));
+
+        CategoryResponse response = categoryMapper.toCategoryResponse(categoryRepository.save(category));
+        response.setParentId(category.getParent().getId());
+        return response;
     }
 
     @Override
     public void softDeleteCategory(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+
+        if (categoryRepository.existsByParent(id)) {
+            throw new AppException(ErrorCode.CATEGORY_HAS_CHILDREN);
+        }
+
         category.setDeletedAt(LocalDateTime.now());
         categoryRepository.save(category);
         log.info("Category with id {} has been soft deleted", id);

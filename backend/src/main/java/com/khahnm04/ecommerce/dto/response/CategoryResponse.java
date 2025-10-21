@@ -14,7 +14,7 @@ public class CategoryResponse {
     private String name;
     private String description;
     private String image;
-    private Long parent;
+    private Long parentId;
     private StatusEnum status;
     private LocalDateTime createdAt;
     private Long createdBy;
