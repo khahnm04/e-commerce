@@ -14,7 +14,7 @@ public enum ErrorCode {
     UNAUTHENTICATED(1003, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1004, "You do not have permission", HttpStatus.FORBIDDEN),
     VALIDATION_EXCEPTION(1005, "Validation error", HttpStatus.BAD_REQUEST),
-    TOKEN_INVALID(1006, "Token invalid", HttpStatus.UNAUTHORIZED),
+    TOKEN_CREATION_FAILED(1007, "Token creation failed", HttpStatus.UNAUTHORIZED),
 
     // ========== 2xxx: USER ==========
     // user

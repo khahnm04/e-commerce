@@ -13,13 +13,16 @@ import com.khahnm04.ecommerce.service.contract.AuthenticationService;
 import com.khahnm04.ecommerce.service.contract.JwtService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jwt.SignedJWT;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import java.text.ParseException;
+import java.time.Duration;
 
 @Slf4j
 @Service
@@ -33,7 +36,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserMapper userMapper;
 
     @Override
-    public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
+    public IntrospectResponse introspect(IntrospectRequest request) {
         var token = request.getToken();
         boolean isValid = true;
 
@@ -49,7 +52,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public LoginResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request, HttpServletResponse response) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(request.getIdentifier(), request.getPassword()));
 
@@ -63,9 +66,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .expiredTime(refreshToken.getExpiredTime().getTime())
                     .build());
 
+        addTokenCookies(response, accessToken.getToken(), refreshToken.getToken());
+
         return LoginResponse.builder()
                 .accessToken(accessToken.getToken())
-                .refreshToken(refreshToken.getToken())
                 .user(userMapper.toUserResponse(user))
                 .build();
     }
@@ -87,6 +91,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             log.info("remove refresh token success");
         } catch (AppException e) {
             log.error("Token already expired");
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
     }
 
@@ -102,6 +107,27 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return RefreshResponse.builder()
                 .token(accessToken.getToken())
                 .build();
+    }
+
+    private void addTokenCookies(HttpServletResponse response, String accessToken, String refreshToken) {
+        // Access Token Cookie (15 phút)
+        ResponseCookie accessCookie = ResponseCookie.from("access_token", accessToken)
+                .httpOnly(true)
+                .secure(false) // true nếu chỉ cho gửi qua HTTPS
+                .path("/")
+                .maxAge(Duration.ofMinutes(15))
+                .build();
+
+        // Refresh Token Cookie (7 ngày)
+        ResponseCookie refreshCookie = ResponseCookie.from("refresh_token", refreshToken)
+                .httpOnly(true)
+                .secure(false) // true nếu chỉ cho gửi qua HTTPS
+                .path("/auth")
+                .maxAge(Duration.ofDays(7))
+                .build();
+
+        response.addHeader("Set-Cookie", accessCookie.toString());
+        response.addHeader("Set-Cookie", refreshCookie.toString());
     }
 
 }

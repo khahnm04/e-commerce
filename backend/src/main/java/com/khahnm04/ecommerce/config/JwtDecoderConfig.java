@@ -9,8 +9,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
-import com.nimbusds.jose.JOSEException;
-import java.text.ParseException;
 import java.util.Objects;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -27,11 +25,7 @@ public class JwtDecoderConfig implements JwtDecoder {
 
     @Override
     public Jwt decode(String token) throws JwtException {
-        try {
-            jwtService.verifyAccessToken(token);
-        } catch (JOSEException | ParseException e) {
-            throw new JwtException(e.getMessage());
-        }
+        jwtService.verifyAccessToken(token);
 
         if (Objects.isNull(nimbusJwtDecoder)) {
             SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512");

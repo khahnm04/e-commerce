@@ -11,7 +11,6 @@ import java.io.Serializable;
 public class LoginResponse implements Serializable {
 
     private String accessToken;
-    private String refreshToken;
     private UserResponse user;
 
 }

@@ -4,6 +4,7 @@ import com.khahnm04.ecommerce.dto.request.*;
 import com.khahnm04.ecommerce.dto.response.*;
 import com.khahnm04.ecommerce.service.contract.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
@@ -17,10 +18,11 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     ApiResponse<LoginResponse> login(
-        @RequestBody LoginRequest request
+        @RequestBody LoginRequest request,
+        HttpServletResponse response
     ) {
         return ApiResponse.<LoginResponse>builder()
-                .data(authenticationService.login(request))
+                .data(authenticationService.login(request, response))
                 .build();
     }
 
