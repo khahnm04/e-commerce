@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.service.impl;
 
-import com.khahnm04.ecommerce.constant.StatusEnum;
+import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.dto.request.CategoryRequest;
 import com.khahnm04.ecommerce.dto.response.CategoryResponse;
 import com.khahnm04.ecommerce.entity.Category;

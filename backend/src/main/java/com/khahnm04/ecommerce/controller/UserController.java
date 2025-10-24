@@ -5,7 +5,7 @@ import com.khahnm04.ecommerce.dto.request.UserRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
 import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
-import com.khahnm04.ecommerce.constant.StatusEnum;
+import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.service.contract.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -84,22 +84,22 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ApiResponse<?> changeUserStatus(
+    public ApiResponse<Void> changeUserStatus(
         @PathVariable Long id,
         @RequestParam("status") StatusEnum status
     ) {
         userService.changeUserStatus(id, status);
-        return ApiResponse.builder()
+        return ApiResponse.<Void>builder()
                 .message("user status has been changed")
                 .build();
     }
 
     @DeleteMapping("/{id}")
-    public ApiResponse<?> softDeleteUser(
+    public ApiResponse<Void> softDeleteUser(
         @PathVariable Long id
     ) {
         userService.softDeleteUserById(id);
-        return ApiResponse.builder()
+        return ApiResponse.<Void>builder()
                 .message("user soft deleted")
                 .build();
     }

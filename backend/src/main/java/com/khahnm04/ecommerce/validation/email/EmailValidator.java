@@ -4,6 +4,7 @@ import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.util.ValidationUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.util.StringUtils;
 
 public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
 
@@ -11,7 +12,7 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
-        if (!email.matches(EMAIL_REGEX)) {
+        if (StringUtils.hasText(email) && !email.matches(EMAIL_REGEX)) {
             ValidationUtils.buildError(ErrorCode.EMAIL_INVALID_FORMAT, context);
             return false;
         }

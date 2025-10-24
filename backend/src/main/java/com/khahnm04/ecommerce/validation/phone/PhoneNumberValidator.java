@@ -5,6 +5,7 @@ import com.khahnm04.ecommerce.util.ValidationUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 public class PhoneNumberValidator implements ConstraintValidator<ValidPhoneNumber, String> {
@@ -13,9 +14,8 @@ public class PhoneNumberValidator implements ConstraintValidator<ValidPhoneNumbe
 
     @Override
     public boolean isValid(String phoneNumber, ConstraintValidatorContext context) {
-        if(phoneNumber == null || phoneNumber.isEmpty()) {
-            ValidationUtils.buildError(ErrorCode.PHONE_NUMBER_REQUIRED, context);
-            return false;
+        if (!StringUtils.hasText(phoneNumber)) {
+            return true;
         }
         String normalized = phoneNumber.replaceAll(" ", "");
         if (normalized.startsWith("+84")) {

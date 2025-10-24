@@ -1,5 +1,6 @@
 package com.khahnm04.ecommerce.mapper;
 
+import com.khahnm04.ecommerce.dto.request.RegisterRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
 import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
@@ -20,5 +21,7 @@ public interface UserMapper {
     void updateUser(@MappingTarget User user, UserRequest request);
 
     MyInfoResponse toMyInfoResponse(User user);
+
+    User fromRegisterRequestToUser(RegisterRequest request);
 
 }

@@ -1,15 +1,14 @@
 package com.khahnm04.ecommerce.entity;
 
-import com.khahnm04.ecommerce.constant.GenderEnum;
-import com.khahnm04.ecommerce.constant.StatusEnum;
+import com.khahnm04.ecommerce.common.enums.GenderEnum;
+import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -25,19 +24,19 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "username", length = 50)
+    @Column(name = "username", unique = true, length = 50)
     private String username;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
-    @Column(name = "phone_number", nullable = false, length = 20)
+    @Column(name = "phone_number", unique = true, length = 20)
     private String phoneNumber;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "full_name", nullable = false, length = 100)
+    @Column(name = "full_name", nullable = false, unique = true)
     private String fullName;
 
     @Column(name = "date_of_birth")
@@ -55,7 +54,7 @@ public class User extends BaseEntity implements UserDetails {
     private StatusEnum status;
 
     @Column(name = "last_login_at")
-    private Instant lastLoginAt;
+    private LocalDateTime lastLoginAt;
 
     @ManyToMany
     private Set<Role> roles;

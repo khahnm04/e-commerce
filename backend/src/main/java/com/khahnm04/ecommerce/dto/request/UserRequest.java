@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.dto.request;
 
-import com.khahnm04.ecommerce.constant.GenderEnum;
-import com.khahnm04.ecommerce.constant.StatusEnum;
+import com.khahnm04.ecommerce.common.enums.GenderEnum;
+import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.validation.email.ValidEmail;
 import com.khahnm04.ecommerce.validation.password.ValidPassword;
 import com.khahnm04.ecommerce.validation.phone.ValidPhoneNumber;

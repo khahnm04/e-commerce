@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.service.impl;
 
-import com.khahnm04.ecommerce.constant.TokenType;
+import com.khahnm04.ecommerce.common.constant.TokenConstants;
 import com.khahnm04.ecommerce.dto.response.TokenPayload;
 import com.khahnm04.ecommerce.entity.User;
 import com.khahnm04.ecommerce.exception.AppException;
@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -46,12 +48,12 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public TokenPayload generateAccessToken(User user) {
-        return generateToken(user, TokenType.ACCESS.getType());
+        return generateToken(user, TokenConstants.ACCESS_TOKEN);
     }
 
     @Override
     public TokenPayload generateRefreshToken(User user) {
-        return generateToken(user, TokenType.REFRESH.getType());
+        return generateToken(user, TokenConstants.REFRESH_TOKEN);
     }
 
     @Override
@@ -75,23 +77,24 @@ public class JwtServiceImpl implements JwtService {
     private TokenPayload generateToken(User user, String typeToken) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
+        String subject = StringUtils.hasText(user.getPhoneNumber()) ? user.getPhoneNumber() : user.getEmail();
         Date issueTime = new Date();
         Date expiredTime = new Date(Instant.now()
-                .plus(typeToken.equalsIgnoreCase(TokenType.ACCESS.getType())
+                .plus(typeToken.equalsIgnoreCase(TokenConstants.ACCESS_TOKEN)
                         ? accessTokenExpiration
                         : refreshTokenExpiration, ChronoUnit.SECONDS)
                 .toEpochMilli());
         String jwtId = UUID.randomUUID().toString();
 
         JWTClaimsSet.Builder claimsBuilder = new JWTClaimsSet.Builder()
-                .subject(user.getPhoneNumber())
+                .subject(subject)
                 .issueTime(issueTime)
                 .expirationTime(expiredTime)
                 .jwtID(jwtId)
                 .claim("scope", buildScope(user))
                 .claim("type", typeToken);
 
-        if (typeToken.equalsIgnoreCase(TokenType.ACCESS.getType())) {
+        if (typeToken.equalsIgnoreCase(TokenConstants.ACCESS_TOKEN)) {
             claimsBuilder.claim("userId", user.getId());
         }
 

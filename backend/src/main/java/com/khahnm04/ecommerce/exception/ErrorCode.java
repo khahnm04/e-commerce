@@ -22,15 +22,17 @@ public enum ErrorCode {
     USER_NAME_EXISTED(2001, "username existed", HttpStatus.CONFLICT),
     USER_NAME_INVALID_LENGTH(2002, "Username must be between {min} and {max} characters", HttpStatus.BAD_REQUEST),
     USER_NAME_INVALID_FORMAT(2003, "Username can only contain letters, numbers and underscore", HttpStatus.BAD_REQUEST),
+    USER_EXISTED(2004, "user already existed", HttpStatus.CONFLICT),
     // email
     EMAIL_EXISTED(2100, "email existed", HttpStatus.CONFLICT),
     EMAIL_REQUIRED(2101, "ValidEmail cannot be blank", HttpStatus.BAD_REQUEST),
     EMAIL_INVALID_FORMAT(2102, "ValidEmail format is invalid", HttpStatus.BAD_REQUEST),
     // phone number
     PHONE_NUMBER_EXISTED(2200, "phone number existed", HttpStatus.CONFLICT),
-    PHONE_NUMBER_REQUIRED(2201, "ValidPhoneNumber number cannot be blank", HttpStatus.BAD_REQUEST),
+    PHONE_NUMBER_REQUIRED(2201, "PhoneNumber number cannot be blank", HttpStatus.BAD_REQUEST),
     PHONE_NUMBER_INVALID_FORMAT(2202, "Phone number format is invalid", HttpStatus.BAD_REQUEST),
     PHONE_NUMBER_INVALID_LENGTH(2203, "Phone number must be exactly 10 digits", HttpStatus.BAD_REQUEST),
+    EMAIL_OR_PHONE_NUMBER_REQUIRED(2204, "Email or phoneNumber number cannot be blank", HttpStatus.BAD_REQUEST),
     // password
     PASSWORD_REQUIRED(2300, "Password cannot be blank", HttpStatus.BAD_REQUEST),
     PASSWORD_TOO_SHORT(2301, "Password must be at least 8 characters", HttpStatus.BAD_REQUEST),

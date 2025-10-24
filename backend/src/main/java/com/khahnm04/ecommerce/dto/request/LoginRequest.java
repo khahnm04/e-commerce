@@ -11,10 +11,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class LoginRequest implements Serializable {
 
-    @NotBlank(message = "Email or phone number is required")
+    @NotBlank(message = "EMAIL_OR_PHONE_NUMBER_REQUIRED")
     private String identifier;
 
-    @NotBlank(message = "Password is required")
+    @NotBlank(message = "PASSWORD_REQUIRED")
     private String password;
 
 }

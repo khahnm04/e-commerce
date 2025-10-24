@@ -4,7 +4,7 @@ import com.khahnm04.ecommerce.dto.request.MyInfoRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
 import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
-import com.khahnm04.ecommerce.constant.StatusEnum;
+import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

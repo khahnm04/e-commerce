@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.dto.response;
 
-import com.khahnm04.ecommerce.constant.GenderEnum;
+import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,12 +1,11 @@
 package com.khahnm04.ecommerce.dto.response;
 
-import com.khahnm04.ecommerce.constant.GenderEnum;
-import com.khahnm04.ecommerce.constant.StatusEnum;
+import com.khahnm04.ecommerce.common.enums.GenderEnum;
+import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import java.io.Serializable;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -25,7 +24,7 @@ public class UserResponse implements Serializable {
     private GenderEnum gender;
     private String image;
     private StatusEnum status;
-    private Instant lastLoginAt;
+    private LocalDateTime lastLoginAt;
     private LocalDateTime createdAt;
     private Long createdBy;
     private LocalDateTime updatedAt;

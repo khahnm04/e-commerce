@@ -5,6 +5,7 @@ import com.khahnm04.ecommerce.dto.response.FieldErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -37,7 +38,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = AppException.class)
     ResponseEntity<ErrorResponse> handlingAppException(AppException exception, HttpServletRequest request) {
         ErrorCode errorCode = exception.getErrorCode();
-
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .code(errorCode.getCode())
@@ -45,7 +45,6 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .method(request.getMethod())
                 .build();
-
         return ResponseEntity.status(errorCode.getStatusCode()).body(errorResponse);
     }
 
@@ -53,7 +52,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = AccessDeniedException.class)
     ResponseEntity<ErrorResponse> handlingAccessDeniedException(AccessDeniedException exception, HttpServletRequest request) {
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
-
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .code(errorCode.getCode())
@@ -61,7 +59,6 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .method(request.getMethod())
                 .build();
-
         return ResponseEntity.status(errorCode.getStatusCode()).body(errorResponse);
     }
 
@@ -88,8 +85,8 @@ public class GlobalExceptionHandler {
                             .code(errorCode.getCode())
                             .field(fieldError.getField())
                             .message(Objects.nonNull(attributes)
-                                    ? mapAttribute(errorCode.getMessage(), attributes)
-                                    : errorCode.getMessage())
+                                        ? mapAttribute(errorCode.getMessage(), attributes)
+                                        : errorCode.getMessage())
                             .build();
                 })
                 .toList();

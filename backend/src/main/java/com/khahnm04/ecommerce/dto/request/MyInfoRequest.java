@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.dto.request;
 
-import com.khahnm04.ecommerce.constant.GenderEnum;
+import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.entity;
 
-import com.khahnm04.ecommerce.constant.StatusEnum;
+import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
 

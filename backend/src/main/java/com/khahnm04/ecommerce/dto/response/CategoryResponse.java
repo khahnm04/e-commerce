@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.dto.response;
 
-import com.khahnm04.ecommerce.constant.StatusEnum;
+import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import lombok.*;
 import java.time.LocalDateTime;
 

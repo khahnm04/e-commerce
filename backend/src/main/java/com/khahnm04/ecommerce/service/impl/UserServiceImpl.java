@@ -1,13 +1,13 @@
 package com.khahnm04.ecommerce.service.impl;
 
-import com.khahnm04.ecommerce.constant.GenderEnum;
+import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import com.khahnm04.ecommerce.dto.request.MyInfoRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
 import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
 import com.khahnm04.ecommerce.entity.Role;
 import com.khahnm04.ecommerce.entity.User;
-import com.khahnm04.ecommerce.constant.StatusEnum;
+import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.exception.AppException;
 import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.mapper.UserMapper;
@@ -16,11 +16,9 @@ import com.khahnm04.ecommerce.repository.UserRepository;
 import com.khahnm04.ecommerce.service.CloudinaryService;
 import com.khahnm04.ecommerce.service.contract.UserService;
 import com.khahnm04.ecommerce.util.PhoneNumberUtils;
-import com.khahnm04.ecommerce.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -63,7 +61,7 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(normalizePhoneNumber);
         user.setImage(cloudinaryService.uploadFileIfPresent(file));
         user.setStatus(request.getStatus() == null ? StatusEnum.ACTIVE : request.getStatus());
-        user.setGender(request.getGenderEnum() == null ? GenderEnum.OTHER : request.getGenderEnum());
+        user.setGender(request.getGenderEnum() == null ? GenderEnum.UNKNOWN : request.getGenderEnum());
 
         List<Role> roles = roleRepository.findAllById(request.getRoles());
         user.setRoles(new HashSet<>(roles));
@@ -73,7 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-//    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(userMapper::toUserResponse)

@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.dto.request;
 
-import com.khahnm04.ecommerce.constant.StatusEnum;
+import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
