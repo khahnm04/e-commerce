@@ -64,7 +64,9 @@ export const Sider = (props: {
 
   return (
     <>
-      <nav className={`bg-[#FFFFFF] border-r border-[#E0E0E0] lg:w-[240px] w-[280px] lg:h-[calc(100vh-70px)] h-full fixed lg:top-[70px] top-0 left-0 overflow-y-auto [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-thumb]:bg-[#ddd] z-[999] lg:block ${activeSider ? 'block' : 'hidden'}`}>
+      <nav className={`bg-[#FFFFFF] border-r border-[#E0E0E0] lg:w-[240px] w-[280px] lg:h-[calc(100vh-70px)] h-full fixed 
+        lg:top-[70px] top-0 left-0 overflow-y-auto [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-thumb]:bg-[#ddd] z-[999] 
+        lg:block ${activeSider ? 'block' : 'hidden'}`}>
         <SiderMenu
           menuList={menuList1}
           activeMenu={activeMenu}

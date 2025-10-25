@@ -1,5 +1,6 @@
 package com.khahnm04.ecommerce.service;
 
+import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,8 +16,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
-        return userRepository.findByIdentifier(identifier)
-                .orElseThrow(() -> new UsernameNotFoundException("user does not exits"));
+        return userRepository.findByPhoneNumberOrEmail(identifier)
+                .orElseThrow(() -> new UsernameNotFoundException(ErrorCode.USER_NOT_FOUND.getMessage()));
     }
 
 }

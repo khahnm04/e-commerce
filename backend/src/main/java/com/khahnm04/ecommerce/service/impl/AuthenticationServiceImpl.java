@@ -53,8 +53,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public LoginResponse login(LoginRequest request, HttpServletResponse response) {
+        if (!StringUtils.hasText(request.getEmail()) && !StringUtils.hasText(request.getPhoneNumber())) {
+            throw new AppException(ErrorCode.EMAIL_OR_PHONE_NUMBER_REQUIRED);
+        }
+
+        String identifier = StringUtils.hasText(request.getPhoneNumber()) ? request.getPhoneNumber() : request.getEmail();
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(request.getIdentifier(), request.getPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(identifier, request.getPassword()));
 
         User user = (User) authentication.getPrincipal();
 
@@ -80,7 +85,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             // save access token
             var signAccessToken = jwtService.verifyAccessToken(accessToken);
 
-            User user = userRepository.findByIdentifier(signAccessToken.getJWTClaimsSet().getSubject())
+            User user = userRepository.findByPhoneNumberOrEmail(signAccessToken.getJWTClaimsSet().getSubject())
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
             user.setLastLoginAt(LocalDateTime.now());
             userRepository.save(user);
@@ -111,8 +116,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         try {
             SignedJWT signedJWT = jwtService.verifyRefreshToken(token);
 
-            String subject = signedJWT.getJWTClaimsSet().getSubject();
-            User user = userRepository.findByIdentifier(subject)
+            User user = userRepository.findByPhoneNumberOrEmail(signedJWT.getJWTClaimsSet().getSubject())
                     .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
             TokenPayload accessToken = jwtService.generateAccessToken(user);
@@ -152,6 +156,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         ResponseCookie accessCookie = ResponseCookie.from(TokenConstants.ACCESS_TOKEN, accessToken)
                 .httpOnly(true)
                 .secure(false)
+                .domain("localhost")
                 .path("/")
                 .maxAge(Duration.ofMinutes(15))
                 .sameSite(Cookie.SameSite.STRICT.attributeValue())
@@ -163,6 +168,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         ResponseCookie refreshCookie = ResponseCookie.from(TokenConstants.REFRESH_TOKEN, refreshToken)
                 .httpOnly(true)
                 .secure(false)
+                .domain("localhost")
                 .path("/api/v1/auth")
                 .maxAge(Duration.ofDays(30))
                 .sameSite(Cookie.SameSite.STRICT.attributeValue())
@@ -173,6 +179,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void clearAccessTokenCookie(HttpServletResponse response) {
         ResponseCookie accessTokenCookie = ResponseCookie.from(TokenConstants.ACCESS_TOKEN, "")
                 .maxAge(0)
+                .domain("localhost")
                 .path("/")
                 .httpOnly(true)
                 .secure(false)
@@ -184,7 +191,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void clearRefreshTokenCookie(HttpServletResponse response) {
         ResponseCookie refreshTokenCookie = ResponseCookie.from(TokenConstants.REFRESH_TOKEN, "")
                 .maxAge(0)
-                .path("/")
+                .domain("localhost")
+                .path("/api/v1/auth")
                 .httpOnly(true)
                 .secure(false)
                 .sameSite(Cookie.SameSite.STRICT.attributeValue())

@@ -10,7 +10,7 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     full_name NVARCHAR(100) NOT NULL,
     date_of_birth DATE,
-    gender ENUM('MALE', 'FEMALE', 'OTHER') DEFAULT 'OTHER',
+    gender ENUM('MALE', 'FEMALE', 'UNKNOWN') DEFAULT 'UNKNOWN',
     image VARCHAR(500),
     status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE',
     last_login_at TIMESTAMP,
@@ -20,6 +20,11 @@ CREATE TABLE users (
     updated_by BIGINT,
     deleted_at DATETIME
 );
+ALTER TABLE `db_fashion_ecommerce`.`users` 
+ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
+ADD UNIQUE INDEX `phone_number_UNIQUE` (`phone_number` ASC) VISIBLE,
+ADD UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE;
+
 
 -- bảng Category
 CREATE TABLE categories (
