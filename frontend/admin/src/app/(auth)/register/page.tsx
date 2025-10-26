@@ -1,15 +1,18 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
+import JustValidate from "just-validate";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import JustValidate from 'just-validate';
-import { useRouter } from "next/navigation";
 import { AuthForm } from "@/app/components/auth/AuthForm";
 
-export default function LoginPage() {
+export default function RegisterPage() {
 
   const emailFields = [
+    {
+      label: "Họ tên",
+      id: "fullName",
+      type: "text",
+      placeholder: "Ví dụ: Lê Văn A"
+    },
     {
       label: "Email",
       id: "email",
@@ -26,6 +29,12 @@ export default function LoginPage() {
 
   const phoneFields = [
     {
+      label: "Họ tên",
+      id: "fullName",
+      type: "text",
+      placeholder: "Ví dụ: Lê Văn A"
+    },
+    {
       label: "Số điện thoại",
       id: "phone",
       type: "tel",
@@ -41,9 +50,9 @@ export default function LoginPage() {
 
   const [loginType, setLoginType] = useState(true);
   const formFields = loginType ? phoneFields : emailFields;
-  const router = useRouter();
 
   useEffect(() => {
+
     const validator = new JustValidate("#loginForm", {
       errorLabelStyle: {
         position: 'absolute',
@@ -85,6 +94,22 @@ export default function LoginPage() {
         ])
     }
     validator
+      .addField("#fullName", [
+        {
+          rule: "required",
+          errorMessage: "Vui lòng nhập họ tên!"
+        },
+        {
+          rule: "minLength",
+          value: 5,
+          errorMessage: "Họ tên phải có ít nhất 5 ký tự!"
+        },
+        {
+          rule: "maxLength",
+          value: 50,
+          errorMessage: "Họ tên không được vượt quá 50 ký tự!"
+        }
+      ])
       .addField('#password', [
         {
           rule: "required",
@@ -128,56 +153,31 @@ export default function LoginPage() {
           errorMessage: "Mật khẩu phải chứa ký tự đặc biệt!"
         },
       ])
-      .onSuccess((event: any) => {
+      .onSuccess(() => {
         // Call API
-        const identifier = loginType ? event.target.phone.value : event.target.email.value;
-        const password = event.target.password.value;
 
-        const dataFinal = loginType
-          ? { phoneNumber: identifier, password: password }
-          : { email: identifier, password: password };
-
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataFinal),
-          credentials: "include"
-        })
-          .then(res => res.json())
-          .then(data => {
-            console.log(data);
-            if (!data.success) {
-              alert("Đăng nhập thất bại");
-            }
-            if (data.success) {
-              router.push("/");
-            }
-          })
       });
+
     return () => {
       validator.destroy();
       document.querySelectorAll(".just-validate-error-label").forEach(el => el.remove());
     };
+
   }, [loginType]);
 
   return (
     <>
-      <div className="bg-[url('/assets/images/bg-account.svg')] py-[50px] min-h-[100vh] bg-cover bg-no-repeat bg-center">
-        <div className="bg-[#fff] rounded-[24px] md:w-[630px] w-[95%] mx-auto md:py-[90px] py-[40px] md:px-[57px] px-[20px]">
-          <h2 className="font-[700] text-[32px] text-[var(--color-text)] text-center mt-[0] mb-[15px]">
-            Đăng nhập
+      <div className="bg-[url('/assets/images/bg-account.svg')] py-[40px] min-h-[100vh] bg-cover bg-no-repeat bg-center">
+        <div className="bg-[#fff] rounded-[19.2px] md:w-[504px] w-[95%] mx-auto md:py-[72px] py-[32px] md:px-[45.6px] px-[16px]">
+          <h2 className="font-[700] text-[25.6px] text-[var(--color-text)] text-center mt-[0] mb-[12px]">
+            Đăng ký
           </h2>
-          <p className="font-600 text-[18px] text-[var(--color-text)] opacity-[0.8] text-center mt-0 mb-[40px]">
-            {loginType
-              ? "Vui lòng nhập số điện thoại và mật khẩu để tiếp tục"
-              : "Vui lòng nhập email và mật khẩu để tiếp tục"
-            }
+          <p className="font-[600] text-[14.4px] text-[var(--color-text)] opacity-[0.8] text-center mt-0 mb-[32px]">
+            Tạo một tài khoản để tiếp tục
           </p>
           <form
             id="loginForm"
-            className="mb-[30px]"
+            className="mb-[24px]"
           >
             {formFields && (
               formFields.map((item, index) => (
@@ -190,53 +190,47 @@ export default function LoginPage() {
                 />
               ))
             )}
-            <div className="mb-[30px] flex justify-between">
-              <div className="flex items-center gap-[12px] relative">
+            <div className="mb-[24px] flex justify-between">
+              <div className="flex items-center gap-[9.6px] relative">
                 <input
-                  className="w-[24px] h-[24px]"
+                  className="w-[19.2px] h-[19.2px]"
                   type="checkbox"
                   name="rememberPassword"
                   id="remember-password"
                 />
                 <label
-                  className="font-[600] text-[18px] text-[var(--color-text)] opacity-60"
-                  htmlFor="remember-password">
-                  Nhớ mật khẩu
+                  className="font-[600] text-[14.4px] text-[var(--color-text)] opacity-60"
+                  htmlFor="remember-password"
+                >
+                  Tôi chấp nhận các điều khoản và điều kiện
                 </label>
               </div>
-              <Link
-                className="font-[600] text-[18px] text-[var(--color-text)] opacity-60 hover:text-[var(--color-primary)] hover:opacity-100"
-                href="#"
-              >
-                Quên mật khẩu?
-              </Link>
             </div>
-            <button className="w-full h-[56px] border-0 rounded-[8px] bg-[var(--color-primary)] opacity-90 font-[700] text-[20px]
-             text-white cursor-pointer hover:opacity-100">
-              Đăng Nhập
+            <button className="w-full h-[44.8px] border-0 rounded-[8px] bg-[var(--color-primary)] opacity-90 font-[700] text-[16px] text-white cursor-pointer hover:opacity-100">
+              Đăng Ký
             </button>
           </form>
           <div className="text-center">
             <Link
-              className="font-[700] text-[18px] text-[#5A8CFF] underline block mb-[10px]"
+              className="font-[700] text-[14.4px] text-[#5A8CFF] underline block mb-[8px]"
               href="#"
               onClick={() => setLoginType(!loginType)}
             >
               {!loginType
-                ? "Đăng nhập bằng số điện thoại"
-                : "Đăng nhập bằng email"
+                ? "Đăng ký bằng số điện thoại"
+                : "Đăng ký bằng email"
               }
             </Link>
           </div>
           <div className="text-center">
-            <span className="font-[600] text-[18px] text-[var(--color-text)] opacity-65">
-              Bạn chưa có tài khoản?
+            <span className="font-[600] text-[14.4px] text-[var(--color-text)] opacity-65">
+              Bạn đã có tài khoản?
             </span>
             <Link
-              className="font-[700] text-[18px] text-[#5A8CFF] underline ml-[10px]"
-              href="/register"
+              className="font-[700] text-[14.4px] text-[#5A8CFF] underline ml-[8px]"
+              href="/login"
             >
-              Tạo tài khoản
+              Đăng nhập
             </Link>
           </div>
         </div>

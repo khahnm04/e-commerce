@@ -28,5 +28,5 @@ cloudinary:
 
 jwt:
   signerKey: "${SIGNER_KEY}"
-  access-token-expiration: 20 # in seconds
+  access-token-expiration: 36000 # in seconds
   refresh-token-expiration: 2592000 # in seconds
