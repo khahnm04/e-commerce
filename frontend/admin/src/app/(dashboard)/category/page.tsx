@@ -106,7 +106,10 @@ export default function CategoryPage() {
               <input type="text" placeholder="Tìm kiếm" className="text-[14px] font-[700] flex-1 border-0 outline-none text-[var(--color-text)] placeholder:text-[#979797]" />
             </div>
             <div className="">
-              <Link href="#" className="inline-block bg-[var(--color-primary)] rounded-[14px] lg:px-[50px] px-[30px] lg:py-[24px] py-[15px] font-[700] text-[14px] text-white">
+              <Link
+                href="/category/create"
+                className="inline-block bg-[var(--color-primary)] rounded-[14px] lg:px-[50px] px-[30px] lg:py-[24px] py-[15px] font-[700] text-[14px] text-white"
+              >
                 + Tạo mới
               </Link>
             </div>

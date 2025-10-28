@@ -32,3 +32,59 @@ select,
 textarea {
   outline: none;
 }
+
+.badge {
+  border-radius: 4.5px;
+  padding: 6px 22px;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.badge-orange {
+  color: #FFA756;
+  background-color: rgba(255, 168, 86, 0.2);
+}
+
+.badge-green {
+  color: #00B69B;
+  background-color: rgba(0, 182, 155, 0.2);
+}
+
+.badge-red {
+  color: #EF3826;
+  background-color: rgba(239, 55, 38, 0.2);
+}
+
+/* filepond */
+.filepond--root {
+  width: 150px;
+  height: 150px;
+}
+
+.filepond--credits {
+  display: none;
+}
+
+.filepond--browser {
+  width: 100% !important;
+  height: 100% !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.filepond--root .filepond--drop-label {
+  min-height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.filepond--drop-label.filepond--drop-label label {
+  font-size: 50px;
+}
+
+.filepond--file-action-button {
+  background-color: red;
+}
+
+/* End filepond */

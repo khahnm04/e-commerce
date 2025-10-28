@@ -3,8 +3,10 @@ import { NextResponse, NextRequest } from 'next/server'
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
 
-  const token = request.cookies.get('access_token')?.value;
-  const isLogin = !!token;
+  // const token = request.cookies.get('access_token')?.value;
+  // const isLogin = !!token;
+
+  const isLogin = true;
 
   if (isLogin) {
     return NextResponse.next();
