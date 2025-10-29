@@ -12,9 +12,10 @@ import com.khahnm04.ecommerce.service.CloudinaryService;
 import com.khahnm04.ecommerce.service.contract.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,26 +25,27 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final CategoryMapper categoryMapper;
     private final CloudinaryService cloudinaryService;
+    private final CategoryMapper categoryMapper;
 
     @Override
     public CategoryResponse createCategory(CategoryRequest request, MultipartFile file) {
-        if (categoryRepository.existsByName(request.getName())) {
-            throw new AppException(ErrorCode.CATEGORY_NAME_EXISTED);
-        }
         Category category = categoryMapper.toCategory(request);
 
-        if (request.getParentId() != null) {
+        if (!StringUtils.hasText(category.getName())) {
             Category categoryParent = categoryRepository.findById(request.getParentId())
                     .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
             category.setParent(categoryParent);
         }
-        category.setImage(cloudinaryService.uploadFileIfPresent(file));
-        category.setStatus(request.getStatus() == null ? StatusEnum.ACTIVE : request.getStatus());
-
-        Category savedCategory = categoryRepository.save(category);
-        CategoryResponse response = categoryMapper.toCategoryResponse(savedCategory);
+        category.setImage(cloudinaryService.upload(file));
+        
+        try {
+            categoryRepository.save(category);
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException(ErrorCode.CATEGORY_EXISTED);
+        }
+        
+        CategoryResponse response = categoryMapper.toCategoryResponse(category);
         if (category.getParent() != null) {
             response.setParentId(category.getParent().getId());
         }
@@ -63,8 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
 
-        if (categoryRepository.existsByName(request.getName())
-                && !request.getName().equals(category.getName())) {
+        if (categoryRepository.existsByName(request.getName()) && !request.getName().equals(category.getName())) {
             throw new AppException(ErrorCode.CATEGORY_NAME_EXISTED);
         }
 
@@ -74,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
             category.setParent(categoryParent);
         }
         categoryMapper.updateCategory(category, request);
-        category.setImage(cloudinaryService.uploadFileIfPresent(file));
+        category.setImage(cloudinaryService.upload(file));
 
         CategoryResponse response = categoryMapper.toCategoryResponse(categoryRepository.save(category));
         response.setParentId(category.getParent().getId());

@@ -22,11 +22,11 @@ public class PhoneNumberValidator implements ConstraintValidator<ValidPhoneNumbe
             normalized = normalized.replaceFirst("\\+84", "0");
         }
         if (normalized.length() != 10) {
-            ValidationUtils.buildError(ErrorCode.PHONE_NUMBER_INVALID_LENGTH, context);
+            ValidationUtils.buildError("Phone number must be exactly 10 digits", context);
             return false;
         }
         if (!normalized.matches(PHONE_REGEX)) {
-            ValidationUtils.buildError(ErrorCode.PHONE_NUMBER_INVALID_FORMAT, context);
+            ValidationUtils.buildError("Phone number format is invalid", context);
             return false;
         }
         return true;

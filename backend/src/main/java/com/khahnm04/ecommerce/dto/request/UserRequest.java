@@ -20,8 +20,8 @@ import java.util.Set;
 @Builder
 public class UserRequest implements Serializable {
 
-    @Size(min = 3, max = 50, message = "USER_NAME_INVALID_LENGTH")
-    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "USER_NAME_INVALID_FORMAT")
+    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters,")
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$", message = "Username can only contain letters, numbers and underscore")
     private String username;
 
     @ValidEmail
@@ -33,12 +33,12 @@ public class UserRequest implements Serializable {
     @ValidPassword
     private String password;
 
-    @NotBlank(message = "FULL_NAME_REQUIRED")
+    @NotBlank(message = "fullName is required")
     private String fullName;
 
     private LocalDate dateOfBirth;
 
-    private GenderEnum genderEnum;
+    private GenderEnum gender;
 
     private String image;
 

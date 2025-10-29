@@ -12,7 +12,10 @@ public class CloudinaryService {
 
     private final Cloudinary cloudinary;
 
-    public String uploadFile(MultipartFile file) {
+    public String upload(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
         try {
             var uploadResult = cloudinary.uploader()
                     .upload(file.getBytes(), ObjectUtils.asMap(
@@ -23,10 +26,6 @@ public class CloudinaryService {
         } catch (Exception e) {
             throw new RuntimeException("Failed to upload file: " + e.getMessage());
         }
-    }
-
-    public String uploadFileIfPresent(MultipartFile file) {
-        return (file == null || file.isEmpty()) ? null : uploadFile(file);
     }
 
 }

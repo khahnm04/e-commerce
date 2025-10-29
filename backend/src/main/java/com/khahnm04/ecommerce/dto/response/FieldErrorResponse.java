@@ -10,7 +10,6 @@ import java.io.Serializable;
 @Builder
 public class FieldErrorResponse implements Serializable {
 
-    private int code;
     private String field;
     private String message;
 

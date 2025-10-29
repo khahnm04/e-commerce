@@ -28,37 +28,37 @@ public class PasswordValidator implements ConstraintValidator<ValidPassword, Str
 
         // Null/empty check
         if (password == null || password.isEmpty()) {
-            ValidationUtils.buildError(ErrorCode.PASSWORD_REQUIRED, context);
+            ValidationUtils.buildError("Password cannot be blank", context);
             return false;
         }
 
         // Length checks
         if (password.length() < minLength) {
-            ValidationUtils.buildError(ErrorCode.PASSWORD_TOO_SHORT, context);
+            ValidationUtils.buildError("Password must be at least 8 characters", context);
             return false;
         }
 
         // Uppercase check
         if (requireUppercase && password.chars().noneMatch(Character::isUpperCase)) {
-            ValidationUtils.buildError(ErrorCode.PASSWORD_MISSING_UPPERCASE, context);
+            ValidationUtils.buildError("Password must contain at least one uppercase letter", context);
             return false;
         }
 
         // Lowercase check
         if (requireLowercase && password.chars().noneMatch(Character::isLowerCase)) {
-            ValidationUtils.buildError(ErrorCode.PASSWORD_MISSING_LOWERCASE, context);
+            ValidationUtils.buildError("Password must contain at least one lowercase letter", context);
             return false;
         }
 
         // Digit check
         if (requireDigit && password.chars().noneMatch(Character::isDigit)) {
-            ValidationUtils.buildError(ErrorCode.PASSWORD_MISSING_NUMBER, context);
+            ValidationUtils.buildError("Password must contain at least one digit", context);
             return false;
         }
 
         // Special character check
         if (requireSpecialChar && !password.matches(".*[^A-Za-z0-9].*")) {
-            ValidationUtils.buildError(ErrorCode.PASSWORD_MISSING_SPECIAL_CHAR, context);
+            ValidationUtils.buildError("Password must contain at least one special character", context);
             return false;
         }
 

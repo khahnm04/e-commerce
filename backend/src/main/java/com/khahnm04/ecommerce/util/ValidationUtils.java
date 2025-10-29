@@ -5,9 +5,9 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class ValidationUtils {
 
-    public static void buildError(ErrorCode errorCode, ConstraintValidatorContext context) {
+    public static void buildError(String errorCode, ConstraintValidatorContext context) {
         context.disableDefaultConstraintViolation();
-        context.buildConstraintViolationWithTemplate(errorCode.name())
+        context.buildConstraintViolationWithTemplate(errorCode)
                 .addConstraintViolation();
     }
 

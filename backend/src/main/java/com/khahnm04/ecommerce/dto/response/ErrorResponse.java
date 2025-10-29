@@ -21,7 +21,7 @@ public class ErrorResponse {
     @Builder.Default
     private boolean success = false;
 
-    private int code;
+    private Integer code;
     private String message;
     private String path;
     private String method;

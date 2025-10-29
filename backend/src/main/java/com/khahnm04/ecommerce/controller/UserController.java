@@ -4,6 +4,7 @@ import com.khahnm04.ecommerce.dto.request.MyInfoRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
 import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
+import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.service.contract.UserService;
@@ -37,10 +38,15 @@ public class UserController {
     }
 
     @GetMapping
-    public ApiResponse<List<UserResponse>> getAllUsers() {
-        return ApiResponse.<List<UserResponse>>builder()
-                .data(userService.getAllUsers())
-                .message("get all users")
+    public ApiResponse<PageResponse<UserResponse>> getAllUsers(
+        @RequestParam(required = false) String search,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int size,
+        @RequestParam(defaultValue = "createdAt,desc") String sort
+    ) {
+        return ApiResponse.<PageResponse<UserResponse>>builder()
+                .data(userService.getAllUsers(search, page, size, sort))
+                .message("get all users successfully")
                 .build();
     }
 
@@ -50,7 +56,7 @@ public class UserController {
     ) {
         return ApiResponse.<UserResponse>builder()
                 .data(userService.getUserById(id))
-                .message("get user by id")
+                .message("get user by id successfully")
                 .build();
     }
 
@@ -58,7 +64,7 @@ public class UserController {
     public ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
                 .data(userService.getMyInfo())
-                .message("get my info")
+                .message("get my info successfully")
                 .build();
     }
 
@@ -68,7 +74,7 @@ public class UserController {
     ) {
         return ApiResponse.<MyInfoResponse>builder()
                 .data(userService.updateMyInfo(request))
-                .message("update my info")
+                .message("update my info successfully")
                 .build();
     }
 
@@ -79,7 +85,7 @@ public class UserController {
     ) {
         return ApiResponse.<UserResponse>builder()
                 .data(userService.updateUser(id, request))
-                .message("update user")
+                .message("update user successfully")
                 .build();
     }
 

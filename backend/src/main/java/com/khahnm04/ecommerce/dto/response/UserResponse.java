@@ -2,9 +2,8 @@ package com.khahnm04.ecommerce.dto.response;
 
 import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +12,8 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserResponse implements Serializable {
 
     private Long id;

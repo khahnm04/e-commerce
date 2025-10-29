@@ -3,8 +3,7 @@ package com.khahnm04.ecommerce.entity;
 import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
@@ -16,6 +15,9 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User extends BaseEntity implements UserDetails {
 
@@ -36,22 +38,22 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "full_name", nullable = false, unique = true)
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gender")
-    private GenderEnum gender;
-
     @Column(name = "image", length = 500)
     private String image;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
+    private GenderEnum gender = GenderEnum.UNKNOWN;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private StatusEnum status;
+    private StatusEnum status = StatusEnum.ACTIVE;
 
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;

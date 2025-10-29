@@ -15,15 +15,16 @@ public class Category extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(length = 500)
+    @Column(name = "image", length = 500)
     private String image;
 
     @ManyToOne
@@ -31,6 +32,7 @@ public class Category extends BaseEntity {
     private Category parent;
 
     @Enumerated(EnumType.STRING)
-    private StatusEnum status;
+    @Column(name = "status")
+    private StatusEnum status = StatusEnum.ACTIVE;
 
 }
