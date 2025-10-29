@@ -13,7 +13,7 @@ import java.util.List;
 public interface UserService {
 
     UserResponse createUser(UserRequest request, MultipartFile file);
-    PageResponse<UserResponse> getAllUsers(String search, int page, int size, String sort);
+    PageResponse<UserResponse> getAllUsers(String search, int page, int size, List<String> sort);
     UserResponse getUserById(Long id);
     UserResponse getMyInfo();
     MyInfoResponse updateMyInfo(MyInfoRequest request);

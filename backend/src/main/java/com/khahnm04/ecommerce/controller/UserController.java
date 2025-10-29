@@ -42,7 +42,7 @@ public class UserController {
         @RequestParam(required = false) String search,
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "createdAt,desc") String sort
+        @RequestParam(defaultValue = "createdAt,desc") List<String> sort
     ) {
         return ApiResponse.<PageResponse<UserResponse>>builder()
                 .data(userService.getAllUsers(search, page, size, sort))

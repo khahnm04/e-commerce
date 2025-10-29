@@ -6,6 +6,7 @@ import com.khahnm04.ecommerce.dto.request.UserRequest;
 import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
+import com.khahnm04.ecommerce.entity.QUser;
 import com.khahnm04.ecommerce.entity.Role;
 import com.khahnm04.ecommerce.entity.User;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
@@ -16,6 +17,8 @@ import com.khahnm04.ecommerce.repository.RoleRepository;
 import com.khahnm04.ecommerce.repository.UserRepository;
 import com.khahnm04.ecommerce.service.CloudinaryService;
 import com.khahnm04.ecommerce.service.contract.UserService;
+import com.khahnm04.ecommerce.util.SortUtils;
+import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -55,22 +58,33 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(userSaved);
     }
 
-    @Override
     //@PreAuthorize("hasRole('ADMIN')")
-    public PageResponse<UserResponse> getAllUsers(String search, int page, int size, String sort) {
-        Sort sortObj;
-        if (sort.contains(",")) {
-            String[] parts = sort.split(",");
-            String property = parts[0].trim();
-            Sort.Direction direction = parts.length > 1 && parts[1].equalsIgnoreCase("desc")
-                    ? Sort.Direction.DESC : Sort.Direction.ASC;
-            sortObj = Sort.by(direction, property);
-        } else {
-            sortObj = Sort.by(Sort.Direction.DESC, sort.trim());
-        }
+    @Override
+    public PageResponse<UserResponse> getAllUsers(String search, int page, int size, List<String> sort) {
+        Sort sortObj = SortUtils.parseSort(sort);
         Pageable pageable = PageRequest.of(page, size, sortObj);
-        Page<UserResponse> userPage = userRepository.findUsersDynamic(search, pageable);
-        return PageResponse.fromPage(userPage);
+
+        QUser user = QUser.user;
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (search != null && !search.trim().isEmpty()) {
+            String term = search.trim().toLowerCase();
+            builder.and(
+                    user.username.lower().contains(term)
+                            .or(user.email.lower().contains(term))
+                            .or(user.phoneNumber.contains(term))
+                            .or(user.fullName.lower().contains(term))
+                            .or(user.gender.stringValue().lower().contains(term))
+                            .or(user.status.stringValue().lower().contains(term))
+                            .or(user.id.stringValue().contains(term))
+                            .or(user.image.lower().contains(term))
+                            .or(user.dateOfBirth.stringValue().contains(term))
+            );
+        }
+
+        Page<User> userPage = userRepository.findAll(builder, pageable);
+        Page<UserResponse> dtoPage = userPage.map(userMapper::toUserResponse);
+        return PageResponse.fromPage(dtoPage);
     }
 
     @Override
