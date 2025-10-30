@@ -1,5 +1,6 @@
 package com.khahnm04.ecommerce.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -10,9 +11,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "permissions")
-public class Permission extends BaseEntity {
+public class Permission extends BaseEntity<Long> {
 
-    @Id
+    @Column(nullable = false, unique = true)
     private String name;
 
     private String description;

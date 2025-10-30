@@ -11,12 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "categories")
-public class Category extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class Category extends BaseEntity<Long> {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;

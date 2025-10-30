@@ -19,6 +19,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(1000, "user not found", HttpStatus.NOT_FOUND),
     USER_EXISTED(1001, "user already existed", HttpStatus.CONFLICT),
     EMAIL_OR_PHONE_NUMBER_REQUIRED(1002, "Email or phoneNumber number cannot be blank", HttpStatus.BAD_REQUEST),
+    ADDRESS_NOT_FOUND(1003, "Address not found", HttpStatus.NOT_FOUND),
 
     CATEGORY_NOT_FOUND(2000, "category not found", HttpStatus.NOT_FOUND),
     CATEGORY_EXISTED(2001, "category already existed", HttpStatus.CONFLICT),

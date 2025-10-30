@@ -14,7 +14,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class RegisterRequest implements Serializable {
 
-    @NotBlank(message = "FULL_NAME_REQUIRED")
+    @NotBlank(message = "full name is not blank")
     private String fullName;
 
     @ValidEmail
@@ -24,7 +24,7 @@ public class RegisterRequest implements Serializable {
     private String phoneNumber;
 
     @ValidPassword
-    @NotBlank(message = "PASSWORD_REQUIRED")
+    @NotBlank(message = "password is not blank")
     private String password;
 
 }

@@ -11,23 +11,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "addresses")
-public class Address extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+public class Address extends BaseEntity<Long> {
 
     @Column(name = "province", nullable = false)
     private String province;
 
-    @Column(name = "district", nullable = false)
-    private String district;
-
     @Column(name = "ward", nullable = false)
     private String ward;
 
-    @Column(name = "home_address")
+    @Column(name = "home_address", nullable = false)
     private String homeAddress;
 
     @Column(name = "reminiscent_name")

@@ -1,11 +1,9 @@
 package com.khahnm04.ecommerce.controller;
 
+import com.khahnm04.ecommerce.dto.request.AddressUserRequest;
 import com.khahnm04.ecommerce.dto.request.ProfileRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
-import com.khahnm04.ecommerce.dto.response.ApiResponse;
-import com.khahnm04.ecommerce.dto.response.ProfileResponse;
-import com.khahnm04.ecommerce.dto.response.PageResponse;
-import com.khahnm04.ecommerce.dto.response.UserResponse;
+import com.khahnm04.ecommerce.dto.response.*;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.service.contract.UserService;
 import jakarta.validation.Valid;

@@ -25,12 +25,11 @@ CREATE TABLE users (
 CREATE TABLE addresses (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     province VARCHAR(255) NOT NULL,
-	district VARCHAR(255) NOT NULL,
     ward VARCHAR(255) NOT NULL,
     home_address VARCHAR(255),
     reminiscent_name VARCHAR(255),
     is_default BOOLEAN DEFAULT FALSE,
-    address_type ENUM('HOME', 'WORK', 'OTHER') DEFAULT 'HOME',
+    address_type ENUM('HOME', 'WORK') DEFAULT 'HOME',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     created_by BIGINT,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -39,7 +38,6 @@ CREATE TABLE addresses (
     user_id BIGINT,
     CONSTRAINT fk_addresses_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
-alter table addresses modify address_type ENUM('HOME', 'WORK') DEFAULT 'HOME'
 
 -- bảng Category
 CREATE TABLE categories (
