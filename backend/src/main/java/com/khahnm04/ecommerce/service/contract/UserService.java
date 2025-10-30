@@ -1,8 +1,8 @@
 package com.khahnm04.ecommerce.service.contract;
 
-import com.khahnm04.ecommerce.dto.request.MyInfoRequest;
+import com.khahnm04.ecommerce.dto.request.ProfileRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
-import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
+import com.khahnm04.ecommerce.dto.response.ProfileResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
@@ -13,12 +13,12 @@ import java.util.List;
 public interface UserService {
 
     UserResponse createUser(UserRequest request, MultipartFile file);
-    PageResponse<UserResponse> getAllUsers(String search, int page, int size, List<String> sort);
+    PageResponse<UserResponse> getAllUsers(int page, int size, List<String> sort, String... search);
     UserResponse getUserById(Long id);
-    UserResponse getMyInfo();
-    MyInfoResponse updateMyInfo(MyInfoRequest request);
+    UserResponse getProfile();
+    ProfileResponse updateProfile(ProfileRequest request);
     UserResponse updateUser(Long id, UserRequest request);
-    void changeUserStatus(Long id, StatusEnum status);
-    void softDeleteUserById(Long id);
+    void updateUserStatus(Long id, StatusEnum status);
+    void softDeleteUser(Long id);
 
 }

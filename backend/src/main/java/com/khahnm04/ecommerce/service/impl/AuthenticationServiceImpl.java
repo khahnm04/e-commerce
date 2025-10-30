@@ -85,7 +85,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             // save access token
             var signAccessToken = jwtService.verifyAccessToken(accessToken);
 
-            User user = userRepository.findByPhoneNumberOrEmail(signAccessToken.getJWTClaimsSet().getSubject())
+            User user = userRepository.findByIdentifier(signAccessToken.getJWTClaimsSet().getSubject())
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
             user.setLastLoginAt(LocalDateTime.now());
             userRepository.save(user);
@@ -116,7 +116,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         try {
             SignedJWT signedJWT = jwtService.verifyRefreshToken(token);
 
-            User user = userRepository.findByPhoneNumberOrEmail(signedJWT.getJWTClaimsSet().getSubject())
+            User user = userRepository.findByIdentifier(signedJWT.getJWTClaimsSet().getSubject())
                     .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
             TokenPayload accessToken = jwtService.generateAccessToken(user);

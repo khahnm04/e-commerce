@@ -13,18 +13,33 @@ CREATE TABLE users (
     gender ENUM('MALE', 'FEMALE', 'UNKNOWN') DEFAULT 'UNKNOWN',
     image VARCHAR(500),
     status ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE',
-    last_login_at TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     created_by BIGINT,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     updated_by BIGINT,
     deleted_at DATETIME
 );
-ALTER TABLE `db_fashion_ecommerce`.`users` 
-ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
-ADD UNIQUE INDEX `phone_number_UNIQUE` (`phone_number` ASC) VISIBLE,
-ADD UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE;
 
+-- Bảng Address
+CREATE TABLE addresses (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    province VARCHAR(255) NOT NULL,
+	district VARCHAR(255) NOT NULL,
+    ward VARCHAR(255) NOT NULL,
+    home_address VARCHAR(255),
+    reminiscent_name VARCHAR(255),
+    is_default BOOLEAN DEFAULT FALSE,
+    address_type ENUM('HOME', 'WORK', 'OTHER') DEFAULT 'HOME',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_by BIGINT,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_by BIGINT,
+    deleted_at DATETIME,
+    user_id BIGINT,
+    CONSTRAINT fk_addresses_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
+alter table addresses modify address_type ENUM('HOME', 'WORK') DEFAULT 'HOME'
 
 -- bảng Category
 CREATE TABLE categories (

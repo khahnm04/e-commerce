@@ -61,6 +61,9 @@ public class User extends BaseEntity implements UserDetails {
     @ManyToMany
     private Set<Role> roles;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Address> addresses;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

@@ -1,9 +1,9 @@
 package com.khahnm04.ecommerce.controller;
 
-import com.khahnm04.ecommerce.dto.request.MyInfoRequest;
+import com.khahnm04.ecommerce.dto.request.ProfileRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
-import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
+import com.khahnm04.ecommerce.dto.response.ProfileResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
@@ -38,14 +38,16 @@ public class UserController {
     }
 
     @GetMapping
-    public ApiResponse<PageResponse<UserResponse>> getAllUsers(
-        @RequestParam(required = false) String search,
-        @RequestParam(defaultValue = "0") int page,
+    public ApiResponse<List<UserResponse>> getAllUsers(
+        @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "createdAt,desc") List<String> sort
+        @RequestParam(defaultValue = "createdAt,desc") List<String> sort,
+        @RequestParam(required = false) String... search
     ) {
-        return ApiResponse.<PageResponse<UserResponse>>builder()
-                .data(userService.getAllUsers(search, page, size, sort))
+        PageResponse<UserResponse> pageResponse = userService.getAllUsers(page, size, sort, search);
+        return ApiResponse.<List<UserResponse>>builder()
+                .data(pageResponse.getData())
+                .meta(pageResponse.getMeta())
                 .message("get all users successfully")
                 .build();
     }
@@ -61,19 +63,19 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ApiResponse<UserResponse> getMyInfo() {
+    public ApiResponse<UserResponse> getProfile() {
         return ApiResponse.<UserResponse>builder()
-                .data(userService.getMyInfo())
+                .data(userService.getProfile())
                 .message("get my info successfully")
                 .build();
     }
 
     @PutMapping("/profile/update")
-    public ApiResponse<MyInfoResponse> updateMyInfo(
-        @Valid @RequestBody MyInfoRequest request
+    public ApiResponse<ProfileResponse> updateProfile(
+        @Valid @RequestBody ProfileRequest request
     ) {
-        return ApiResponse.<MyInfoResponse>builder()
-                .data(userService.updateMyInfo(request))
+        return ApiResponse.<ProfileResponse>builder()
+                .data(userService.updateProfile(request))
                 .message("update my info successfully")
                 .build();
     }
@@ -90,11 +92,11 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ApiResponse<Void> changeUserStatus(
+    public ApiResponse<Void> updateUserStatus(
         @PathVariable Long id,
         @RequestParam("status") StatusEnum status
     ) {
-        userService.changeUserStatus(id, status);
+        userService.updateUserStatus(id, status);
         return ApiResponse.<Void>builder()
                 .message("user status has been changed")
                 .build();
@@ -104,7 +106,7 @@ public class UserController {
     public ApiResponse<Void> softDeleteUser(
         @PathVariable Long id
     ) {
-        userService.softDeleteUserById(id);
+        userService.softDeleteUser(id);
         return ApiResponse.<Void>builder()
                 .message("user soft deleted")
                 .build();

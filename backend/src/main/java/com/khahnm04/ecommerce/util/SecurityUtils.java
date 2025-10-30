@@ -1,10 +1,10 @@
 package com.khahnm04.ecommerce.util;
 
-import com.khahnm04.ecommerce.entity.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 @Slf4j
 public class SecurityUtils {
@@ -12,71 +12,29 @@ public class SecurityUtils {
     private SecurityUtils() {}
 
     /**
-     * Lấy ID của user hiện tại từ SecurityContext
-     * @return User ID hoặc null nếu không có user đăng nhập
+     * Lấy thông tin định danh (principal) của người dùng hiện tại từ SecurityContext.
+     * Có thể là UserDetails, subject (Jwt) hoặc String.
+     * @return thông tin principal của người dùng hoặc null nếu không có
      */
-    public static Long getCurrentUserId() {
+    public static String extractPrincipal() {
         try {
-            Authentication authentication = SecurityContextHolder.getContext()
-                    .getAuthentication();
-
-            if (authentication == null ||
-                    !authentication.isAuthenticated() ||
-                    authentication instanceof AnonymousAuthenticationToken) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null) {
                 return null;
             }
-
-            Object principal = authentication.getPrincipal();
-
-            if (principal instanceof User) {
-                return ((User) principal).getId();
+            if(authentication.getPrincipal() instanceof UserDetails userDetails) {
+                return userDetails.getUsername();
             }
-
-        } catch (Exception e) {
-            log.error("Error getting current user ID", e);
-        }
-
-        return null;
-    }
-
-    /**
-     * Lấy User object hiện tại từ SecurityContext
-     * @return User object hoặc null
-     */
-    public static User getCurrentUser() {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext()
-                    .getAuthentication();
-
-            if (authentication != null &&
-                    authentication.getPrincipal() instanceof User) {
-                return (User) authentication.getPrincipal();
+            if(authentication.getPrincipal() instanceof Jwt jwt) {
+                return jwt.getSubject();
             }
-
+            if (authentication.getPrincipal() instanceof  String s) {
+                return s;
+            }
         } catch (Exception e) {
             log.error("Error getting current user", e);
         }
-
         return null;
-    }
-
-    /**
-     * Kiểm tra user hiện tại có authenticated không
-     * @return true nếu đã đăng nhập
-     */
-    public static boolean isAuthenticated() {
-        try {
-            Authentication authentication = SecurityContextHolder.getContext()
-                    .getAuthentication();
-
-            return authentication != null &&
-                    authentication.isAuthenticated() &&
-                    !(authentication instanceof AnonymousAuthenticationToken);
-
-        } catch (Exception e) {
-            log.error("Error checking authentication", e);
-        }
-        return false;
     }
 
 }

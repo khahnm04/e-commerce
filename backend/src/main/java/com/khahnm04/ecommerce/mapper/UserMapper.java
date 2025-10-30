@@ -2,14 +2,13 @@ package com.khahnm04.ecommerce.mapper;
 
 import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
+import com.khahnm04.ecommerce.dto.request.ProfileRequest;
 import com.khahnm04.ecommerce.dto.request.RegisterRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
-import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
+import com.khahnm04.ecommerce.dto.response.ProfileResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
 import com.khahnm04.ecommerce.entity.User;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -31,9 +30,13 @@ public interface UserMapper {
     UserResponse toUserResponse(User user);
 
     @Mapping(target = "roles", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUser(@MappingTarget User user, UserRequest request);
 
-    MyInfoResponse toMyInfoResponse(User user);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateProfile(@MappingTarget User user, ProfileRequest request);
+
+    ProfileResponse toProfileResponse(User user);
 
     User fromRegisterRequestToUser(RegisterRequest request);
 

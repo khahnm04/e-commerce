@@ -3,8 +3,10 @@ package com.khahnm04.ecommerce.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+import org.springframework.data.domain.Page;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -23,5 +25,22 @@ public class ApiResponse <T> implements Serializable {
     private String message;
 
     private T data;
+
+    private PageMetadata meta;
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PageMetadata {
+        private int page;
+        private int pageSize;
+        private long totalElements;
+        private int totalPages;
+        private boolean isFirst;
+        private boolean isLast;
+        private boolean isEmpty;
+    }
 
 }

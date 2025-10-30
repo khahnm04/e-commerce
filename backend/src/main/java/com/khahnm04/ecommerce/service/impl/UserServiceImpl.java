@@ -1,9 +1,8 @@
 package com.khahnm04.ecommerce.service.impl;
 
-import com.khahnm04.ecommerce.common.enums.GenderEnum;
-import com.khahnm04.ecommerce.dto.request.MyInfoRequest;
+import com.khahnm04.ecommerce.dto.request.ProfileRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
-import com.khahnm04.ecommerce.dto.response.MyInfoResponse;
+import com.khahnm04.ecommerce.dto.response.ProfileResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
 import com.khahnm04.ecommerce.entity.QUser;
@@ -17,6 +16,7 @@ import com.khahnm04.ecommerce.repository.RoleRepository;
 import com.khahnm04.ecommerce.repository.UserRepository;
 import com.khahnm04.ecommerce.service.CloudinaryService;
 import com.khahnm04.ecommerce.service.contract.UserService;
+import com.khahnm04.ecommerce.util.SecurityUtils;
 import com.khahnm04.ecommerce.util.SortUtils;
 import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +26,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -60,26 +61,36 @@ public class UserServiceImpl implements UserService {
 
     //@PreAuthorize("hasRole('ADMIN')")
     @Override
-    public PageResponse<UserResponse> getAllUsers(String search, int page, int size, List<String> sort) {
+    public PageResponse<UserResponse> getAllUsers(int page, int size, List<String> sort, String... search) {
         Sort sortObj = SortUtils.parseSort(sort);
-        Pageable pageable = PageRequest.of(page, size, sortObj);
+        Pageable pageable = PageRequest.of(Math.max(page - 1, 0), size, sortObj);
 
         QUser user = QUser.user;
         BooleanBuilder builder = new BooleanBuilder();
 
-        if (search != null && !search.trim().isEmpty()) {
-            String term = search.trim().toLowerCase();
-            builder.and(
-                    user.username.lower().contains(term)
-                            .or(user.email.lower().contains(term))
-                            .or(user.phoneNumber.contains(term))
-                            .or(user.fullName.lower().contains(term))
-                            .or(user.gender.stringValue().lower().contains(term))
-                            .or(user.status.stringValue().lower().contains(term))
-                            .or(user.id.stringValue().contains(term))
-                            .or(user.image.lower().contains(term))
-                            .or(user.dateOfBirth.stringValue().contains(term))
-            );
+        if (search != null && search.length > 0) {
+            BooleanBuilder searchBuilder = new BooleanBuilder();
+            Arrays.stream(search)
+                    .filter(Objects::nonNull)
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .map(String::toLowerCase)
+                    .map(s -> s.matches("\\d{4}-\\d{2}-\\d{2} .*") && s.contains("T") ? s.replace("T", " ") : s)
+                    .forEach(keyword -> searchBuilder.or(
+                            user.username.lower().contains(keyword)
+                            .or(user.email.lower().contains(keyword))
+                            .or(user.phoneNumber.contains(keyword))
+                            .or(user.fullName.lower().contains(keyword))
+                            .or(user.dateOfBirth.stringValue().contains(keyword))
+                            .or(user.gender.stringValue().lower().contains(keyword))
+                            .or(user.status.stringValue().lower().contains(keyword))
+                            .or(user.createdAt.stringValue().contains(keyword))
+                            .or(user.createdBy.stringValue().contains(keyword))
+                            .or(user.updatedAt.stringValue().contains(keyword))
+                            .or(user.updatedBy.stringValue().contains(keyword))
+                            .or(user.deletedAt.stringValue().contains(keyword))
+                    ));
+            builder.and(searchBuilder);
         }
 
         Page<User> userPage = userRepository.findAll(builder, pageable);
@@ -91,32 +102,23 @@ public class UserServiceImpl implements UserService {
     @PostAuthorize("returnObject.phoneNumber == authentication.name")
     public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED));
+        return userMapper.toUserResponse(user);
+    }
+
+    @Override
+    public UserResponse getProfile() {
+        User user = userRepository.findByIdentifier(SecurityUtils.extractPrincipal())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         return userMapper.toUserResponse(user);
     }
 
     @Override
-    public UserResponse getMyInfo() {
-        var context = SecurityContextHolder.getContext();
-        String phoneNumber = context.getAuthentication().getName();
-        User user = userRepository.findByPhoneNumber(phoneNumber)
+    public ProfileResponse updateProfile(ProfileRequest request) {
+        User user = userRepository.findByIdentifier(SecurityUtils.extractPrincipal())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-        return userMapper.toUserResponse(user);
-    }
-
-    @Override
-    public MyInfoResponse updateMyInfo(MyInfoRequest request) {
-        var context = SecurityContextHolder.getContext();
-        String phoneNumber = context.getAuthentication().getName();
-        User user = userRepository.findByPhoneNumber(phoneNumber)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-
-        user.setFullName(request.getFullName());
-        user.setUsername(request.getUsername());
-        user.setGender(request.getGender());
-        user.setDateOfBirth(request.getDateOfBirth());
-
-        return userMapper.toMyInfoResponse(userRepository.save(user));
+        userMapper.updateProfile(user, request);
+        return userMapper.toProfileResponse(userRepository.save(user));
     }
 
     @Override
@@ -135,18 +137,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeUserStatus(Long id, StatusEnum status) {
+    public void updateUserStatus(Long id, StatusEnum status) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         user.setStatus(status);
+        userRepository.save(user);
         log.info("user status changed to {}", status);
     }
 
     @Override
-    public void softDeleteUserById(Long id) {
+    public void softDeleteUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         user.setDeletedAt(LocalDateTime.now());
+        userRepository.save(user);
         log.info("user soft deleted successfully");
     }
 

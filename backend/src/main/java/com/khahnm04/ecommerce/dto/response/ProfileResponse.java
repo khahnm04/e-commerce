@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class MyInfoResponse implements Serializable {
+public class ProfileResponse implements Serializable {
 
     private String fullName;
     private String username;
