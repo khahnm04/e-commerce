@@ -3,6 +3,7 @@ package com.khahnm04.ecommerce.controller;
 import com.khahnm04.ecommerce.dto.request.CategoryRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
 import com.khahnm04.ecommerce.dto.response.CategoryResponse;
+import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.service.contract.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @Slf4j
@@ -35,9 +35,16 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ApiResponse<List<CategoryResponse>> getAllCategories() {
+    public ApiResponse<List<CategoryResponse>> getAllCategories(
+        @RequestParam(defaultValue = "1", required = false) int page,
+        @RequestParam(defaultValue = "10", required = false) int size,
+        @RequestParam(defaultValue = "createdAt,desc", required = false) String sort,
+        @RequestParam(required = false) String... search
+    ) {
+        PageResponse<CategoryResponse> pageResponse = categoryService.getAllCategories(page, size, sort, search);
         return ApiResponse.<List<CategoryResponse>>builder()
-                .data(categoryService.getAllCategories())
+                .meta(pageResponse.getMeta())
+                .data(pageResponse.getData())
                 .message("get all categories")
                 .build();
     }
@@ -54,7 +61,7 @@ public class CategoryController {
                 .build();
     }
 
-    @PatchMapping("/{id}")
+    @DeleteMapping("/{id}/soft")
     public ApiResponse<Void> softDeleteCategory(
         @PathVariable Long id
     ) {

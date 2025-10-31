@@ -55,6 +55,7 @@ CREATE TABLE categories (
     CONSTRAINT fk_categories_parent FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL
 );
 
+-- bảng brand
 
 
 

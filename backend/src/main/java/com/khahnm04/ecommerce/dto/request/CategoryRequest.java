@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class CategoryRequest implements Serializable {
 
-    @NotBlank(message = "CATEGORY_NUMBER_REQUIRED")
+    @NotBlank(message = "category cannot be blank")
     private String name;
 
     private String description;

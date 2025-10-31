@@ -13,28 +13,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final Map<String, ErrorCode> PATH_ERROR_MAP = Map.of(
-            "/api/v1/users", ErrorCode.USER_EXISTED,
-            "/api/v1/categories", ErrorCode.CATEGORY_EXISTED
-    );
-
     // Catch exception when Duplicate entry
     @ExceptionHandler(value = DataIntegrityViolationException.class)
     ResponseEntity<ErrorResponse> handlingDataIntegrityViolationException(DataIntegrityViolationException exception, HttpServletRequest request) {
-        String path = request.getRequestURI();
-        ErrorCode errorCode = PATH_ERROR_MAP.getOrDefault(path, ErrorCode.DUPLICATE_ENTRY);
+        ErrorCode errorCode = ErrorCode.DUPLICATE_ENTRY;
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
-                .path(path)
+                .path(request.getRequestURI())
                 .method(request.getMethod())
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
@@ -49,7 +42,7 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .method(request.getMethod())
                 .build();
-        return ResponseEntity.badRequest().body(errorResponse);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
     @ExceptionHandler(value = AppException.class)

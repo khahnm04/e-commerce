@@ -1,6 +1,5 @@
 package com.khahnm04.ecommerce.controller;
 
-import com.khahnm04.ecommerce.dto.request.AddressUserRequest;
 import com.khahnm04.ecommerce.dto.request.ProfileRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
 import com.khahnm04.ecommerce.dto.response.*;
@@ -39,7 +38,7 @@ public class UserController {
     public ApiResponse<List<UserResponse>> getAllUsers(
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "createdAt,desc") List<String> sort,
+        @RequestParam(defaultValue = "createdAt,desc") String sort,
         @RequestParam(required = false) String... search
     ) {
         PageResponse<UserResponse> pageResponse = userService.getAllUsers(page, size, sort, search);
@@ -100,7 +99,7 @@ public class UserController {
                 .build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/soft")
     public ApiResponse<Void> softDeleteUser(
         @PathVariable Long id
     ) {

@@ -21,6 +21,7 @@ import com.khahnm04.ecommerce.util.SortUtils;
 import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,10 +31,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -52,16 +50,20 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setImage(cloudinaryService.upload(file));
 
-        List<Role> roles = roleRepository.findAllById(request.getRoles());
+        List<Role> roles = Optional.ofNullable(request.getRoles())
+                .filter(list -> !list.isEmpty())
+                .map(roleRepository::findAllById)
+                .orElse(Collections.emptyList());
         user.setRoles(new HashSet<>(roles));
 
-        User userSaved = userRepository.save(user);
-        return userMapper.toUserResponse(userSaved);
+        User savedUser = saveUser(user);
+        log.info("User with id {} has been saved", savedUser.getId());
+        return userMapper.toUserResponse(savedUser);
     }
 
     //@PreAuthorize("hasRole('ADMIN')")
     @Override
-    public PageResponse<UserResponse> getAllUsers(int page, int size, List<String> sort, String... search) {
+    public PageResponse<UserResponse> getAllUsers(int page, int size, String sort, String... search) {
         Sort sortObj = SortUtils.parseSort(sort);
         Pageable pageable = PageRequest.of(Math.max(page - 1, 0), size, sortObj);
 
@@ -118,7 +120,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByIdentifier(SecurityUtils.extractPrincipal())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userMapper.updateProfile(user, request);
-        return userMapper.toProfileResponse(userRepository.save(user));
+        User savedUser = saveUser(user);
+        log.info("Updated profile user with id {}", savedUser.getId());
+        return userMapper.toProfileResponse(savedUser);
     }
 
     @Override
@@ -132,8 +136,9 @@ public class UserServiceImpl implements UserService {
         List<Role> roles = roleRepository.findAllById(request.getRoles());
         user.setRoles(new HashSet<>(roles));
 
-        User userSaved = userRepository.save(user);
-        return userMapper.toUserResponse(userSaved);
+        User savedUser = saveUser(user);
+        log.info("Updated user with id {}", savedUser.getId());
+        return userMapper.toUserResponse(savedUser);
     }
 
     @Override
@@ -141,7 +146,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         user.setStatus(status);
-        userRepository.save(user);
+        saveUser(user);
         log.info("user status changed to {}", status);
     }
 
@@ -150,8 +155,17 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         user.setDeletedAt(LocalDateTime.now());
-        userRepository.save(user);
+        saveUser(user);
         log.info("user soft deleted successfully");
+    }
+
+    private User saveUser(User user) {
+        try {
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException(ErrorCode.CATEGORY_EXISTED);
+        }
+        return user;
     }
 
 }

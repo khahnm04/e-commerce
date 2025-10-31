@@ -27,6 +27,9 @@ public enum ErrorCode {
     CATEGORY_NAME_EXISTED(2003, "category name existed", HttpStatus.CONFLICT),
     CATEGORY_PARENT_NOT_EXISTED(2004, "category parent not existed", HttpStatus.CONFLICT),
     CATEGORY_HAS_CHILDREN(2005, "Cannot delete category because it has child categories.", HttpStatus.BAD_REQUEST),
+
+    BRAND_NOT_FOUND(3000, "brand not found", HttpStatus.NOT_FOUND),
+    BRAND_EXISTED(3001, "brand already existed", HttpStatus.CONFLICT),
     ;
 
     private final Integer code;

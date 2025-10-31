@@ -18,7 +18,11 @@ public interface CategoryMapper {
         return category;
     }
 
-    @Mapping(target = "parentId", ignore = true)
+    default Long getParentId(Category category) {
+        return category.getParent() != null ? category.getParent().getId() : null;
+    }
+
+    @Mapping(target = "parentId", expression = "java(getParentId(category))")
     CategoryResponse toCategoryResponse(Category category);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
