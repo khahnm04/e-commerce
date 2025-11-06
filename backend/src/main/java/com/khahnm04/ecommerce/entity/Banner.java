@@ -13,8 +13,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "brands")
-public class Brand extends BaseEntity<Long> {
+@Table(name = "banners")
+public class Banner extends BaseEntity<Long> {
 
     @Column(name = "slug", nullable = false, unique = true)
     private String slug;
@@ -22,21 +22,15 @@ public class Brand extends BaseEntity<Long> {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
-
-    @Column(name = "logo", columnDefinition = "TEXT")
-    private String logo;
-
-    @Column(name = "country")
-    private String country;
+    @Column(name = "image", columnDefinition = "TEXT")
+    private String image;
 
     @ColumnDefault("'ACTIVE'")
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private StatusEnum status = StatusEnum.ACTIVE;
 
-    @OneToMany(mappedBy = "brand", fetch = FetchType.LAZY)
-    private List<Product> products;
+    @OneToMany(mappedBy = "banner", fetch = FetchType.LAZY)
+    private List<BannerDetail> bannerDetails;
 
 }

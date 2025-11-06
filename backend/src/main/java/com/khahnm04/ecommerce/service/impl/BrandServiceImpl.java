@@ -2,12 +2,9 @@ package com.khahnm04.ecommerce.service.impl;
 
 import com.khahnm04.ecommerce.dto.request.BrandRequest;
 import com.khahnm04.ecommerce.dto.response.BrandResponse;
-import com.khahnm04.ecommerce.dto.response.CategoryResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.entity.Brand;
-import com.khahnm04.ecommerce.entity.Category;
 import com.khahnm04.ecommerce.entity.QBrand;
-import com.khahnm04.ecommerce.entity.QCategory;
 import com.khahnm04.ecommerce.exception.AppException;
 import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.mapper.BrandMapper;

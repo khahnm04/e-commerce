@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     public UserResponse createUser(UserRequest request, MultipartFile file) {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setImage(cloudinaryService.upload(file));
+        user.setAvatar(cloudinaryService.upload(file));
 
         List<Role> roles = Optional.ofNullable(request.getRoles())
                 .filter(list -> !list.isEmpty())

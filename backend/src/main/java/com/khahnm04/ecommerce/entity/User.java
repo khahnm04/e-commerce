@@ -4,8 +4,10 @@ import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -21,7 +23,7 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends BaseEntity<Long> implements UserDetails {
 
-    @Column(name = "username", unique = true, length = 50)
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "email", unique = true)
@@ -36,16 +38,18 @@ public class User extends BaseEntity<Long> implements UserDetails {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
+    @Column(name = "avatar", columnDefinition = "TEXT")
+    private String avatar;
+
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @Column(name = "image", length = 500)
-    private String image;
-
-    @Enumerated(EnumType.STRING)
+    @ColumnDefault("'UNKNOWN'")
     @Column(name = "gender")
+    @Enumerated(EnumType.STRING)
     private GenderEnum gender = GenderEnum.UNKNOWN;
 
+    @ColumnDefault("'ACTIVE'")
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private StatusEnum status = StatusEnum.ACTIVE;
@@ -54,10 +58,21 @@ public class User extends BaseEntity<Long> implements UserDetails {
     private LocalDateTime lastLoginAt;
 
     @ManyToMany
+    @JoinTable(
+            name = "role_users",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Address> addresses;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<ProductQuestion> productQuestions;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

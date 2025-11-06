@@ -3,6 +3,7 @@ package com.khahnm04.ecommerce.entity;
 import com.khahnm04.ecommerce.common.enums.AddressTypeEnum;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -25,15 +26,17 @@ public class Address extends BaseEntity<Long> {
     @Column(name = "reminiscent_name")
     private String reminiscentName;
 
-    @Column(name = "is_default")
-    private Boolean isDefault = false;
-
+    @ColumnDefault("'HOME'")
     @Enumerated(EnumType.STRING)
     @Column(name = "address_type")
     private AddressTypeEnum addressType = AddressTypeEnum.HOME;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ColumnDefault("0")
+    @Column(name = "is_default")
+    private Boolean isDefault = false;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
 }
