@@ -1,11 +1,11 @@
-package com.khahnm04.ecommerce.service.contract;
+package com.khahnm04.ecommerce.service.auth;
 
 import com.khahnm04.ecommerce.dto.request.*;
 import com.khahnm04.ecommerce.dto.response.LoginResponse;
 import com.khahnm04.ecommerce.dto.response.RegisterResponse;
 import jakarta.servlet.http.HttpServletResponse;
 
-public interface AuthenticationService {
+public interface AuthService {
 
     LoginResponse login(LoginRequest request, HttpServletResponse response);
     void logout(String accessToken, String refreshToken, HttpServletResponse response);

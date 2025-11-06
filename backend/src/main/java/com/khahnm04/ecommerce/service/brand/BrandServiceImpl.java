@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service.impl;
+package com.khahnm04.ecommerce.service.brand;
 
 import com.khahnm04.ecommerce.dto.request.BrandRequest;
 import com.khahnm04.ecommerce.dto.response.BrandResponse;
@@ -10,7 +10,6 @@ import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.mapper.BrandMapper;
 import com.khahnm04.ecommerce.repository.BrandRepository;
 import com.khahnm04.ecommerce.service.CloudinaryService;
-import com.khahnm04.ecommerce.service.contract.BrandService;
 import com.khahnm04.ecommerce.util.SortUtils;
 import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;

@@ -19,6 +19,8 @@ public class LoginRequest implements Serializable {
     @ValidEmail
     private String email;
 
+    private String username;
+
     @NotBlank(message = "PASSWORD_REQUIRED")
     private String password;
 

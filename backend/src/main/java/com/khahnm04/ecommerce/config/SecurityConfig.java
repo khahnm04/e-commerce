@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.config;
 
 import com.khahnm04.ecommerce.common.constant.SecurityConstants;
-import com.khahnm04.ecommerce.service.CustomUserDetailsService;
+import com.khahnm04.ecommerce.service.user.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

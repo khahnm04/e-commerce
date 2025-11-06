@@ -1,11 +1,9 @@
-package com.khahnm04.ecommerce.service.contract;
+package com.khahnm04.ecommerce.service.brand;
 
 import com.khahnm04.ecommerce.dto.request.BrandRequest;
 import com.khahnm04.ecommerce.dto.response.BrandResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 public interface BrandService {
 

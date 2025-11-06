@@ -3,7 +3,7 @@ package com.khahnm04.ecommerce.controller;
 import com.khahnm04.ecommerce.dto.request.PermissionRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
 import com.khahnm04.ecommerce.dto.response.PermissionResponse;
-import com.khahnm04.ecommerce.service.contract.PermissionService;
+import com.khahnm04.ecommerce.service.permission.PermissionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

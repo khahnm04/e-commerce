@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service.impl;
+package com.khahnm04.ecommerce.service.role;
 
 import com.khahnm04.ecommerce.dto.request.RoleRequest;
 import com.khahnm04.ecommerce.dto.response.RoleResponse;
@@ -7,7 +7,6 @@ import com.khahnm04.ecommerce.entity.Role;
 import com.khahnm04.ecommerce.mapper.RoleMapper;
 import com.khahnm04.ecommerce.repository.PermissionRepository;
 import com.khahnm04.ecommerce.repository.RoleRepository;
-import com.khahnm04.ecommerce.service.contract.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

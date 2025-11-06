@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service.contract;
+package com.khahnm04.ecommerce.service.address;
 
 import com.khahnm04.ecommerce.dto.request.AddressUserRequest;
 import com.khahnm04.ecommerce.dto.response.AddressUserResponse;

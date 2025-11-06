@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service.impl;
+package com.khahnm04.ecommerce.service.category;
 
 import com.khahnm04.ecommerce.dto.request.CategoryRequest;
 import com.khahnm04.ecommerce.dto.response.CategoryResponse;
@@ -10,7 +10,6 @@ import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.mapper.CategoryMapper;
 import com.khahnm04.ecommerce.repository.CategoryRepository;
 import com.khahnm04.ecommerce.service.CloudinaryService;
-import com.khahnm04.ecommerce.service.contract.CategoryService;
 import com.khahnm04.ecommerce.util.SortUtils;
 import com.querydsl.core.BooleanBuilder;
 import lombok.RequiredArgsConstructor;

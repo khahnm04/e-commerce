@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service.contract;
+package com.khahnm04.ecommerce.service.auth.jwt;
 
 import com.khahnm04.ecommerce.dto.response.TokenPayload;
 import com.khahnm04.ecommerce.entity.User;

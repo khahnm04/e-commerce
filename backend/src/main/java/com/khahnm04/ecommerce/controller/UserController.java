@@ -4,7 +4,7 @@ import com.khahnm04.ecommerce.dto.request.ProfileRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
 import com.khahnm04.ecommerce.dto.response.*;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
-import com.khahnm04.ecommerce.service.contract.UserService;
+import com.khahnm04.ecommerce.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

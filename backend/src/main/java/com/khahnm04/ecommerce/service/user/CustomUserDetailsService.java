@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service;
+package com.khahnm04.ecommerce.service.user;
 
 import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.repository.UserRepository;

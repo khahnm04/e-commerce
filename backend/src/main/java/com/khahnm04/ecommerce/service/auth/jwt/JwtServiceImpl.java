@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service.impl;
+package com.khahnm04.ecommerce.service.auth.jwt;
 
 import com.khahnm04.ecommerce.common.constant.TokenConstants;
 import com.khahnm04.ecommerce.dto.response.TokenPayload;
@@ -6,7 +6,6 @@ import com.khahnm04.ecommerce.entity.User;
 import com.khahnm04.ecommerce.exception.AppException;
 import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.repository.RedisTokenRepository;
-import com.khahnm04.ecommerce.service.contract.JwtService;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;

@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service.impl;
+package com.khahnm04.ecommerce.service.address;
 
 import com.khahnm04.ecommerce.dto.request.AddressUserRequest;
 import com.khahnm04.ecommerce.dto.response.AddressUserResponse;
@@ -9,7 +9,6 @@ import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.mapper.AddressMapper;
 import com.khahnm04.ecommerce.repository.AddressRepository;
 import com.khahnm04.ecommerce.repository.UserRepository;
-import com.khahnm04.ecommerce.service.contract.AddressService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

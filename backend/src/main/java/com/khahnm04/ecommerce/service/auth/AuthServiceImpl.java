@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service.impl;
+package com.khahnm04.ecommerce.service.auth;
 
 import com.khahnm04.ecommerce.common.constant.TokenConstants;
 import com.khahnm04.ecommerce.common.enums.GenderEnum;
@@ -15,8 +15,8 @@ import com.khahnm04.ecommerce.mapper.UserMapper;
 import com.khahnm04.ecommerce.repository.RedisTokenRepository;
 import com.khahnm04.ecommerce.repository.RoleRepository;
 import com.khahnm04.ecommerce.repository.UserRepository;
-import com.khahnm04.ecommerce.service.contract.AuthenticationService;
-import com.khahnm04.ecommerce.service.contract.JwtService;
+import com.khahnm04.ecommerce.service.auth.jwt.JwtService;
+import com.khahnm04.ecommerce.service.auth.strategy.LoginStrategy;
 import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +26,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -36,32 +34,45 @@ import java.text.ParseException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthenticationServiceImpl implements AuthenticationService {
+public class AuthServiceImpl implements AuthService {
 
-    private final AuthenticationManager authenticationManager;
     private final RedisTokenRepository redisTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
     private final JwtService jwtService;
+    private final List<LoginStrategy> loginStrategies;
 
     @Override
     public LoginResponse login(LoginRequest request, HttpServletResponse response) {
-        if (!StringUtils.hasText(request.getEmail()) && !StringUtils.hasText(request.getPhoneNumber())) {
-            throw new AppException(ErrorCode.EMAIL_OR_PHONE_NUMBER_REQUIRED);
-        }
 
-        String identifier = StringUtils.hasText(request.getPhoneNumber()) ? request.getPhoneNumber() : request.getEmail();
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(identifier, request.getPassword()));
+        Map<Function<LoginRequest, Boolean>, ErrorCode> validators = Map.of(
+                r -> !StringUtils.hasText(r.getPhoneNumber()), ErrorCode.PHONE_NUMBER_REQUIRED,
+                r -> !StringUtils.hasText(r.getEmail()), ErrorCode.EMAIL_NUMBER_REQUIRED,
+                r -> !StringUtils.hasText(r.getUsername()), ErrorCode.USERNAME_REQUIRED
+        );
 
-        User user = (User) authentication.getPrincipal();
+        validators.forEach((predicate, error) -> {
+            if (predicate.apply(request)) {
+                throw new AppException(error);
+            }
+        });
+
+        LoginStrategy strategy = loginStrategies.stream()
+                .filter(s -> s.supports(request))
+                .findFirst()
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+
+        User user = strategy.authenticate(request);
 
         TokenPayload accessToken = jwtService.generateAccessToken(user);
         TokenPayload refreshToken = jwtService.generateRefreshToken(user);
@@ -74,6 +85,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         addAccessTokenCookies(response, accessToken.getToken());
         addRefreshTokenCookies(response, refreshToken.getToken());
 
+        log.info("User with id = {} has been authenticated", user.getId());
         return LoginResponse.builder()
                 .userId(user.getId())
                 .build();
@@ -129,10 +141,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public RegisterResponse register(RegisterRequest request) {
-        if (!StringUtils.hasText(request.getEmail()) && !StringUtils.hasText(request.getPhoneNumber())) {
-            throw new AppException(ErrorCode.EMAIL_OR_PHONE_NUMBER_REQUIRED);
-        }
 
+        Map<Function<RegisterRequest, Boolean>, ErrorCode> validators = Map.of(
+                r -> !StringUtils.hasText(r.getPhoneNumber()), ErrorCode.PHONE_NUMBER_REQUIRED,
+                r -> !StringUtils.hasText(r.getEmail()), ErrorCode.EMAIL_NUMBER_REQUIRED
+        );
+
+        validators.forEach((predicate, error) -> {
+            if (predicate.apply(request)) {
+                throw new AppException(error);
+            }
+        });
         User newUser = userMapper.fromRegisterRequestToUser(request);
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 

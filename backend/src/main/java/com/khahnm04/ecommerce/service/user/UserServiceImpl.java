@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service.impl;
+package com.khahnm04.ecommerce.service.user;
 
 import com.khahnm04.ecommerce.dto.request.ProfileRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
@@ -15,7 +15,6 @@ import com.khahnm04.ecommerce.mapper.UserMapper;
 import com.khahnm04.ecommerce.repository.RoleRepository;
 import com.khahnm04.ecommerce.repository.UserRepository;
 import com.khahnm04.ecommerce.service.CloudinaryService;
-import com.khahnm04.ecommerce.service.contract.UserService;
 import com.khahnm04.ecommerce.util.SecurityUtils;
 import com.khahnm04.ecommerce.util.SortUtils;
 import com.querydsl.core.BooleanBuilder;

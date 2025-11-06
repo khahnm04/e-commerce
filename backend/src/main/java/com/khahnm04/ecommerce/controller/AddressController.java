@@ -3,7 +3,7 @@ package com.khahnm04.ecommerce.controller;
 import com.khahnm04.ecommerce.dto.request.AddressUserRequest;
 import com.khahnm04.ecommerce.dto.response.AddressUserResponse;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
-import com.khahnm04.ecommerce.service.contract.AddressService;
+import com.khahnm04.ecommerce.service.address.AddressService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

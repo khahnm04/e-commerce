@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service.contract;
+package com.khahnm04.ecommerce.service.user;
 
 import com.khahnm04.ecommerce.dto.request.ProfileRequest;
 import com.khahnm04.ecommerce.dto.request.UserRequest;
@@ -7,8 +7,6 @@ import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.dto.response.UserResponse;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 public interface UserService {
 

@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service.contract;
+package com.khahnm04.ecommerce.service.role;
 
 import com.khahnm04.ecommerce.dto.request.RoleRequest;
 import com.khahnm04.ecommerce.dto.response.RoleResponse;
