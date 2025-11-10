@@ -7,7 +7,6 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -23,8 +22,8 @@ import java.util.Set;
 @Table(name = "users")
 public class User extends BaseEntity<Long> implements UserDetails {
 
-    @Column(name = "username", unique = true)
-    private String username;
+    @Column(name = "full_name", nullable = false)
+    private String fullName;
 
     @Column(name = "email", unique = true)
     private String email;
@@ -34,9 +33,6 @@ public class User extends BaseEntity<Long> implements UserDetails {
 
     @Column(name = "password", nullable = false)
     private String password;
-
-    @Column(name = "full_name", nullable = false)
-    private String fullName;
 
     @Column(name = "avatar", columnDefinition = "TEXT")
     private String avatar;
@@ -59,9 +55,9 @@ public class User extends BaseEntity<Long> implements UserDetails {
 
     @ManyToMany
     @JoinTable(
-            name = "role_users",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+        name = "role_users",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
 
@@ -73,6 +69,11 @@ public class User extends BaseEntity<Long> implements UserDetails {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<ProductQuestion> productQuestions;
+
+    @Override
+    public String getUsername() {
+        return "";
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

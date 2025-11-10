@@ -22,10 +22,11 @@ public class Role extends BaseEntity<Long> {
 
     @ManyToMany
     @JoinTable(
-            name = "permission_roles",
-            joinColumns = @JoinColumn(name = "role_id"),
-            inverseJoinColumns = @JoinColumn(name = "permission_id")
+        name = "permission_roles",
+        joinColumns = @JoinColumn(name = "role_id"),
+        inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
+    @OrderBy("id ASC")
     Set<Permission> permissions;
 
 }

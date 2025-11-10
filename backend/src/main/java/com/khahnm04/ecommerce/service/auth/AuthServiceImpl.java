@@ -1,9 +1,7 @@
 package com.khahnm04.ecommerce.service.auth;
 
 import com.khahnm04.ecommerce.common.constant.TokenConstants;
-import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import com.khahnm04.ecommerce.common.enums.RoleEnum;
-import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.dto.request.*;
 import com.khahnm04.ecommerce.dto.response.*;
 import com.khahnm04.ecommerce.entity.RedisToken;
@@ -22,10 +20,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.server.Cookie;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -53,12 +49,12 @@ public class AuthServiceImpl implements AuthService {
     private final List<LoginStrategy> loginStrategies;
 
     @Override
-    public LoginResponse login(LoginRequest request, HttpServletResponse response) {
-
-        Map<Function<LoginRequest, Boolean>, ErrorCode> validators = Map.of(
+    public RegisterResponse register(RegisterRequest request) {
+        Map<Function<RegisterRequest, Boolean>, ErrorCode> validators = Map.of(
                 r -> !StringUtils.hasText(r.getPhoneNumber()), ErrorCode.PHONE_NUMBER_REQUIRED,
-                r -> !StringUtils.hasText(r.getEmail()), ErrorCode.EMAIL_NUMBER_REQUIRED,
-                r -> !StringUtils.hasText(r.getUsername()), ErrorCode.USERNAME_REQUIRED
+                r -> userRepository.existsByPhoneNumber(r.getPhoneNumber()), ErrorCode.PHONE_EXISTED,
+                r -> userRepository.existsByEmail(r.getEmail()), ErrorCode.EMAIL_EXISTED,
+                r -> !request.getPassword().equals(request.getConfirmPassword()), ErrorCode.PASSWORD_CONFIRMATION_MISMATCH
         );
 
         validators.forEach((predicate, error) -> {
@@ -67,12 +63,27 @@ public class AuthServiceImpl implements AuthService {
             }
         });
 
-        LoginStrategy strategy = loginStrategies.stream()
+        User newUser = userMapper.fromRegisterRequestToUser(request);
+
+//        Set<Role> roles = new HashSet<>();
+//        roleRepository.findById(RoleEnum.USER.name()).ifPresent(roles::add);
+//        newUser.setRoles(roles);
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+
+        newUser = userRepository.save(newUser);
+        return RegisterResponse.builder()
+                .userId(newUser.getId())
+                .build();
+    }
+
+    @Override
+    public LoginResponse login(LoginRequest request, HttpServletResponse response) {
+        LoginStrategy loginStrategy = loginStrategies.stream()
                 .filter(s -> s.supports(request))
                 .findFirst()
-                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+                .orElseThrow(() -> new AppException(ErrorCode.LOGIN_IDENTIFIER_REQUIRED));
 
-        User user = strategy.authenticate(request);
+        User user = loginStrategy.authenticate(request);
 
         TokenPayload accessToken = jwtService.generateAccessToken(user);
         TokenPayload refreshToken = jwtService.generateRefreshToken(user);
@@ -139,45 +150,13 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    @Override
-    public RegisterResponse register(RegisterRequest request) {
-
-        Map<Function<RegisterRequest, Boolean>, ErrorCode> validators = Map.of(
-                r -> !StringUtils.hasText(r.getPhoneNumber()), ErrorCode.PHONE_NUMBER_REQUIRED,
-                r -> !StringUtils.hasText(r.getEmail()), ErrorCode.EMAIL_NUMBER_REQUIRED
-        );
-
-        validators.forEach((predicate, error) -> {
-            if (predicate.apply(request)) {
-                throw new AppException(error);
-            }
-        });
-        User newUser = userMapper.fromRegisterRequestToUser(request);
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-
-        Set<Role> roles = new HashSet<>();
-        roleRepository.findById(RoleEnum.USER.name()).ifPresent(roles::add);
-        newUser.setRoles(roles);
-        newUser.setGender(GenderEnum.UNKNOWN);
-        newUser.setStatus(StatusEnum.ACTIVE);
-
-        try {
-            newUser = userRepository.save(newUser);
-        } catch (DataIntegrityViolationException e) {
-            throw new AppException(ErrorCode.USER_EXISTED);
-        }
-        return RegisterResponse.builder()
-                .userId(newUser.getId())
-                .build();
-    }
-
     private void addAccessTokenCookies(HttpServletResponse response, String accessToken) {
         ResponseCookie accessCookie = ResponseCookie.from(TokenConstants.ACCESS_TOKEN, accessToken)
                 .httpOnly(true)
                 .secure(false)
                 .domain("localhost")
                 .path("/")
-                .maxAge(Duration.ofMinutes(15))
+                .maxAge(Duration.ofDays(30))
                 .sameSite(Cookie.SameSite.STRICT.attributeValue())
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());

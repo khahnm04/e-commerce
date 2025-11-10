@@ -9,6 +9,7 @@ public interface RoleService {
 
     RoleResponse createRole(RoleRequest request);
     List<RoleResponse> getAllRoles();
-    void deleteRole(String role);
+    RoleResponse updateRole(Long id, RoleRequest request);
+    void deleteRole(Long id);
 
 }

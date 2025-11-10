@@ -10,23 +10,27 @@ import com.khahnm04.ecommerce.dto.response.UserResponse;
 import com.khahnm04.ecommerce.entity.User;
 import org.mapstruct.*;
 
+import java.util.Objects;
+
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
     default User toUser(UserRequest request) {
         if (request == null) return null;
-        User user = User.builder()
-                .gender(request.getGender() == null ? GenderEnum.UNKNOWN : request.getGender())
-                .status(request.getStatus() == null ? StatusEnum.ACTIVE : request.getStatus())
-                .build();
 
-        if (request.getGender() == null) request.setGender(GenderEnum.UNKNOWN);
-        if (request.getStatus() == null) request.setStatus(StatusEnum.ACTIVE);
+        request.setGender(Objects.requireNonNullElse(request.getGender(), GenderEnum.UNKNOWN));
+        request.setStatus(Objects.requireNonNullElse(request.getStatus(), StatusEnum.ACTIVE));
+
+        User user = User.builder()
+                .gender(request.getGender())
+                .status(request.getStatus())
+                .build();
 
         updateUser(user, request);
         return user;
     }
 
+    @Mapping(target = "roles", ignore = true)
     UserResponse toUserResponse(User user);
 
     @Mapping(target = "roles", ignore = true)

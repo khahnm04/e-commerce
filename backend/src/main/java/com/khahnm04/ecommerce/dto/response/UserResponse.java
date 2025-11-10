@@ -17,13 +17,12 @@ import java.util.Set;
 public class UserResponse implements Serializable {
 
     private Long id;
-    private String username;
+    private String fullName;
     private String email;
     private String phoneNumber;
-    private String fullName;
+    private String avatar;
     private LocalDate dateOfBirth;
     private GenderEnum gender;
-    private String image;
     private StatusEnum status;
     private LocalDateTime lastLoginAt;
     private LocalDateTime createdAt;
@@ -31,6 +30,6 @@ public class UserResponse implements Serializable {
     private LocalDateTime updatedAt;
     private Long updatedBy;
     private LocalDateTime deletedAt;
-    private Set<RoleResponse> roles;
+    private Set<String> roles;
 
 }

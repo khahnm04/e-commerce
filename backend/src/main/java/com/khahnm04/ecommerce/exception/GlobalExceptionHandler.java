@@ -96,4 +96,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
+    @ExceptionHandler(BusinessValidationException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessValidation(BusinessValidationException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .code(9002)
+                .message("Validation error")
+                .path(request.getRequestURI())
+                .method(request.getMethod())
+                .errors(ex.getErrors()) // trả mảng lỗi như DTO
+                .build();
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
 }

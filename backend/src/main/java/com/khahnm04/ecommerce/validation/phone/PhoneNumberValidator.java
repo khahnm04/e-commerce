@@ -1,6 +1,5 @@
 package com.khahnm04.ecommerce.validation.phone;
 
-import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.util.ValidationUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

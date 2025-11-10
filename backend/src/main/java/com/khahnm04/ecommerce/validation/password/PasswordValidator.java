@@ -4,6 +4,7 @@ import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.util.ValidationUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.util.StringUtils;
 
 public class PasswordValidator implements ConstraintValidator<ValidPassword, String> {
 
@@ -26,10 +27,8 @@ public class PasswordValidator implements ConstraintValidator<ValidPassword, Str
     public boolean isValid(String password, ConstraintValidatorContext context) {
         context.disableDefaultConstraintViolation();
 
-        // Null/empty check
-        if (password == null || password.isEmpty()) {
-            ValidationUtils.buildError("Password cannot be blank", context);
-            return false;
+        if (!StringUtils.hasText(password)) {
+            return true;
         }
 
         // Length checks

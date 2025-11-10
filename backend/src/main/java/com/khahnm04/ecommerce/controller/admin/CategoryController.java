@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.controller;
+package com.khahnm04.ecommerce.controller.admin;
 
 import com.khahnm04.ecommerce.dto.request.CategoryRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;

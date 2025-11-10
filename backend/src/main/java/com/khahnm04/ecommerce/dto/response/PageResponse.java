@@ -20,7 +20,7 @@ public class PageResponse<T> {
         return PageResponse.<T>builder()
                 .data(page.getContent())
                 .meta(ApiResponse.PageMetadata.builder()
-                        .page(page.getNumber() + 1)
+                        .pageNo(page.getNumber() + 1)
                         .pageSize(page.getSize())
                         .totalElements(page.getTotalElements())
                         .totalPages(page.getTotalPages())

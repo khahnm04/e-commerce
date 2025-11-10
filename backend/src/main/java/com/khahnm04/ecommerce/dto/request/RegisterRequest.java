@@ -4,8 +4,10 @@ import com.khahnm04.ecommerce.validation.email.ValidEmail;
 import com.khahnm04.ecommerce.validation.password.ValidPassword;
 import com.khahnm04.ecommerce.validation.phone.ValidPhoneNumber;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -17,14 +19,21 @@ public class RegisterRequest implements Serializable {
     @NotBlank(message = "full name is not blank")
     private String fullName;
 
+    @NotNull(message = "dateOfBirth cannot be null")
+    private LocalDate dateOfBirth;
+
+    @ValidPhoneNumber
+    @NotBlank(message = "phoneNumber cannot be blank")
+    private String phoneNumber;
+
     @ValidEmail
     private String email;
 
-    @ValidPhoneNumber
-    private String phoneNumber;
-
     @ValidPassword
-    @NotBlank(message = "password is not blank")
+    @NotBlank(message = "password cannot be blank")
     private String password;
+
+    @NotBlank(message = "confirmPassword cannot be blank")
+    private String confirmPassword;
 
 }

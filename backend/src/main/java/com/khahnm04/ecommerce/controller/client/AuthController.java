@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.controller;
+package com.khahnm04.ecommerce.controller.client;
 
 import com.khahnm04.ecommerce.common.constant.TokenConstants;
 import com.khahnm04.ecommerce.dto.request.*;
@@ -16,6 +16,16 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @PostMapping("/register")
+    ApiResponse<RegisterResponse> register(
+        @Valid @RequestBody RegisterRequest request
+    ) {
+        return ApiResponse.<RegisterResponse>builder()
+                .data(authService.register(request))
+                .message("register successful")
+                .build();
+    }
+
     @PostMapping("/login")
     ApiResponse<LoginResponse> login(
         @Valid @RequestBody LoginRequest request,
@@ -23,7 +33,7 @@ public class AuthController {
     ) {
         return ApiResponse.<LoginResponse>builder()
                 .data(authService.login(request, response))
-                .message("Login Successful")
+                .message("login Successful")
                 .build();
     }
 
@@ -47,16 +57,6 @@ public class AuthController {
         authService.refreshToken(token, response);
         return ApiResponse.<Void>builder()
                 .message("refresh token Successful")
-                .build();
-    }
-
-    @PostMapping("/register")
-    ApiResponse<RegisterResponse> register(
-        @Valid @RequestBody RegisterRequest request
-    ) {
-        return ApiResponse.<RegisterResponse>builder()
-                .data(authService.register(request))
-                .message("register Successful")
                 .build();
     }
 

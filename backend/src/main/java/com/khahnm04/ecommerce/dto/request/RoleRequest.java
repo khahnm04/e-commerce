@@ -5,13 +5,14 @@ import lombok.*;
 import java.io.Serializable;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoleRequest implements Serializable {
 
-    @NotBlank(message = "name is not blank")
+    @NotBlank(message = "name cannot be blank")
     private String name;
 
     private String description;

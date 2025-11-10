@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.controller;
+package com.khahnm04.ecommerce.controller.admin;
 
 import com.khahnm04.ecommerce.dto.request.RoleRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("${api.prefix}/roles")
+@RequestMapping("${api.prefix}/admin/roles")
 @RequiredArgsConstructor
 public class RoleController {
 
@@ -24,6 +24,7 @@ public class RoleController {
     ) {
         return ApiResponse.<RoleResponse>builder()
                 .data(roleService.createRole(request))
+                .message("role created successfully")
                 .build();
     }
 
@@ -31,15 +32,29 @@ public class RoleController {
     ApiResponse<List<RoleResponse>> getAllRoles() {
         return ApiResponse.<List<RoleResponse>>builder()
                 .data(roleService.getAllRoles())
+                .message("get all roles successfully")
                 .build();
     }
 
-    @DeleteMapping("/{role}")
-    ApiResponse<Void> deleteRole(
-        @PathVariable String role
+    @PutMapping("/{id}")
+    ApiResponse<RoleResponse> updateRole(
+        @PathVariable Long id,
+        @Valid @RequestBody RoleRequest request
     ) {
-        roleService.deleteRole(role);
-        return ApiResponse.<Void>builder().build();
+        return ApiResponse.<RoleResponse>builder()
+                .data(roleService.updateRole(id, request))
+                .message("role updated successfully")
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    ApiResponse<Void> deleteRole(
+        @PathVariable Long id
+    ) {
+        roleService.deleteRole(id);
+        return ApiResponse.<Void>builder()
+                .message("role deleted successfully")
+                .build();
     }
 
 }

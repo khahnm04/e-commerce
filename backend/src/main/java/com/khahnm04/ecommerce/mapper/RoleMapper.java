@@ -3,8 +3,7 @@ package com.khahnm04.ecommerce.mapper;
 import com.khahnm04.ecommerce.dto.request.RoleRequest;
 import com.khahnm04.ecommerce.dto.response.RoleResponse;
 import com.khahnm04.ecommerce.entity.Role;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {
@@ -13,5 +12,9 @@ public interface RoleMapper {
     Role toRole(RoleRequest request);
 
     RoleResponse toRoleResponse(Role role);
+
+    @Mapping(target = "permissions", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateRole(@MappingTarget Role role, RoleRequest request);
 
 }
