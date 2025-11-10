@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.service.brand;
 
-import com.khahnm04.ecommerce.dto.request.BrandRequest;
-import com.khahnm04.ecommerce.dto.response.BrandResponse;
+import com.khahnm04.ecommerce.dto.request.brand.BrandRequest;
+import com.khahnm04.ecommerce.dto.response.brand.BrandResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.entity.Brand;
 import com.khahnm04.ecommerce.entity.QBrand;

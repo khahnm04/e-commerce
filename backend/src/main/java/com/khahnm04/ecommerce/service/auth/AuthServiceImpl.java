@@ -1,11 +1,12 @@
 package com.khahnm04.ecommerce.service.auth;
 
 import com.khahnm04.ecommerce.common.constant.TokenConstants;
-import com.khahnm04.ecommerce.common.enums.RoleEnum;
-import com.khahnm04.ecommerce.dto.request.*;
-import com.khahnm04.ecommerce.dto.response.*;
+import com.khahnm04.ecommerce.dto.request.auth.LoginRequest;
+import com.khahnm04.ecommerce.dto.request.auth.RegisterRequest;
+import com.khahnm04.ecommerce.dto.response.auth.LoginResponse;
+import com.khahnm04.ecommerce.dto.response.auth.RegisterResponse;
+import com.khahnm04.ecommerce.dto.response.auth.TokenPayload;
 import com.khahnm04.ecommerce.entity.RedisToken;
-import com.khahnm04.ecommerce.entity.Role;
 import com.khahnm04.ecommerce.entity.User;
 import com.khahnm04.ecommerce.exception.AppException;
 import com.khahnm04.ecommerce.exception.ErrorCode;
@@ -29,10 +30,8 @@ import org.springframework.util.StringUtils;
 import java.text.ParseException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 
 @Slf4j

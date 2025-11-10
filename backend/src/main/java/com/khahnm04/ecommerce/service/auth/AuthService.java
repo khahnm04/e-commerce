@@ -1,8 +1,9 @@
 package com.khahnm04.ecommerce.service.auth;
 
-import com.khahnm04.ecommerce.dto.request.*;
-import com.khahnm04.ecommerce.dto.response.LoginResponse;
-import com.khahnm04.ecommerce.dto.response.RegisterResponse;
+import com.khahnm04.ecommerce.dto.request.auth.LoginRequest;
+import com.khahnm04.ecommerce.dto.request.auth.RegisterRequest;
+import com.khahnm04.ecommerce.dto.response.auth.LoginResponse;
+import com.khahnm04.ecommerce.dto.response.auth.RegisterResponse;
 import jakarta.servlet.http.HttpServletResponse;
 
 public interface AuthService {

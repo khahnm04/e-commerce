@@ -1,8 +1,11 @@
 package com.khahnm04.ecommerce.controller.client;
 
 import com.khahnm04.ecommerce.common.constant.TokenConstants;
-import com.khahnm04.ecommerce.dto.request.*;
+import com.khahnm04.ecommerce.dto.request.auth.LoginRequest;
+import com.khahnm04.ecommerce.dto.request.auth.RegisterRequest;
 import com.khahnm04.ecommerce.dto.response.*;
+import com.khahnm04.ecommerce.dto.response.auth.LoginResponse;
+import com.khahnm04.ecommerce.dto.response.auth.RegisterResponse;
 import com.khahnm04.ecommerce.service.auth.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

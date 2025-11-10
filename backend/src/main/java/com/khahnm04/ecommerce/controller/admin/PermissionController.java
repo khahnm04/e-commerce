@@ -1,8 +1,8 @@
 package com.khahnm04.ecommerce.controller.admin;
 
-import com.khahnm04.ecommerce.dto.request.PermissionRequest;
+import com.khahnm04.ecommerce.dto.request.auth.PermissionRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
-import com.khahnm04.ecommerce.dto.response.PermissionResponse;
+import com.khahnm04.ecommerce.dto.response.auth.PermissionResponse;
 import com.khahnm04.ecommerce.service.permission.PermissionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

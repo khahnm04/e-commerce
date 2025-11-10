@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.service.address;
 
-import com.khahnm04.ecommerce.dto.request.AddressUserRequest;
-import com.khahnm04.ecommerce.dto.response.AddressUserResponse;
+import com.khahnm04.ecommerce.dto.request.user.AddressUserRequest;
+import com.khahnm04.ecommerce.dto.response.user.AddressUserResponse;
 import com.khahnm04.ecommerce.entity.Address;
 import com.khahnm04.ecommerce.entity.User;
 import com.khahnm04.ecommerce.exception.AppException;

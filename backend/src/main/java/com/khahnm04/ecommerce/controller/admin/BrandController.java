@@ -1,8 +1,8 @@
 package com.khahnm04.ecommerce.controller.admin;
 
-import com.khahnm04.ecommerce.dto.request.BrandRequest;
+import com.khahnm04.ecommerce.dto.request.brand.BrandRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
-import com.khahnm04.ecommerce.dto.response.BrandResponse;
+import com.khahnm04.ecommerce.dto.response.brand.BrandResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.service.brand.BrandService;
 import jakarta.validation.Valid;

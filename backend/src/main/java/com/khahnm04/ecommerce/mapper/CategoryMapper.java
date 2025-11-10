@@ -1,8 +1,8 @@
 package com.khahnm04.ecommerce.mapper;
 
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
-import com.khahnm04.ecommerce.dto.request.CategoryRequest;
-import com.khahnm04.ecommerce.dto.response.CategoryResponse;
+import com.khahnm04.ecommerce.dto.request.category.CategoryRequest;
+import com.khahnm04.ecommerce.dto.response.category.CategoryResponse;
 import com.khahnm04.ecommerce.entity.Category;
 import org.mapstruct.*;
 

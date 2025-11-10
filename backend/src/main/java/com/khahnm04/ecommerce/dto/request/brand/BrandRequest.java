@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.dto.request;
+package com.khahnm04.ecommerce.dto.request.brand;
 
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import jakarta.validation.constraints.NotBlank;

@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.service.auth.jwt;
 
 import com.khahnm04.ecommerce.common.constant.TokenConstants;
-import com.khahnm04.ecommerce.dto.response.TokenPayload;
+import com.khahnm04.ecommerce.dto.response.auth.TokenPayload;
 import com.khahnm04.ecommerce.entity.User;
 import com.khahnm04.ecommerce.exception.AppException;
 import com.khahnm04.ecommerce.exception.ErrorCode;

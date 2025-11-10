@@ -1,8 +1,8 @@
 package com.khahnm04.ecommerce.mapper;
 
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
-import com.khahnm04.ecommerce.dto.request.BrandRequest;
-import com.khahnm04.ecommerce.dto.response.BrandResponse;
+import com.khahnm04.ecommerce.dto.request.brand.BrandRequest;
+import com.khahnm04.ecommerce.dto.response.brand.BrandResponse;
 import com.khahnm04.ecommerce.entity.Brand;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

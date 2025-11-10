@@ -1,9 +1,12 @@
 package com.khahnm04.ecommerce.controller.client;
 
-import com.khahnm04.ecommerce.dto.request.AddressUserRequest;
-import com.khahnm04.ecommerce.dto.request.ChangePasswordRequest;
-import com.khahnm04.ecommerce.dto.request.ProfileRequest;
+import com.khahnm04.ecommerce.dto.request.user.AddressUserRequest;
+import com.khahnm04.ecommerce.dto.request.user.ChangePasswordRequest;
+import com.khahnm04.ecommerce.dto.request.user.ProfileRequest;
 import com.khahnm04.ecommerce.dto.response.*;
+import com.khahnm04.ecommerce.dto.response.user.AddressUserResponse;
+import com.khahnm04.ecommerce.dto.response.user.ProfileResponse;
+import com.khahnm04.ecommerce.dto.response.user.UserResponse;
 import com.khahnm04.ecommerce.service.address.AddressService;
 import com.khahnm04.ecommerce.service.user.UserService;
 import jakarta.validation.Valid;
@@ -28,7 +31,7 @@ public class UserController {
     public ApiResponse<UserResponse> getProfile() {
         return ApiResponse.<UserResponse>builder()
                 .data(userService.getProfile())
-                .message("get my info successfully")
+                .message("get my profile successfully")
                 .build();
     }
 
@@ -38,7 +41,7 @@ public class UserController {
     ) {
         return ApiResponse.<ProfileResponse>builder()
                 .data(userService.updateProfile(request))
-                .message("update my info successfully")
+                .message("update my profile successfully")
                 .build();
     }
 

@@ -1,12 +1,12 @@
 package com.khahnm04.ecommerce.service.user;
 
-import com.khahnm04.ecommerce.dto.request.ChangePasswordRequest;
-import com.khahnm04.ecommerce.dto.request.ProfileRequest;
-import com.khahnm04.ecommerce.dto.request.UserRequest;
+import com.khahnm04.ecommerce.dto.request.user.ChangePasswordRequest;
+import com.khahnm04.ecommerce.dto.request.user.ProfileRequest;
+import com.khahnm04.ecommerce.dto.request.user.UserRequest;
 import com.khahnm04.ecommerce.dto.response.FieldErrorResponse;
-import com.khahnm04.ecommerce.dto.response.ProfileResponse;
+import com.khahnm04.ecommerce.dto.response.user.ProfileResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
-import com.khahnm04.ecommerce.dto.response.UserResponse;
+import com.khahnm04.ecommerce.dto.response.user.UserResponse;
 import com.khahnm04.ecommerce.entity.Role;
 import com.khahnm04.ecommerce.entity.User;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;

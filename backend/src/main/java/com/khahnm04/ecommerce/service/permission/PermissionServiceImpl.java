@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.service.permission;
 
-import com.khahnm04.ecommerce.dto.request.PermissionRequest;
-import com.khahnm04.ecommerce.dto.response.PermissionResponse;
+import com.khahnm04.ecommerce.dto.request.auth.PermissionRequest;
+import com.khahnm04.ecommerce.dto.response.auth.PermissionResponse;
 import com.khahnm04.ecommerce.entity.Permission;
 import com.khahnm04.ecommerce.exception.AppException;
 import com.khahnm04.ecommerce.exception.ErrorCode;

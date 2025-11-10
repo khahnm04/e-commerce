@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.dto.response;
+package com.khahnm04.ecommerce.dto.response.category;
 
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import lombok.*;

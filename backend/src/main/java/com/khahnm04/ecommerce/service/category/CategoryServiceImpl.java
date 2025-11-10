@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.service.category;
 
-import com.khahnm04.ecommerce.dto.request.CategoryRequest;
-import com.khahnm04.ecommerce.dto.response.CategoryResponse;
+import com.khahnm04.ecommerce.dto.request.category.CategoryRequest;
+import com.khahnm04.ecommerce.dto.response.category.CategoryResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.entity.Category;
 import com.khahnm04.ecommerce.entity.QCategory;

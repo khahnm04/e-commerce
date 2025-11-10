@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.dto.response;
+package com.khahnm04.ecommerce.dto.response.auth;
 
 import lombok.*;
 import java.io.Serializable;

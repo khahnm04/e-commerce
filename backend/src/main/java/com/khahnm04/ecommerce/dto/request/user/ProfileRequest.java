@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.dto.request;
+package com.khahnm04.ecommerce.dto.request.user;
 
 import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import com.khahnm04.ecommerce.validation.email.ValidEmail;

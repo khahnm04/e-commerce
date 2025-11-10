@@ -2,11 +2,11 @@ package com.khahnm04.ecommerce.mapper;
 
 import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
-import com.khahnm04.ecommerce.dto.request.ProfileRequest;
-import com.khahnm04.ecommerce.dto.request.RegisterRequest;
-import com.khahnm04.ecommerce.dto.request.UserRequest;
-import com.khahnm04.ecommerce.dto.response.ProfileResponse;
-import com.khahnm04.ecommerce.dto.response.UserResponse;
+import com.khahnm04.ecommerce.dto.request.user.ProfileRequest;
+import com.khahnm04.ecommerce.dto.request.auth.RegisterRequest;
+import com.khahnm04.ecommerce.dto.request.user.UserRequest;
+import com.khahnm04.ecommerce.dto.response.user.ProfileResponse;
+import com.khahnm04.ecommerce.dto.response.user.UserResponse;
 import com.khahnm04.ecommerce.entity.User;
 import org.mapstruct.*;
 

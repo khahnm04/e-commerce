@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.service.auth.strategy;
 
-import com.khahnm04.ecommerce.dto.request.LoginRequest;
+import com.khahnm04.ecommerce.dto.request.auth.LoginRequest;
 import com.khahnm04.ecommerce.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

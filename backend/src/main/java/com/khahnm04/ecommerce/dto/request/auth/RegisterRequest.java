@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.dto.request;
+package com.khahnm04.ecommerce.dto.request.auth;
 
 import com.khahnm04.ecommerce.validation.email.ValidEmail;
 import com.khahnm04.ecommerce.validation.password.ValidPassword;

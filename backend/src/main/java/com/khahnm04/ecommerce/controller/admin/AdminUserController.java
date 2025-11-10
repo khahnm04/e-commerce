@@ -1,10 +1,10 @@
 package com.khahnm04.ecommerce.controller.admin;
 
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
-import com.khahnm04.ecommerce.dto.request.UserRequest;
+import com.khahnm04.ecommerce.dto.request.user.UserRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
-import com.khahnm04.ecommerce.dto.response.UserResponse;
+import com.khahnm04.ecommerce.dto.response.user.UserResponse;
 import com.khahnm04.ecommerce.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
