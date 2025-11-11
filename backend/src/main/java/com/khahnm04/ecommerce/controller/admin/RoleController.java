@@ -3,7 +3,7 @@ package com.khahnm04.ecommerce.controller.admin;
 import com.khahnm04.ecommerce.dto.request.auth.RoleRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
 import com.khahnm04.ecommerce.dto.response.auth.RoleResponse;
-import com.khahnm04.ecommerce.service.role.RoleServiceImpl;
+import com.khahnm04.ecommerce.service.auth.role.RoleServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

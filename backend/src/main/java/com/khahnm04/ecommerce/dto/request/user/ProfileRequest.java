@@ -2,6 +2,7 @@ package com.khahnm04.ecommerce.dto.request.user;
 
 import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import com.khahnm04.ecommerce.validation.email.ValidEmail;
+import com.khahnm04.ecommerce.validation.enums.ValidEnum;
 import com.khahnm04.ecommerce.validation.phone.ValidPhoneNumber;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -22,10 +23,12 @@ public class ProfileRequest implements Serializable {
     private String email;
 
     @ValidPhoneNumber
+    @NotBlank(message = "phoneNumber cannot be blank")
     private String phoneNumber;
 
-    private GenderEnum gender;
-
     private LocalDate dateOfBirth;
+
+    @ValidEnum(enumClass = GenderEnum.class)
+    private GenderEnum gender;
 
 }

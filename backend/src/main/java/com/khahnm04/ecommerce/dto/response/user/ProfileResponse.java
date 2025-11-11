@@ -1,9 +1,7 @@
 package com.khahnm04.ecommerce.dto.response.user;
 
 import com.khahnm04.ecommerce.common.enums.GenderEnum;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -12,9 +10,12 @@ import java.time.LocalDate;
 @Builder
 public class ProfileResponse implements Serializable {
 
+    private Long id;
     private String fullName;
-    private String username;
-    private GenderEnum gender;
+    private String email;
+    private String phoneNumber;
+    private String avatar;
     private LocalDate dateOfBirth;
+    private GenderEnum gender;
 
 }

@@ -45,36 +45,37 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public PageResponse<BrandResponse> getAllBrands(int page, int size, String sort, String... search) {
-        Sort sortObj = SortUtils.parseSort(sort);
-        Pageable pageable = PageRequest.of(Math.max(page - 1, 0), size, sortObj);
-
-        QBrand brand = QBrand.brand;
-        BooleanBuilder builder = new BooleanBuilder();
-
-        if (search != null && search.length > 0) {
-            BooleanBuilder searchBuilder = new BooleanBuilder();
-            Arrays.stream(search)
-                    .filter(Objects::nonNull)
-                    .map(String::trim)
-                    .filter(s -> !s.isEmpty())
-                    .map(String::toLowerCase)
-                    .map(s -> s.matches("\\d{4}-\\d{2}-\\d{2} .*") && s.contains("T") ? s.replace("T", " ") : s)
-                    .forEach(keyword -> searchBuilder.or(
-                            brand.name.lower().contains(keyword)
-                            .or(brand.description.lower().contains(keyword))
-                            .or(brand.status.stringValue().lower().contains(keyword))
-                            .or(brand.createdAt.stringValue().contains(keyword))
-                            .or(brand.createdBy.stringValue().contains(keyword))
-                            .or(brand.updatedAt.stringValue().contains(keyword))
-                            .or(brand.updatedBy.stringValue().contains(keyword))
-                            .or(brand.deletedAt.stringValue().contains(keyword))
-                    ));
-            builder.and(searchBuilder);
-        }
-
-        Page<Brand> brandPage = brandRepository.findAll(builder, pageable);
-        Page<BrandResponse> dtoPage = brandPage.map(brandMapper::toBrandResponse);
-        return PageResponse.fromPage(dtoPage);
+//        Sort sortObj = SortUtils.parseSort(sort);
+//        Pageable pageable = PageRequest.of(Math.max(page - 1, 0), size, sortObj);
+//
+//        QBrand brand = QBrand.brand;
+//        BooleanBuilder builder = new BooleanBuilder();
+//
+//        if (search != null && search.length > 0) {
+//            BooleanBuilder searchBuilder = new BooleanBuilder();
+//            Arrays.stream(search)
+//                    .filter(Objects::nonNull)
+//                    .map(String::trim)
+//                    .filter(s -> !s.isEmpty())
+//                    .map(String::toLowerCase)
+//                    .map(s -> s.matches("\\d{4}-\\d{2}-\\d{2} .*") && s.contains("T") ? s.replace("T", " ") : s)
+//                    .forEach(keyword -> searchBuilder.or(
+//                            brand.name.lower().contains(keyword)
+//                            .or(brand.description.lower().contains(keyword))
+//                            .or(brand.status.stringValue().lower().contains(keyword))
+//                            .or(brand.createdAt.stringValue().contains(keyword))
+//                            .or(brand.createdBy.stringValue().contains(keyword))
+//                            .or(brand.updatedAt.stringValue().contains(keyword))
+//                            .or(brand.updatedBy.stringValue().contains(keyword))
+//                            .or(brand.deletedAt.stringValue().contains(keyword))
+//                    ));
+//            builder.and(searchBuilder);
+//        }
+//
+//        Page<Brand> brandPage = brandRepository.findAll(builder, pageable);
+//        Page<BrandResponse> dtoPage = brandPage.map(brandMapper::toBrandResponse);
+//        return PageResponse.fromPage(dtoPage);
+        return null;
     }
 
     @Override

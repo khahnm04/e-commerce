@@ -10,6 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 public class AddressUserResponse {
 
+    private Long id;
     private String province;
     private String ward;
     private String homeAddress;

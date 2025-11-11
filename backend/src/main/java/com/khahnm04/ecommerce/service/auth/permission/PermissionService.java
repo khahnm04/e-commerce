@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.service.permission;
+package com.khahnm04.ecommerce.service.auth.permission;
 
 import com.khahnm04.ecommerce.dto.request.auth.PermissionRequest;
 import com.khahnm04.ecommerce.dto.response.auth.PermissionResponse;

@@ -15,7 +15,7 @@ import java.util.Objects;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    default User toUser(UserRequest request) {
+    default User fromUserRequestToUser(UserRequest request) {
         if (request == null) return null;
 
         request.setGender(Objects.requireNonNullElse(request.getGender(), GenderEnum.UNKNOWN));
@@ -31,7 +31,7 @@ public interface UserMapper {
     }
 
     @Mapping(target = "roles", ignore = true)
-    UserResponse toUserResponse(User user);
+    UserResponse fromUserToUserResponse(User user);
 
     @Mapping(target = "roles", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -40,8 +40,10 @@ public interface UserMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateProfile(@MappingTarget User user, ProfileRequest request);
 
-    ProfileResponse toProfileResponse(User user);
+    ProfileResponse fromUserToProfileResponse(User user);
 
     User fromRegisterRequestToUser(RegisterRequest request);
+
+    UserRequest fromProfileRequestToUserRequest(ProfileRequest request);
 
 }

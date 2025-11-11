@@ -6,8 +6,6 @@ import com.khahnm04.ecommerce.dto.request.user.ProfileRequest;
 import com.khahnm04.ecommerce.dto.response.*;
 import com.khahnm04.ecommerce.dto.response.user.AddressUserResponse;
 import com.khahnm04.ecommerce.dto.response.user.ProfileResponse;
-import com.khahnm04.ecommerce.dto.response.user.UserResponse;
-import com.khahnm04.ecommerce.service.address.AddressService;
 import com.khahnm04.ecommerce.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @Slf4j
@@ -25,11 +22,10 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final AddressService addressService;
 
     @GetMapping("/profile")
-    public ApiResponse<UserResponse> getProfile() {
-        return ApiResponse.<UserResponse>builder()
+    public ApiResponse<ProfileResponse> getProfile() {
+        return ApiResponse.<ProfileResponse>builder()
                 .data(userService.getProfile())
                 .message("get my profile successfully")
                 .build();
@@ -41,14 +37,13 @@ public class UserController {
     ) {
         return ApiResponse.<ProfileResponse>builder()
                 .data(userService.updateProfile(request))
-                .message("update my profile successfully")
+                .message("updated my profile successfully")
                 .build();
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @PatchMapping("/upload")
+    @PatchMapping(value = "/profile/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Void> uploadAvatar(
-            MultipartFile file
+            @RequestPart(value = "avatar") MultipartFile file
     ) {
         userService.uploadAvatar(file);
         return ApiResponse.<Void>builder()
@@ -56,9 +51,9 @@ public class UserController {
                 .build();
     }
 
-    @PatchMapping("/change-password")
+    @PatchMapping("/profile/change-password")
     public ApiResponse<Void> changePassword(
-            @RequestBody ChangePasswordRequest request
+            @Valid @RequestBody ChangePasswordRequest request
     ) {
         userService.changePassword(request);
         return ApiResponse.<Void>builder()
@@ -71,7 +66,7 @@ public class UserController {
             @Valid @RequestBody AddressUserRequest request
     ) {
         return ApiResponse.<AddressUserResponse>builder()
-                .data(addressService.addAddress(request))
+                .data(userService.addAddress(request))
                 .message("address added successfully")
                 .build();
     }
@@ -79,7 +74,7 @@ public class UserController {
     @GetMapping("/address")
     public ApiResponse<List<AddressUserResponse>> getAllAddresses() {
         return ApiResponse.<List<AddressUserResponse>>builder()
-                .data(addressService.getAllAddresses())
+                .data(userService.getAllAddresses())
                 .message("get all addresses successfully")
                 .build();
     }
@@ -90,7 +85,7 @@ public class UserController {
             @Valid @RequestBody AddressUserRequest request
     ) {
         return ApiResponse.<AddressUserResponse>builder()
-                .data(addressService.updateAddress(id, request))
+                .data(userService.updateAddress(id, request))
                 .message("address updated successfully")
                 .build();
     }
@@ -99,7 +94,7 @@ public class UserController {
     public ApiResponse<Void> deleteAddress(
             @PathVariable Long id
     ) {
-        addressService.deleteAddress(id);
+        userService.deleteAddress(id);
         return ApiResponse.<Void>builder()
                 .message("address deleted successfully")
                 .build();

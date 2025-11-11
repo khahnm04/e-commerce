@@ -1,7 +1,6 @@
 package com.khahnm04.ecommerce.exception;
 
 import com.khahnm04.ecommerce.dto.response.ErrorResponse;
-import com.khahnm04.ecommerce.dto.response.FieldErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @RestControllerAdvice
@@ -76,11 +74,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     ResponseEntity<ErrorResponse> handlingValidation(MethodArgumentNotValidException exception, HttpServletRequest request) {
 
-        List<FieldErrorResponse> errors = exception.getBindingResult().getFieldErrors()
+        List<ErrorResponse.FieldErrorResponse> errors = exception.getBindingResult().getFieldErrors()
                 .stream()
-                .map(fieldError -> FieldErrorResponse.builder()
+                .map(fieldError -> ErrorResponse.FieldErrorResponse.builder()
                             .field(fieldError.getField())
-                            .message(Objects.requireNonNull(exception.getFieldError()).getDefaultMessage())
+                            .message(fieldError.getDefaultMessage())
                             .build())
                 .toList();
 
@@ -93,19 +91,6 @@ public class GlobalExceptionHandler {
                 .errors(errors)
                 .build();
 
-        return ResponseEntity.badRequest().body(errorResponse);
-    }
-
-    @ExceptionHandler(BusinessValidationException.class)
-    public ResponseEntity<ErrorResponse> handleBusinessValidation(BusinessValidationException ex, HttpServletRequest request) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
-                .code(9002)
-                .message("Validation error")
-                .path(request.getRequestURI())
-                .method(request.getMethod())
-                .errors(ex.getErrors()) // trả mảng lỗi như DTO
-                .build();
         return ResponseEntity.badRequest().body(errorResponse);
     }
 

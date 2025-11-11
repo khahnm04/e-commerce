@@ -3,14 +3,12 @@ package com.khahnm04.ecommerce.dto.response;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse <T> implements Serializable {
 
@@ -30,9 +28,7 @@ public class ApiResponse <T> implements Serializable {
     @Getter
     @Setter
     @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class PageMetadata {
+    public static class PageMetadata implements Serializable {
         private int pageNo;
         private int pageSize;
         private long totalElements;

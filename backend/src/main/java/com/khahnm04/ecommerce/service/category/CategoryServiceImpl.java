@@ -51,36 +51,37 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public PageResponse<CategoryResponse> getAllCategories(int page, int size, String sort, String... search) {
-        Sort sortObj = SortUtils.parseSort(sort);
-        Pageable pageable = PageRequest.of(Math.max(page - 1, 0), size, sortObj);
-
-        QCategory category = QCategory.category;
-        BooleanBuilder builder = new BooleanBuilder();
-
-        if (search != null && search.length > 0) {
-            BooleanBuilder searchBuilder = new BooleanBuilder();
-            Arrays.stream(search)
-                    .filter(Objects::nonNull)
-                    .map(String::trim)
-                    .filter(s -> !s.isEmpty())
-                    .map(String::toLowerCase)
-                    .map(s -> s.matches("\\d{4}-\\d{2}-\\d{2} .*") && s.contains("T") ? s.replace("T", " ") : s)
-                    .forEach(keyword -> searchBuilder.or(
-                            category.name.lower().contains(keyword)
-                            .or(category.description.lower().contains(keyword))
-                            .or(category.status.stringValue().lower().contains(keyword))
-                            .or(category.createdAt.stringValue().contains(keyword))
-                            .or(category.createdBy.stringValue().contains(keyword))
-                            .or(category.updatedAt.stringValue().contains(keyword))
-                            .or(category.updatedBy.stringValue().contains(keyword))
-                            .or(category.deletedAt.stringValue().contains(keyword))
-                    ));
-            builder.and(searchBuilder);
-        }
-
-        Page<Category> categoryPage = categoryRepository.findAll(builder, pageable);
-        Page<CategoryResponse> dtoPage = categoryPage.map(categoryMapper::toCategoryResponse);
-        return PageResponse.fromPage(dtoPage);
+//        Sort sortObj = SortUtils.parseSort(sort);
+//        Pageable pageable = PageRequest.of(Math.max(page - 1, 0), size, sortObj);
+//
+//        QCategory category = QCategory.category;
+//        BooleanBuilder builder = new BooleanBuilder();
+//
+//        if (search != null && search.length > 0) {
+//            BooleanBuilder searchBuilder = new BooleanBuilder();
+//            Arrays.stream(search)
+//                    .filter(Objects::nonNull)
+//                    .map(String::trim)
+//                    .filter(s -> !s.isEmpty())
+//                    .map(String::toLowerCase)
+//                    .map(s -> s.matches("\\d{4}-\\d{2}-\\d{2} .*") && s.contains("T") ? s.replace("T", " ") : s)
+//                    .forEach(keyword -> searchBuilder.or(
+//                            category.name.lower().contains(keyword)
+//                            .or(category.description.lower().contains(keyword))
+//                            .or(category.status.stringValue().lower().contains(keyword))
+//                            .or(category.createdAt.stringValue().contains(keyword))
+//                            .or(category.createdBy.stringValue().contains(keyword))
+//                            .or(category.updatedAt.stringValue().contains(keyword))
+//                            .or(category.updatedBy.stringValue().contains(keyword))
+//                            .or(category.deletedAt.stringValue().contains(keyword))
+//                    ));
+//            builder.and(searchBuilder);
+//        }
+//
+//        Page<Category> categoryPage = categoryRepository.findAll(builder, pageable);
+//        Page<CategoryResponse> dtoPage = categoryPage.map(categoryMapper::toCategoryResponse);
+//        return PageResponse.fromPage(dtoPage);
+        return null;
     }
 
     @Override

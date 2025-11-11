@@ -40,10 +40,9 @@ public class AdminUserController {
     public ApiResponse<List<UserResponse>> getAllUsers(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc")  String sortDir
+            @RequestParam(defaultValue = "createdAt,asc") String sort
     ) {
-        PageResponse<UserResponse> pageResponse = userService.getAllUsers(page - 1, size, sortBy, sortDir);
+        PageResponse<UserResponse> pageResponse = userService.getAllUsers(page - 1, size, sort);
         return ApiResponse.<List<UserResponse>>builder()
                 .meta(pageResponse.getMeta())
                 .data(pageResponse.getData())
@@ -55,10 +54,9 @@ public class AdminUserController {
     public ApiResponse<List<UserResponse>> getAllDeletedUsers(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc")  String sortDir
+            @RequestParam(defaultValue = "createdAt,asc") String sort
     ) {
-        PageResponse<UserResponse> pageResponse = userService.getAllDeletedUsers(page - 1, size, sortBy, sortDir);
+        PageResponse<UserResponse> pageResponse = userService.getAllDeletedUsers(page - 1, size, sort);
         return ApiResponse.<List<UserResponse>>builder()
                 .meta(pageResponse.getMeta())
                 .data(pageResponse.getData())

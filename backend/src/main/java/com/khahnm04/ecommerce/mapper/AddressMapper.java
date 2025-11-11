@@ -3,16 +3,14 @@ package com.khahnm04.ecommerce.mapper;
 import com.khahnm04.ecommerce.dto.request.user.AddressUserRequest;
 import com.khahnm04.ecommerce.dto.response.user.AddressUserResponse;
 import com.khahnm04.ecommerce.entity.Address;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface AddressMapper {
 
     Address toAddress(AddressUserRequest request);
 
+    @Mapping(source = "user.id", target = "userId")
     AddressUserResponse toAddressResponse(Address address);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

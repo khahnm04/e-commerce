@@ -11,15 +11,16 @@ import lombok.*;
 @AllArgsConstructor
 public class ChangePasswordRequest {
 
-    @ValidPassword
     @NotBlank(message = "oldPassword cannot be blank")
-    String oldPassword;
+    //@ValidPassword
+    private String oldPassword;
 
-    @ValidPassword
     @NotBlank(message = "newPassword cannot be blank")
-    String newPassword;
+    @ValidPassword
+    private String newPassword;
 
     @NotBlank(message = "confirmPassword cannot be blank")
-    String confirmPassword;
+    @ValidPassword
+    private String confirmPassword;
 
 }

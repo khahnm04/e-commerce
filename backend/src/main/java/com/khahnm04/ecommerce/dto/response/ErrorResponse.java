@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,5 +28,13 @@ public class ErrorResponse {
     private String path;
     private String method;
     private List<FieldErrorResponse> errors;
+
+    @Getter
+    @Setter
+    @Builder
+    public static class FieldErrorResponse implements Serializable {
+        private String field;
+        private String message;
+    }
 
 }
