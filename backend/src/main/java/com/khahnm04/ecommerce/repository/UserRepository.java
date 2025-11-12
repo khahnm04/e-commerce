@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.repository;
 
-import com.khahnm04.ecommerce.entity.User;
+import com.khahnm04.ecommerce.entity.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

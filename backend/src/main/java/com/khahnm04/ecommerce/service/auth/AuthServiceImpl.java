@@ -2,14 +2,15 @@ package com.khahnm04.ecommerce.service.auth;
 
 import com.khahnm04.ecommerce.common.constant.TokenConstants;
 import com.khahnm04.ecommerce.common.enums.RoleEnum;
+import com.khahnm04.ecommerce.config.CookieProperties;
 import com.khahnm04.ecommerce.dto.request.auth.LoginRequest;
 import com.khahnm04.ecommerce.dto.request.auth.RegisterRequest;
 import com.khahnm04.ecommerce.dto.response.auth.LoginResponse;
 import com.khahnm04.ecommerce.dto.response.auth.RegisterResponse;
 import com.khahnm04.ecommerce.dto.response.auth.TokenPayload;
-import com.khahnm04.ecommerce.entity.RedisToken;
-import com.khahnm04.ecommerce.entity.Role;
-import com.khahnm04.ecommerce.entity.User;
+import com.khahnm04.ecommerce.entity.auth.RedisToken;
+import com.khahnm04.ecommerce.entity.auth.Role;
+import com.khahnm04.ecommerce.entity.user.User;
 import com.khahnm04.ecommerce.exception.AppException;
 import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.mapper.UserMapper;
@@ -22,7 +23,6 @@ import com.nimbusds.jwt.SignedJWT;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,12 +30,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 @Slf4j
@@ -50,6 +46,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
     private final JwtService jwtService;
     private final List<LoginStrategy> loginStrategies;
+    private final CookieProperties cookieProperties;
 
     @Override
     public RegisterResponse register(RegisterRequest request) {
@@ -57,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
                 r -> !StringUtils.hasText(r.getPhoneNumber()), ErrorCode.PHONE_NUMBER_REQUIRED,
                 r -> userRepository.existsByPhoneNumber(r.getPhoneNumber()), ErrorCode.PHONE_NUMBER_EXISTED,
                 r -> userRepository.existsByEmail(r.getEmail()), ErrorCode.EMAIL_EXISTED,
-                r -> !request.getPassword().equals(request.getConfirmPassword()), ErrorCode.PASSWORD_CONFIRMATION_MISMATCH
+                r -> !Objects.equals(request.getPassword(), request.getConfirmPassword()), ErrorCode.PASSWORD_CONFIRMATION_MISMATCH
         );
 
         validators.forEach((predicate, error) -> {
@@ -99,6 +96,9 @@ public class AuthServiceImpl implements AuthService {
         addAccessTokenCookies(response, accessToken.getToken());
         addRefreshTokenCookies(response, refreshToken.getToken());
 
+        user.setLastLoginAt(LocalDateTime.now());
+        userRepository.save(user);
+
         log.info("User with id = {} has been authenticated", user.getId());
         return LoginResponse.builder()
                 .userId(user.getId())
@@ -110,12 +110,6 @@ public class AuthServiceImpl implements AuthService {
         try {
             // save access token
             var signAccessToken = jwtService.verifyAccessToken(accessToken);
-
-            User user = userRepository.findByIdentifier(signAccessToken.getJWTClaimsSet().getSubject())
-                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
-            user.setLastLoginAt(LocalDateTime.now());
-            userRepository.save(user);
-
             redisTokenRepository.save(RedisToken.builder()
                     .jwtId(signAccessToken.getJWTClaimsSet().getJWTID())
                     .expiredTime(signAccessToken.getJWTClaimsSet().getExpirationTime().getTime())
@@ -155,24 +149,24 @@ public class AuthServiceImpl implements AuthService {
 
     private void addAccessTokenCookies(HttpServletResponse response, String accessToken) {
         ResponseCookie accessCookie = ResponseCookie.from(TokenConstants.ACCESS_TOKEN, accessToken)
-                .httpOnly(true)
-                .secure(false)
-                .domain("localhost")
+                .httpOnly(cookieProperties.isHttpOnly())
+                .secure(cookieProperties.isSecure())
+                .domain(cookieProperties.getDomain())
                 .path("/")
-                .maxAge(Duration.ofDays(30))
-                .sameSite(Cookie.SameSite.STRICT.attributeValue())
+                .maxAge(cookieProperties.getAccessTokenMaxAge())
+                .sameSite(cookieProperties.getSameSite())
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
     }
 
     private void addRefreshTokenCookies(HttpServletResponse response, String refreshToken) {
         ResponseCookie refreshCookie = ResponseCookie.from(TokenConstants.REFRESH_TOKEN, refreshToken)
-                .httpOnly(true)
-                .secure(false)
-                .domain("localhost")
+                .httpOnly(cookieProperties.isHttpOnly())
+                .secure(cookieProperties.isSecure())
+                .domain(cookieProperties.getDomain())
                 .path("/api/v1/auth")
-                .maxAge(Duration.ofDays(30))
-                .sameSite(Cookie.SameSite.STRICT.attributeValue())
+                .maxAge(cookieProperties.getRefreshTokenMaxAge())
+                .sameSite(cookieProperties.getSameSite())
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
     }
@@ -180,11 +174,11 @@ public class AuthServiceImpl implements AuthService {
     public void clearAccessTokenCookie(HttpServletResponse response) {
         ResponseCookie accessTokenCookie = ResponseCookie.from(TokenConstants.ACCESS_TOKEN, "")
                 .maxAge(0)
-                .domain("localhost")
+                .domain(cookieProperties.getDomain())
                 .path("/")
-                .httpOnly(true)
-                .secure(false)
-                .sameSite(Cookie.SameSite.STRICT.attributeValue())
+                .httpOnly(cookieProperties.isHttpOnly())
+                .secure(cookieProperties.isSecure())
+                .sameSite(cookieProperties.getSameSite())
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, accessTokenCookie.toString());
     }
@@ -192,11 +186,11 @@ public class AuthServiceImpl implements AuthService {
     public void clearRefreshTokenCookie(HttpServletResponse response) {
         ResponseCookie refreshTokenCookie = ResponseCookie.from(TokenConstants.REFRESH_TOKEN, "")
                 .maxAge(0)
-                .domain("localhost")
+                .domain(cookieProperties.getDomain())
                 .path("/api/v1/auth")
-                .httpOnly(true)
-                .secure(false)
-                .sameSite(Cookie.SameSite.STRICT.attributeValue())
+                .httpOnly(cookieProperties.isHttpOnly())
+                .secure(cookieProperties.isSecure())
+                .sameSite(cookieProperties.getSameSite())
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
     }

@@ -2,7 +2,7 @@ package com.khahnm04.ecommerce.mapper;
 
 import com.khahnm04.ecommerce.dto.request.auth.RoleRequest;
 import com.khahnm04.ecommerce.dto.response.auth.RoleResponse;
-import com.khahnm04.ecommerce.entity.Role;
+import com.khahnm04.ecommerce.entity.auth.Role;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")

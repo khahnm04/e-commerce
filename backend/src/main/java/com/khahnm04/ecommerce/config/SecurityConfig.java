@@ -1,7 +1,6 @@
 package com.khahnm04.ecommerce.config;
 
-import com.khahnm04.ecommerce.common.constant.SecurityConstants;
-import com.khahnm04.ecommerce.service.user.CustomUserDetailsService;
+import com.khahnm04.ecommerce.service.auth.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +34,12 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final CookieBearerTokenResolver cookieBearerTokenResolver;
 
+    private static final String[] PUBLIC_ENDPOINTS = {
+            "/api/v1/auth/login",
+            "/api/v1/auth/register",
+            "/api/v1/auth/refresh"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -42,7 +47,7 @@ public class SecurityConfig {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
             .authorizeHttpRequests(request ->
-                    request.requestMatchers(HttpMethod.POST, SecurityConstants.getPublicEndpoints()).permitAll()
+                    request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
                             .anyRequest().authenticated())
 
             .oauth2ResourceServer(oauth2 ->

@@ -17,6 +17,6 @@ public class RoleRequest implements Serializable {
 
     private String description;
 
-    private Set<String> permissions;
+    private Set<Long> permissions;
 
 }

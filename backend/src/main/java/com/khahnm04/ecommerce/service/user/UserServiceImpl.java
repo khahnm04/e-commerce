@@ -8,9 +8,9 @@ import com.khahnm04.ecommerce.dto.response.user.AddressUserResponse;
 import com.khahnm04.ecommerce.dto.response.user.ProfileResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.dto.response.user.UserResponse;
-import com.khahnm04.ecommerce.entity.Address;
-import com.khahnm04.ecommerce.entity.Role;
-import com.khahnm04.ecommerce.entity.User;
+import com.khahnm04.ecommerce.entity.user.Address;
+import com.khahnm04.ecommerce.entity.auth.Role;
+import com.khahnm04.ecommerce.entity.user.User;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.exception.AppException;
 import com.khahnm04.ecommerce.exception.ErrorCode;
@@ -19,7 +19,7 @@ import com.khahnm04.ecommerce.mapper.UserMapper;
 import com.khahnm04.ecommerce.repository.AddressRepository;
 import com.khahnm04.ecommerce.repository.RoleRepository;
 import com.khahnm04.ecommerce.repository.UserRepository;
-import com.khahnm04.ecommerce.service.CloudinaryService;
+import com.khahnm04.ecommerce.service.upload.CloudinaryService;
 import com.khahnm04.ecommerce.util.SecurityUtils;
 import com.khahnm04.ecommerce.util.SortUtils;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -249,11 +248,13 @@ public class UserServiceImpl implements UserService {
     }
 
     private void assignRoleToUser(User user, Set<Long> roleIds) {
-        List<Role> roles = Optional.ofNullable(roleIds)
-                .filter(list -> !list.isEmpty())
-                .map(roleRepository::findAllById)
-                .orElse(Collections.emptyList());
-        user.setRoles(new HashSet<>(roles));
+        Set<Role> roles = Optional.ofNullable(roleIds)
+                .orElseGet(Collections::emptySet)
+                .stream()
+                .map(roleId -> roleRepository.findById(roleId)
+                        .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)))
+                .collect(Collectors.toSet());
+        user.setRoles(roles);
     }
 
     private User getCurrentUser() {

@@ -7,12 +7,12 @@ import com.khahnm04.ecommerce.dto.request.auth.RegisterRequest;
 import com.khahnm04.ecommerce.dto.request.user.UserRequest;
 import com.khahnm04.ecommerce.dto.response.user.ProfileResponse;
 import com.khahnm04.ecommerce.dto.response.user.UserResponse;
-import com.khahnm04.ecommerce.entity.User;
+import com.khahnm04.ecommerce.entity.user.User;
 import org.mapstruct.*;
 
 import java.util.Objects;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", imports = {StatusEnum.class, GenderEnum.class})
 public interface UserMapper {
 
     default User fromUserRequestToUser(UserRequest request) {
@@ -42,6 +42,8 @@ public interface UserMapper {
 
     ProfileResponse fromUserToProfileResponse(User user);
 
+    @Mapping(target = "status", expression = "java(StatusEnum.ACTIVE)")
+    @Mapping(target = "gender", expression = "java(GenderEnum.UNKNOWN)")
     User fromRegisterRequestToUser(RegisterRequest request);
 
     UserRequest fromProfileRequestToUserRequest(ProfileRequest request);

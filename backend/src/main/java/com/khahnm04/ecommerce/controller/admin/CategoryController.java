@@ -1,10 +1,10 @@
 package com.khahnm04.ecommerce.controller.admin;
 
-import com.khahnm04.ecommerce.dto.request.category.CategoryRequest;
+import com.khahnm04.ecommerce.dto.request.catalog.CategoryRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
-import com.khahnm04.ecommerce.dto.response.category.CategoryResponse;
+import com.khahnm04.ecommerce.dto.response.catalog.CategoryResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
-import com.khahnm04.ecommerce.service.category.CategoryService;
+import com.khahnm04.ecommerce.service.catalog.category.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

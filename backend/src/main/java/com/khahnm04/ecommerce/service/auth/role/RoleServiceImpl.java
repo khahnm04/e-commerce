@@ -2,8 +2,8 @@ package com.khahnm04.ecommerce.service.auth.role;
 
 import com.khahnm04.ecommerce.dto.request.auth.RoleRequest;
 import com.khahnm04.ecommerce.dto.response.auth.RoleResponse;
-import com.khahnm04.ecommerce.entity.Permission;
-import com.khahnm04.ecommerce.entity.Role;
+import com.khahnm04.ecommerce.entity.auth.Permission;
+import com.khahnm04.ecommerce.entity.auth.Role;
 import com.khahnm04.ecommerce.exception.AppException;
 import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.mapper.RoleMapper;
@@ -13,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,7 +27,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleResponse createRole(RoleRequest request) {
-        validateRequest(request, null);
+        if (CollectionUtils.isEmpty(request.getPermissions())) {
+            throw new AppException(ErrorCode.PERMISSION_REQUIRED);
+        }
+        if (roleRepository.existsByName(request.getName())) {
+            throw new AppException(ErrorCode.ROLE_EXISTED);
+        }
         Role role = roleMapper.toRole(request);
         assignPermissionsToRole(role, request.getPermissions());
         role = roleRepository.save(role);
@@ -48,7 +51,13 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleResponse updateRole(Long id, RoleRequest request) {
         Role role = getRoleById(id);
-        validateRequest(request, role);
+        if (CollectionUtils.isEmpty(request.getPermissions())) {
+            throw new AppException(ErrorCode.PERMISSION_REQUIRED);
+        }
+        if (!Objects.equals(role.getName(), request.getName())
+                && roleRepository.existsByName(request.getName())) {
+            throw new AppException(ErrorCode.ROLE_EXISTED);
+        }
         roleMapper.updateRole(role, request);
         assignPermissionsToRole(role, request.getPermissions());
         role = roleRepository.save(role);
@@ -68,27 +77,11 @@ public class RoleServiceImpl implements RoleService {
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
     }
 
-    private void validateRequest(RoleRequest request, Role existingRole) {
-        Map<Function<RoleRequest, Boolean>, ErrorCode> validators = new LinkedHashMap<>();
-        validators.put(r -> CollectionUtils.isEmpty(r.getPermissions()), ErrorCode.PERMISSION_REQUIRED);
-        if (existingRole == null) {
-            validators.put(r -> roleRepository.existsByName(r.getName()), ErrorCode.ROLE_EXISTED);
-        } else {
-            validators.put(r -> !Objects.equals(existingRole.getName(), r.getName())
-                    && roleRepository.existsByName(r.getName()), ErrorCode.ROLE_EXISTED);
-        }
-        validators.forEach((predicate, error) -> {
-            if (predicate.apply(request)) {
-                throw new AppException(error);
-            }
-        });
-    }
-
-    private void assignPermissionsToRole(Role role, Set<String> permissionNames) {
-        Set<Permission> permissions = Optional.ofNullable(permissionNames)
+    private void assignPermissionsToRole(Role role, Set<Long> permissionIds) {
+        Set<Permission> permissions = Optional.ofNullable(permissionIds)
                 .orElseGet(Collections::emptySet)
                 .stream()
-                .map(permissionName -> permissionRepository.findByName(permissionName)
+                .map(permissionId -> permissionRepository.findById(permissionId)
                         .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOT_FOUND)))
                 .collect(Collectors.toSet());
         role.setPermissions(permissions);

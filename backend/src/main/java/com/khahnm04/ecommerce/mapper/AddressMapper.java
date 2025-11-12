@@ -2,7 +2,7 @@ package com.khahnm04.ecommerce.mapper;
 
 import com.khahnm04.ecommerce.dto.request.user.AddressUserRequest;
 import com.khahnm04.ecommerce.dto.response.user.AddressUserResponse;
-import com.khahnm04.ecommerce.entity.Address;
+import com.khahnm04.ecommerce.entity.user.Address;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
