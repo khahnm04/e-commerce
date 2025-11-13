@@ -1,7 +1,6 @@
-package com.khahnm04.ecommerce.validation.password;
+package com.khahnm04.ecommerce.common.validation.password;
 
-import com.khahnm04.ecommerce.exception.ErrorCode;
-import com.khahnm04.ecommerce.util.ValidationUtils;
+import com.khahnm04.ecommerce.common.util.ValidationUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.util.StringUtils;

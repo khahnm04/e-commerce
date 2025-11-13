@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.dto.request.user;
 
-import com.khahnm04.ecommerce.validation.password.ValidPassword;
+import com.khahnm04.ecommerce.common.validation.password.ValidPassword;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 

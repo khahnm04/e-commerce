@@ -1,6 +1,6 @@
-package com.khahnm04.ecommerce.validation.phone;
+package com.khahnm04.ecommerce.common.validation.phone;
 
-import com.khahnm04.ecommerce.util.ValidationUtils;
+import com.khahnm04.ecommerce.common.util.ValidationUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;

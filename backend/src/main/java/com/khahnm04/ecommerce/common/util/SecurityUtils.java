@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.util;
+package com.khahnm04.ecommerce.common.util;
 
 import com.khahnm04.ecommerce.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

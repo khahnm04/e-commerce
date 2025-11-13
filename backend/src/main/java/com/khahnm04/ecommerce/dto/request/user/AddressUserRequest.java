@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.dto.request.user;
 
 import com.khahnm04.ecommerce.common.enums.AddressTypeEnum;
-import com.khahnm04.ecommerce.validation.enums.ValidEnum;
+import com.khahnm04.ecommerce.common.validation.enums.ValidEnum;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 

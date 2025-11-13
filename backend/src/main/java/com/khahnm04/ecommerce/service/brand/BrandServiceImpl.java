@@ -10,7 +10,7 @@ import com.khahnm04.ecommerce.exception.ErrorCode;
 import com.khahnm04.ecommerce.mapper.BrandMapper;
 import com.khahnm04.ecommerce.repository.BrandRepository;
 import com.khahnm04.ecommerce.service.upload.CloudinaryService;
-import com.khahnm04.ecommerce.util.SortUtils;
+import com.khahnm04.ecommerce.common.util.SortUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

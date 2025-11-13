@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.validation.enums;
+package com.khahnm04.ecommerce.common.validation.enums;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

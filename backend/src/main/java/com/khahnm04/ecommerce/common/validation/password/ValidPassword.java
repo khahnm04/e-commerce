@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.validation.password;
+package com.khahnm04.ecommerce.common.validation.password;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

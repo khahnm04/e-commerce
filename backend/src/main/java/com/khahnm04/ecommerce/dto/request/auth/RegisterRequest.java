@@ -1,8 +1,8 @@
 package com.khahnm04.ecommerce.dto.request.auth;
 
-import com.khahnm04.ecommerce.validation.email.ValidEmail;
-import com.khahnm04.ecommerce.validation.password.ValidPassword;
-import com.khahnm04.ecommerce.validation.phone.ValidPhoneNumber;
+import com.khahnm04.ecommerce.common.validation.email.ValidEmail;
+import com.khahnm04.ecommerce.common.validation.password.ValidPassword;
+import com.khahnm04.ecommerce.common.validation.phone.ValidPhoneNumber;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

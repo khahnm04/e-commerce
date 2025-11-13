@@ -1,6 +1,6 @@
-package com.khahnm04.ecommerce.validation.email;
+package com.khahnm04.ecommerce.common.validation.email;
 
-import com.khahnm04.ecommerce.util.ValidationUtils;
+import com.khahnm04.ecommerce.common.util.ValidationUtils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.util.StringUtils;

@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.dto.request.category;
 
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
-import com.khahnm04.ecommerce.validation.enums.ValidEnum;
+import com.khahnm04.ecommerce.common.validation.enums.ValidEnum;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import java.io.Serializable;
