@@ -1,4 +1,4 @@
-package com.khahnm04.ecommerce.entity.banner;
+package com.khahnm04.ecommerce.entity.category;
 
 import com.khahnm04.ecommerce.entity.BaseEntity;
 import com.khahnm04.ecommerce.entity.product.Product;
@@ -11,15 +11,15 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "banner_details")
-public class BannerDetail extends BaseEntity<Long> {
+@Table(name = "category_products")
+public class CategoryProduct extends BaseEntity<Long> {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "banner_id", nullable = false)
-    private Banner banner;
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
 }

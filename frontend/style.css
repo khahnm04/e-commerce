@@ -1,0 +1,237 @@
+/* Thiết lập chung và biến */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+:root {
+  --primary-color: #F9415D;
+  /* Màu Đỏ CellphoneS */
+  --secondary-color: #333;
+  /* Màu chữ chính */
+  --text-light: #666;
+  /* Màu chữ phụ */
+  --white: #fff;
+  --border-color: #eee;
+}
+
+body {
+  background-color: #f5f5f7;
+  font-size: 14px;
+}
+
+.container {
+  width: 95%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: var(--secondary-color);
+  transition: color 0.2s;
+}
+
+/* -------------------------------------- */
+/* HEADER - GIỐNG 99% THEO HÌNH ẢNH */
+/* -------------------------------------- */
+
+.header-cellphones {
+  background-color: var(--white);
+  padding: 10px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  /* Giả định Header sẽ dính khi cuộn */
+  /* position: sticky; 
+  top: 0;
+  z-index: 1000; */
+}
+
+.header-grid-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  /* Chiều cao cố định của thanh ngang */
+}
+
+/* KHU VỰC 1: LOGO, MENU, ĐỊA CHỈ */
+.header-col-1 {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  /* Ngăn co lại */
+  width: 280px;
+  /* Chiều rộng gần đúng của khu vực 1 */
+  gap: 15px;
+}
+
+.logo {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+
+/* Phần này mô phỏng nút Danh mục và Địa chỉ nằm trong một container */
+.menu-btn-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+.menu-btn {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 8px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.menu-btn i {
+  font-size: 1rem;
+  margin-right: 5px;
+}
+
+.menu-btn:hover {
+  background-color: #d1304a;
+  /* Đỏ đậm hơn */
+}
+
+.city-select {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  display: flex;
+  align-items: center;
+  line-height: 1.2;
+  padding: 5px;
+}
+
+.city-select i {
+  font-size: 0.9rem;
+  margin-right: 5px;
+  color: var(--primary-color);
+}
+
+.city-select i:last-child {
+  margin-left: 5px;
+  margin-right: 0;
+  font-size: 0.6rem;
+  color: var(--text-light);
+}
+
+
+/* KHU VỰC 2: THANH TÌM KIẾM */
+.header-col-2 {
+  flex-grow: 1;
+  /* Chiếm hết không gian còn lại */
+  padding: 0 20px;
+}
+
+.search-bar {
+  display: flex;
+  border: 2px solid var(--primary-color);
+  border-radius: 6px;
+  overflow: hidden;
+  height: 40px;
+}
+
+.search-bar input {
+  border: none;
+  padding: 0 15px;
+  font-size: 1rem;
+  flex-grow: 1;
+  outline: none;
+  color: var(--secondary-color);
+}
+
+.search-bar input::placeholder {
+  color: #aaa;
+}
+
+.search-bar button {
+  background-color: var(--primary-color);
+  /* Nút tìm kiếm phải có nền đỏ */
+  color: var(--white);
+  /* Icon tìm kiếm màu trắng */
+  border: none;
+  padding: 0 15px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.2s;
+}
+
+.search-bar button:hover {
+  background-color: #d1304a;
+}
+
+/* KHU VỰC 3: GIỎ HÀNG + SMEMBER */
+.header-col-3 {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: 180px;
+  /* Chiều rộng gần đúng của khu vực 3 */
+  gap: 15px;
+  justify-content: flex-end;
+  /* Đẩy các item sang phải */
+}
+
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.7rem;
+  /* Giữ font chữ nhỏ như trong ảnh */
+  color: var(--secondary-color);
+  font-weight: 500;
+  padding: 5px;
+  position: relative;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.action-item i {
+  font-size: 1.5rem;
+  /* Icon lớn hơn */
+  margin-bottom: 2px;
+  color: var(--primary-color);
+}
+
+.cart-btn {
+  /* Đảm bảo giỏ hàng có icon và chữ căn đúng vị trí */
+}
+
+.cart-count {
+  position: absolute;
+  top: 0;
+  right: 0px;
+  /* Điều chỉnh vị trí số 0 */
+  background-color: #000;
+  /* Màu đen hoặc màu khác nổi bật cho số lượng */
+  color: #fff;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  font-size: 0.6rem;
+  font-weight: bold;
+}
+
+.smember-btn i {
+  color: var(--primary-color);
+  /* Icon ngôi sao màu đỏ */
+}
+
+.smember-btn span {
+  white-space: nowrap;
+}

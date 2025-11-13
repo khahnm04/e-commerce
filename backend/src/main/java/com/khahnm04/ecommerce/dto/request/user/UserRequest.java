@@ -37,10 +37,10 @@ public class UserRequest implements Serializable {
 
     private LocalDate dateOfBirth;
 
-    @ValidEnum(enumClass = GenderEnum.class)
+    @ValidEnum(name = "gender", enumClass = GenderEnum.class)
     private GenderEnum gender;
 
-    @ValidEnum(enumClass = StatusEnum.class)
+    @ValidEnum(name = "status", enumClass = StatusEnum.class)
     private StatusEnum status;
 
     private Set<Long> roles;

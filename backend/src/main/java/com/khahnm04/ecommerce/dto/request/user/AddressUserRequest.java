@@ -25,7 +25,7 @@ public class AddressUserRequest {
 
     private Boolean isDefault = false;
 
-    @ValidEnum(enumClass = AddressTypeEnum.class)
+    @ValidEnum(name = "addressType", enumClass = AddressTypeEnum.class)
     private AddressTypeEnum addressType;
 
 }

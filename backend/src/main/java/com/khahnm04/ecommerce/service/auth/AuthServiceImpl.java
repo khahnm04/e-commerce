@@ -139,6 +139,8 @@ public class AuthServiceImpl implements AuthService {
             User user = userRepository.findByIdentifier(signedJWT.getJWTClaimsSet().getSubject())
                     .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
+            clearAccessTokenCookie(response);
+
             TokenPayload accessToken = jwtService.generateAccessToken(user);
             addAccessTokenCookies(response, accessToken.getToken());
         } catch (ParseException e) {

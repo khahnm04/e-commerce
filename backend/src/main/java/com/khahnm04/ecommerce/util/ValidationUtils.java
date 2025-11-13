@@ -1,6 +1,5 @@
 package com.khahnm04.ecommerce.util;
 
-import com.khahnm04.ecommerce.exception.ErrorCode;
 import jakarta.validation.ConstraintValidatorContext;
 
 public class ValidationUtils {

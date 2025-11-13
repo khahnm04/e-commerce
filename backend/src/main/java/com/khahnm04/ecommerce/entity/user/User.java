@@ -4,7 +4,7 @@ import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.entity.BaseEntity;
 import com.khahnm04.ecommerce.entity.order.Order;
-import com.khahnm04.ecommerce.entity.catalog.ProductQuestion;
+import com.khahnm04.ecommerce.entity.product.ProductQuestion;
 import com.khahnm04.ecommerce.entity.auth.Role;
 import jakarta.persistence.*;
 import lombok.*;

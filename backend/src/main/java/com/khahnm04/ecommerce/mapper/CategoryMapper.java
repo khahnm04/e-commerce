@@ -1,9 +1,9 @@
 package com.khahnm04.ecommerce.mapper;
 
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
-import com.khahnm04.ecommerce.dto.request.catalog.CategoryRequest;
-import com.khahnm04.ecommerce.dto.response.catalog.CategoryResponse;
-import com.khahnm04.ecommerce.entity.catalog.Category;
+import com.khahnm04.ecommerce.dto.request.category.CategoryRequest;
+import com.khahnm04.ecommerce.dto.response.category.CategoryResponse;
+import com.khahnm04.ecommerce.entity.category.Category;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")

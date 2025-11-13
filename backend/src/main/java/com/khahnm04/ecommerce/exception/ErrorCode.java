@@ -13,6 +13,7 @@ public enum ErrorCode {
     UNCATEGORIZED_EXCEPTION(9001, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     VALIDATION_EXCEPTION(9002, "Validation error", HttpStatus.BAD_REQUEST),
     DUPLICATE_ENTRY(9003, "Duplicate entry", HttpStatus.BAD_REQUEST),
+    INVALID_ENUM_VALUE(9004, "Invalid enum value", HttpStatus.BAD_REQUEST),
 
     UNAUTHENTICATED(1000, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1001, "You do not have permission", HttpStatus.FORBIDDEN),

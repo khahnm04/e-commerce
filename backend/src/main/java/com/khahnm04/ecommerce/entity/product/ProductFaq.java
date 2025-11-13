@@ -1,7 +1,6 @@
-package com.khahnm04.ecommerce.entity.news;
+package com.khahnm04.ecommerce.entity.product;
 
 import com.khahnm04.ecommerce.entity.BaseEntity;
-import com.khahnm04.ecommerce.entity.product.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,15 +10,17 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "news_details")
-public class NewsDetail extends BaseEntity<Long> {
+@Table(name = "product_faqs")
+public class ProductFaq extends BaseEntity<Long> {
+
+    @Column(name = "question", length = 500)
+    private String question;
+
+    @Column(name = "answer", columnDefinition = "TEXT")
+    private String answer;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "news_id", nullable = false)
-    private News news;
 
 }

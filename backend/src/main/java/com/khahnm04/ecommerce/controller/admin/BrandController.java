@@ -1,22 +1,30 @@
 package com.khahnm04.ecommerce.controller.admin;
 
-import com.khahnm04.ecommerce.dto.request.catalog.BrandRequest;
+import com.khahnm04.ecommerce.common.enums.StatusEnum;
+import com.khahnm04.ecommerce.dto.request.brand.BrandRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
-import com.khahnm04.ecommerce.dto.response.catalog.BrandResponse;
+import com.khahnm04.ecommerce.dto.response.brand.BrandResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
-import com.khahnm04.ecommerce.service.catalog.brand.BrandService;
+import com.khahnm04.ecommerce.exception.AppException;
+import com.khahnm04.ecommerce.exception.ErrorCode;
+import com.khahnm04.ecommerce.service.brand.BrandService;
+import com.khahnm04.ecommerce.validation.enums.ValidEnum;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
+@Validated
 @RestController
-@RequestMapping("${api.prefix}/brands")
+@RequestMapping("${api.prefix}/admin/brands")
 @RequiredArgsConstructor
 public class BrandController {
 
@@ -25,23 +33,22 @@ public class BrandController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<BrandResponse> createBrand(
-        @Valid @RequestPart("data") BrandRequest request,
+        @Valid BrandRequest request,
         @RequestPart(value = "logo", required = false) MultipartFile file
     ) {
         return ApiResponse.<BrandResponse>builder()
                 .data(brandService.createBrand(request, file))
-                .message("created brand")
+                .message("brand created successfully")
                 .build();
     }
 
     @GetMapping
-    public ApiResponse<List<BrandResponse>> getAllUsers(
+    public ApiResponse<List<BrandResponse>> getAllBrands(
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam(defaultValue = "createdAt,desc") String sort,
-        @RequestParam(required = false) String... search
+        @RequestParam(defaultValue = "createdAt,desc") String sort
     ) {
-        PageResponse<BrandResponse> pageResponse = brandService.getAllBrands(page, size, sort, search);
+        PageResponse<BrandResponse> pageResponse = brandService.getAllBrands(page - 1, size, sort);
         return ApiResponse.<List<BrandResponse>>builder()
                 .data(pageResponse.getData())
                 .meta(pageResponse.getMeta())
@@ -49,10 +56,44 @@ public class BrandController {
                 .build();
     }
 
+    @GetMapping("/deleted")
+    public ApiResponse<List<BrandResponse>> getAllDeletedBrands(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort
+    ) {
+        PageResponse<BrandResponse> pageResponse = brandService.getAllDeletedBrands(page - 1, size, sort);
+        return ApiResponse.<List<BrandResponse>>builder()
+                .data(pageResponse.getData())
+                .meta(pageResponse.getMeta())
+                .message("get all soft deleted brands successfully")
+                .build();
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<BrandResponse> getBrandDetailById(
+            @PathVariable Long id
+    ) {
+        return ApiResponse.<BrandResponse>builder()
+                .data(brandService.getBrandDetailById(id))
+                .message("get brand detail by id successfully")
+                .build();
+    }
+
+    @GetMapping("/slug/{slug}")
+    public ApiResponse<BrandResponse> getBrandDetailBySlug(
+            @PathVariable String slug
+    ) {
+        return ApiResponse.<BrandResponse>builder()
+                .data(brandService.getBrandDetailBySlug(slug))
+                .message("get brand detail by id successfully")
+                .build();
+    }
+
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<BrandResponse> updateBrand(
         @PathVariable Long id,
-        @Valid @RequestPart("data") BrandRequest request,
+        @Valid BrandRequest request,
         @RequestPart(value = "logo", required = false) MultipartFile file
     ) {
         return ApiResponse.<BrandResponse>builder()
@@ -61,7 +102,18 @@ public class BrandController {
                 .build();
     }
 
-    @DeleteMapping("/{id}/soft")
+    @PatchMapping("/{id}/status")
+    public ApiResponse<Void> updateBrandStatus(
+            @PathVariable Long id,
+            @RequestParam String status
+    ) {
+        brandService.updateBrandStatus(id, status);
+        return ApiResponse.<Void>builder()
+                .message("brand status updated successfully")
+                .build();
+    }
+
+    @DeleteMapping("/{id}/soft-delete")
     public ApiResponse<Void> softDeleteBrand(
         @PathVariable Long id
     ) {

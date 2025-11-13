@@ -1,7 +1,7 @@
 package com.khahnm04.ecommerce.entity.order;
 
 import com.khahnm04.ecommerce.entity.BaseEntity;
-import com.khahnm04.ecommerce.entity.catalog.ProductVariant;
+import com.khahnm04.ecommerce.entity.product.ProductVariant;
 import jakarta.persistence.*;
 import lombok.*;
 

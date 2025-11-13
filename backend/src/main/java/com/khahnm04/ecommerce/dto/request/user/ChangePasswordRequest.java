@@ -12,7 +12,7 @@ import lombok.*;
 public class ChangePasswordRequest {
 
     @NotBlank(message = "oldPassword cannot be blank")
-    //@ValidPassword
+    @ValidPassword
     private String oldPassword;
 
     @NotBlank(message = "newPassword cannot be blank")

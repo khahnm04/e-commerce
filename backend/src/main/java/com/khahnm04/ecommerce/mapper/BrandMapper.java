@@ -1,25 +1,15 @@
 package com.khahnm04.ecommerce.mapper;
 
-import com.khahnm04.ecommerce.common.enums.StatusEnum;
-import com.khahnm04.ecommerce.dto.request.catalog.BrandRequest;
-import com.khahnm04.ecommerce.dto.response.catalog.BrandResponse;
-import com.khahnm04.ecommerce.entity.catalog.Brand;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import com.khahnm04.ecommerce.dto.request.brand.BrandRequest;
+import com.khahnm04.ecommerce.dto.response.brand.BrandResponse;
+import com.khahnm04.ecommerce.entity.brand.Brand;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface BrandMapper {
 
-    default Brand toBrand(BrandRequest request) {
-        if (request == null) return null;
-        Brand brand = Brand.builder()
-                .status(StatusEnum.ACTIVE)
-                .build();
-        updateBrand(brand, request);
-        return brand;
-    }
+    @Mapping(target = "status", constant = "ACTIVE")
+    Brand fromBrandRequesttoBrand(BrandRequest request);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateBrand(@MappingTarget Brand brand, BrandRequest request);

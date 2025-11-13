@@ -28,7 +28,7 @@ public class ProfileRequest implements Serializable {
 
     private LocalDate dateOfBirth;
 
-    @ValidEnum(enumClass = GenderEnum.class)
+    @ValidEnum(name = "gender", enumClass = GenderEnum.class)
     private GenderEnum gender;
 
 }

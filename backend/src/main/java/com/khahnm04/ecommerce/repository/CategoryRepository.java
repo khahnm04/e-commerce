@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.repository;
 
-import com.khahnm04.ecommerce.entity.catalog.Category;
+import com.khahnm04.ecommerce.entity.category.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;

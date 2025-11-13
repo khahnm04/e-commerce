@@ -2,30 +2,30 @@ package com.khahnm04.ecommerce.validation.enums;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.stream.Stream;
 
-public class EnumValidator implements ConstraintValidator<ValidEnum, Enum<?>> {
+public class EnumValidator implements ConstraintValidator<ValidEnum, CharSequence> {
 
-    private Set<String> acceptedValues;
+    private List<String> acceptedValues;
 
     @Override
-    public void initialize(ValidEnum annotation) {
-        String[] anyOf = annotation.anyOf();
-        if (anyOf.length > 0) {
-            acceptedValues = new HashSet<>(Arrays.asList(anyOf));
-        } else {
-            acceptedValues = Arrays.stream(annotation.enumClass().getEnumConstants())
-                    .map(Enum::name)
-                    .collect(Collectors.toSet());
-        }
+    public void initialize(ValidEnum enumValue) {
+        acceptedValues = Stream.of(enumValue.enumClass().getEnumConstants())
+                .map(Enum::name)
+                .toList();
     }
 
     @Override
-    public boolean isValid(Enum<?> value, ConstraintValidatorContext context) {
-        return value == null || acceptedValues.contains(value.name());
+    public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+        if (value == null)  return true;
+        boolean valid = acceptedValues.contains(value.toString().toUpperCase());
+        if (!valid) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate("Invalid value '" + value + "'. Must be one of " + acceptedValues)
+                    .addConstraintViolation();
+        }
+        return valid;
     }
 
 }
