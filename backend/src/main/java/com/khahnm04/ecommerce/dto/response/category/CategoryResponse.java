@@ -1,27 +1,22 @@
 package com.khahnm04.ecommerce.dto.response.category;
 
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
+import com.khahnm04.ecommerce.dto.response.BaseResponse;
 import lombok.*;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryResponse implements Serializable {
+public class CategoryResponse extends BaseResponse<Long> {
 
-    private String id;
+    private String slug;
     private String name;
     private String description;
     private String image;
     private Long parentId;
     private StatusEnum status;
-    private LocalDateTime createdAt;
-    private Long createdBy;
-    private LocalDateTime updatedAt;
-    private Long updatedBy;
-    private LocalDateTime deletedAt;
 
 }

@@ -1,5 +1,6 @@
 package com.khahnm04.ecommerce.entity.category;
 
+import com.khahnm04.ecommerce.common.enums.CategoryStatusEnum;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -7,7 +8,6 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
 import java.util.List;
 
 @Entity
@@ -34,7 +34,7 @@ public class Category extends BaseEntity<Long> {
     @ColumnDefault("'ACTIVE'")
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private StatusEnum status = StatusEnum.ACTIVE;
+    private CategoryStatusEnum status = CategoryStatusEnum.ACTIVE;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)

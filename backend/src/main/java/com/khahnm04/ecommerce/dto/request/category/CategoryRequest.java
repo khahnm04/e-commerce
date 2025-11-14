@@ -4,25 +4,28 @@ import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.common.validation.enums.ValidEnum;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+
 import java.io.Serializable;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryRequest implements Serializable {
 
-    @NotBlank(message = "category cannot be blank")
+    @NotBlank(message = "slug cannot be blank")
+    private String slug;
+
+    @NotBlank(message = "name cannot be blank")
     private String name;
 
     private String description;
 
-    private String image;
-
-    private Long parentId;
-
     @ValidEnum(name = "status", enumClass = StatusEnum.class)
     private String status;
+
+    private Long parentId;
 
 }

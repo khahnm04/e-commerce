@@ -1,6 +1,5 @@
 package com.khahnm04.ecommerce.mapper;
 
-import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.dto.request.category.CategoryRequest;
 import com.khahnm04.ecommerce.dto.response.category.CategoryResponse;
 import com.khahnm04.ecommerce.entity.category.Category;
@@ -9,14 +8,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
 
-    default Category toCategory(CategoryRequest request) {
-        if (request == null) return null;
-        Category category = Category.builder()
-                .status(StatusEnum.ACTIVE)
-                .build();
-        updateCategory(category, request);
-        return category;
-    }
+    @Mapping(target = "status", constant = "ACTIVE")
+    Category fromCategoryRequestToCategory(CategoryRequest request);
 
     default Long getParentId(Category category) {
         return category.getParent() != null ? category.getParent().getId() : null;

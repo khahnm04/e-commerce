@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("${api.prefix}/categories")
+@RequestMapping("${api.prefix}/admin/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 
@@ -25,59 +25,103 @@ public class CategoryController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<CategoryResponse> createCategory(
-        @Valid @RequestPart("data") CategoryRequest request,
-        @RequestPart(value = "image", required = false) MultipartFile file
+            @Valid CategoryRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile file
     ) {
         return ApiResponse.<CategoryResponse>builder()
                 .data(categoryService.createCategory(request, file))
-                .message("category created")
+                .message("category created successfully")
                 .build();
     }
 
     @GetMapping
     public ApiResponse<List<CategoryResponse>> getAllCategories(
-        @RequestParam(defaultValue = "1", required = false) int page,
-        @RequestParam(defaultValue = "10", required = false) int size,
-        @RequestParam(defaultValue = "createdAt,desc", required = false) String sort,
-        @RequestParam(required = false) String... search
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort
     ) {
-        PageResponse<CategoryResponse> pageResponse = categoryService.getAllCategories(page, size, sort, search);
+        PageResponse<CategoryResponse> pageResponse = categoryService.getAllCategories(page - 1, size, sort);
         return ApiResponse.<List<CategoryResponse>>builder()
-                .meta(pageResponse.getMeta())
                 .data(pageResponse.getData())
-                .message("get all categories")
+                .meta(pageResponse.getMeta())
+                .message("get all categories successfully")
+                .build();
+    }
+
+    @GetMapping("/deleted")
+    public ApiResponse<List<CategoryResponse>> getAllDeletedCategories(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt,desc") String sort
+    ) {
+        PageResponse<CategoryResponse> pageResponse = categoryService.getAllDeletedCategories(page - 1, size, sort);
+        return ApiResponse.<List<CategoryResponse>>builder()
+                .data(pageResponse.getData())
+                .meta(pageResponse.getMeta())
+                .message("get all soft deleted categories successfully")
+                .build();
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<CategoryResponse> getCategoryDetailById(
+            @PathVariable Long id
+    ) {
+        return ApiResponse.<CategoryResponse>builder()
+                .data(categoryService.getCategoryDetailById(id))
+                .message("get category detail by id successfully")
+                .build();
+    }
+
+    @GetMapping("/slug/{slug}")
+    public ApiResponse<CategoryResponse> getCategoryDetailBySlug(
+            @PathVariable String slug
+    ) {
+        return ApiResponse.<CategoryResponse>builder()
+                .data(categoryService.getCategoryDetailBySlug(slug))
+                .message("get category detail by id successfully")
                 .build();
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<CategoryResponse> updateCategory(
-        @PathVariable Long id,
-        @Valid @RequestPart("data") CategoryRequest request,
-        @RequestPart(value = "image", required = false) MultipartFile file
+            @PathVariable Long id,
+            @Valid CategoryRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile file
     ) {
         return ApiResponse.<CategoryResponse>builder()
                 .data(categoryService.updateCategory(id, request, file))
-                .message("category created")
+                .message("updated category")
                 .build();
     }
 
-    @DeleteMapping("/{id}/soft")
+    @PatchMapping("/{id}/status")
+    public ApiResponse<Void> updateCategoryStatus(
+            @PathVariable Long id,
+            @RequestParam String status
+    ) {
+        categoryService.updateCategoryStatus(id, status);
+        return ApiResponse.<Void>builder()
+                .message("category status updated successfully")
+                .build();
+    }
+
+    @DeleteMapping("/{id}/soft-delete")
     public ApiResponse<Void> softDeleteCategory(
-        @PathVariable Long id
+            @PathVariable Long id
     ) {
         categoryService.softDeleteCategory(id);
         return ApiResponse.<Void>builder()
-                .message("category soft deleted")
+                .message("soft deleted category")
                 .build();
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteCategory(
-        @PathVariable Long id
+            @PathVariable Long id
     ) {
         categoryService.deleteCategory(id);
         return ApiResponse.<Void>builder()
-                .message("category deleted")
+                .message("deleted category")
                 .build();
     }
 
