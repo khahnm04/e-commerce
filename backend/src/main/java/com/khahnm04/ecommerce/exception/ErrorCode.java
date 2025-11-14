@@ -49,6 +49,9 @@ public enum ErrorCode {
 
     BRAND_NOT_FOUND(1300, "brand not found", HttpStatus.NOT_FOUND),
     BRAND_EXISTED(1301, "brand already existed", HttpStatus.CONFLICT),
+
+    BANNER_NOT_FOUND(1400, "banner not found", HttpStatus.NOT_FOUND),
+    BANNER_EXISTED(1401, "banner already existed", HttpStatus.CONFLICT),
     ;
 
     private final Integer code;

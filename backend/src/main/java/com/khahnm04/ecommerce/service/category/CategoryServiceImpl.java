@@ -50,8 +50,8 @@ public class CategoryServiceImpl implements CategoryService {
                         .orElse(null));
 
         String path = Optional.ofNullable(category.getParent())
-                    .map(Category::getPath)
-                    .orElse("");
+                        .map(Category::getPath)
+                        .orElse("");
 
         Category savedCategory = categoryRepository.save(category);
         savedCategory.setPath(path + savedCategory.getId() + "/");
