@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.dto.response.category;
 
-import com.khahnm04.ecommerce.common.enums.StatusEnum;
+import com.khahnm04.ecommerce.common.enums.CategoryStatusEnum;
 import com.khahnm04.ecommerce.dto.response.BaseResponse;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,6 +17,6 @@ public class CategoryResponse extends BaseResponse<Long> {
     private String description;
     private String image;
     private Long parentId;
-    private StatusEnum status;
+    private CategoryStatusEnum status;
 
 }

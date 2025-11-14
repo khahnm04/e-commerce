@@ -14,6 +14,7 @@ public enum ErrorCode {
     VALIDATION_EXCEPTION(9002, "Validation error", HttpStatus.BAD_REQUEST),
     DUPLICATE_ENTRY(9003, "Duplicate entry", HttpStatus.BAD_REQUEST),
     INVALID_ENUM_VALUE(9004, "Invalid enum value", HttpStatus.BAD_REQUEST),
+    DATA_INTEGRITY_VIOLATION(9005, "Data integrity violation", HttpStatus.BAD_REQUEST),
 
     UNAUTHENTICATED(1000, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1001, "You do not have permission", HttpStatus.FORBIDDEN),
@@ -44,6 +45,7 @@ public enum ErrorCode {
     CATEGORY_NAME_EXISTED(1203, "category name existed", HttpStatus.CONFLICT),
     CATEGORY_PARENT_NOT_EXISTED(1204, "category parent not existed", HttpStatus.CONFLICT),
     CATEGORY_HAS_CHILDREN(1205, "Cannot delete category because it has child categories.", HttpStatus.BAD_REQUEST),
+    CANNOT_MOVE_PARENT_TO_CHILD(1206, "Cannot move parent to child", HttpStatus.BAD_REQUEST),
 
     BRAND_NOT_FOUND(1300, "brand not found", HttpStatus.NOT_FOUND),
     BRAND_EXISTED(1301, "brand already existed", HttpStatus.CONFLICT),

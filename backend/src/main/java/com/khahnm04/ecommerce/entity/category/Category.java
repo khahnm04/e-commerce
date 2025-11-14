@@ -31,6 +31,9 @@ public class Category extends BaseEntity<Long> {
     @Column(name = "image", columnDefinition = "TEXT")
     private String image;
 
+    @Column(name = "path")
+    private String path;
+
     @ColumnDefault("'ACTIVE'")
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

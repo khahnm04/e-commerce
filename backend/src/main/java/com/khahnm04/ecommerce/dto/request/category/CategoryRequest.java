@@ -1,5 +1,6 @@
 package com.khahnm04.ecommerce.dto.request.category;
 
+import com.khahnm04.ecommerce.common.enums.CategoryStatusEnum;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.common.validation.enums.ValidEnum;
 import jakarta.validation.constraints.NotBlank;
@@ -23,7 +24,7 @@ public class CategoryRequest implements Serializable {
 
     private String description;
 
-    @ValidEnum(name = "status", enumClass = StatusEnum.class)
+    @ValidEnum(name = "status", enumClass = CategoryStatusEnum.class)
     private String status;
 
     private Long parentId;

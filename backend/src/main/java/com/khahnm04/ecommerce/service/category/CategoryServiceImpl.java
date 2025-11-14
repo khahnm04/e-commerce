@@ -1,7 +1,6 @@
 package com.khahnm04.ecommerce.service.category;
 
 import com.khahnm04.ecommerce.common.enums.CategoryStatusEnum;
-import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.common.util.SortUtils;
 import com.khahnm04.ecommerce.dto.request.category.CategoryRequest;
 import com.khahnm04.ecommerce.dto.response.category.CategoryResponse;
@@ -19,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -44,11 +44,19 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = categoryMapper.fromCategoryRequestToCategory(request);
         category.setImage(cloudinaryService.upload(file));
+
         category.setParent(Optional.ofNullable(request.getParentId())
                         .map(this::getCategoryById)
                         .orElse(null));
 
+        String path = Optional.ofNullable(category.getParent())
+                    .map(Category::getPath)
+                    .orElse("");
+
         Category savedCategory = categoryRepository.save(category);
+        savedCategory.setPath(path + savedCategory.getId() + "/");
+        savedCategory = categoryRepository.save(savedCategory);
+
         log.info("Saved new category with id {}", savedCategory.getId());
         return categoryMapper.toCategoryResponse(savedCategory);
     }
@@ -82,6 +90,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryResponse updateCategory(Long id, CategoryRequest request, MultipartFile file) {
         Category category = getCategoryById(id);
 
@@ -94,16 +103,40 @@ public class CategoryServiceImpl implements CategoryService {
 
         categoryMapper.updateCategory(category, request);
         category.setImage(cloudinaryService.upload(file));
-        category.setParent(Optional.ofNullable(request.getParentId())
-                .map(this::getCategoryById)
-                .orElse(null));
 
-        Category savedCategory = categoryRepository.save(category);
-        log.info("Updated address with id {}", savedCategory.getId());
-        return categoryMapper.toCategoryResponse(savedCategory);
+        Long currentParentId = (category.getParent() != null) ? category.getParent().getId() : null;
+        Long newParentId = request.getParentId();
+
+        if (Objects.equals(currentParentId, newParentId)) {
+            Category savedCategory = categoryRepository.save(category);
+            log.info("Updated category (no parent change) with id {}", savedCategory.getId());
+            return categoryMapper.toCategoryResponse(savedCategory);
+        } else {
+            String oldPath = category.getPath();
+            String newPath = category.getId() + "/";
+            Category newParent = null;
+
+            if (newParentId != null) {
+                newParent = getCategoryById(newParentId);
+                if (newParent.getPath().startsWith(oldPath)) {
+                    throw new AppException(ErrorCode.CANNOT_MOVE_PARENT_TO_CHILD);
+                }
+                newPath = newParent.getPath() + newPath;
+            }
+
+            category.setParent(newParent);
+            category.setPath(newPath);
+
+            Category savedCategory = categoryRepository.save(category);
+            categoryRepository.updateDescendantPaths(oldPath + "%", newPath, oldPath.length());
+
+            log.info("Updated category AND MOVED tree with id {}", savedCategory.getId());
+            return categoryMapper.toCategoryResponse(savedCategory);
+        }
     }
 
     @Override
+    @Transactional
     public void updateCategoryStatus(Long id, String status) {
         Category category = getCategoryById(id);
 
@@ -113,21 +146,20 @@ public class CategoryServiceImpl implements CategoryService {
             throw new AppException(ErrorCode.INVALID_ENUM_VALUE);
         }
 
-        CategoryStatusEnum newStatus = CategoryStatusEnum.valueOf(status.toUpperCase());
+        String pathWithWildcard = category.getPath() + "%";
 
-        if (category.getStatus() == newStatus) {
-            log.warn("Category id = {} already has status = {}", id, newStatus);
-            return;
-        }
-
-        category.setStatus(CategoryStatusEnum.valueOf(status));
-        categoryRepository.save(category);
-        log.info("Updated status for category id = {}: {}", category.getId(), newStatus);
-
-        if (newStatus == CategoryStatusEnum.ACTIVE) {
-            activateDescendants(category.getId());
+        if (CategoryStatusEnum.INACTIVE.name().equalsIgnoreCase(status)) {
+            category.setStatus(CategoryStatusEnum.INACTIVE_MANUAL);
+            categoryRepository.save(category);
+            categoryRepository.updateDescendantStatusesByPath(
+                    pathWithWildcard, category.getId(), CategoryStatusEnum.INACTIVE_CASCADE, CategoryStatusEnum.ACTIVE);
+        } else if (CategoryStatusEnum.ACTIVE.name().equalsIgnoreCase(status)) {
+            category.setStatus(CategoryStatusEnum.ACTIVE);
+            categoryRepository.save(category);
+            categoryRepository.updateDescendantStatusesByPath(
+                    pathWithWildcard, category.getId(), CategoryStatusEnum.ACTIVE, CategoryStatusEnum.INACTIVE_CASCADE);
         } else {
-            inactivateDescendants(category.getId());
+            throw new RuntimeException("status action is invalid!");
         }
     }
 
@@ -154,44 +186,6 @@ public class CategoryServiceImpl implements CategoryService {
     private Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
-    }
-
-    private void inactivateDescendants(Long parentId) {
-        List<Category> activeChildren = categoryRepository
-                .findByParentIdAndStatusAndDeletedAtIsNull(parentId, CategoryStatusEnum.ACTIVE);
-
-        if (activeChildren.isEmpty()) {
-            return;
-        }
-
-        for (Category child : activeChildren) {
-            child.setStatus(CategoryStatusEnum.INACTIVE_CASCADE);
-        }
-        categoryRepository.saveAll(activeChildren);
-        log.info("  -> Cascaded INACTIVE for {} children of parent id = {}", activeChildren.size(), parentId);
-
-        for (Category child : activeChildren) {
-            inactivateDescendants(child.getId());
-        }
-    }
-
-    private void activateDescendants(Long parentId) {
-        List<Category> cascadedChildren = categoryRepository
-                .findByParentIdAndStatusAndDeletedAtIsNull(parentId, CategoryStatusEnum.INACTIVE_CASCADE);
-
-        if (cascadedChildren.isEmpty()) {
-            return;
-        }
-
-        for (Category child : cascadedChildren) {
-            child.setStatus(CategoryStatusEnum.ACTIVE);
-        }
-        categoryRepository.saveAll(cascadedChildren);
-        log.info("  -> Cascaded ACTIVE for {} children of parent id = {}", cascadedChildren.size(), parentId);
-
-        for (Category child : cascadedChildren) {
-            activateDescendants(child.getId());
-        }
     }
 
 }
