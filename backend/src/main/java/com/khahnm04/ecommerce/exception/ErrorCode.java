@@ -52,6 +52,9 @@ public enum ErrorCode {
 
     BANNER_NOT_FOUND(1400, "banner not found", HttpStatus.NOT_FOUND),
     BANNER_EXISTED(1401, "banner already existed", HttpStatus.CONFLICT),
+
+    NEWS_NOT_FOUND(1500, "news not found", HttpStatus.NOT_FOUND),
+    NEWS_EXISTED(1501, "news already existed", HttpStatus.CONFLICT),
     ;
 
     private final Integer code;

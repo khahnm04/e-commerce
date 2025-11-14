@@ -5,7 +5,6 @@ import com.khahnm04.ecommerce.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-
 import java.util.List;
 
 @Entity
