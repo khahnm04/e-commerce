@@ -32,7 +32,7 @@ public class BrandServiceImpl implements BrandService {
     private final CloudinaryService cloudinaryService;
 
     @Override
-    public BrandResponse createBrand(BrandRequest request, MultipartFile file) {
+    public BrandResponse createBrand(BrandRequest request) {
         if (brandRepository.existsBySlug(request.getSlug())) {
             throw new AppException(ErrorCode.BRAND_EXISTED);
         }
@@ -41,7 +41,7 @@ public class BrandServiceImpl implements BrandService {
         }
 
         Brand brand = brandMapper.fromBrandRequesttoBrand(request);
-        brand.setLogo(cloudinaryService.upload(file));
+        brand.setLogo(cloudinaryService.upload(request.getLogo()));
 
         Brand savedBrand = brandRepository.save(brand);
         log.info("Brand created with id = {}", savedBrand.getId());
@@ -123,6 +123,14 @@ public class BrandServiceImpl implements BrandService {
         Brand brand = getBrandById(id);
         brandRepository.delete(brand);
         log.info("Deleted brand with id {}", id);
+    }
+
+    @Override
+    public void restoreBrand(Long id) {
+        Brand brand = getBrandById(id);
+        brand.setDeletedAt(null);
+        brandRepository.save(brand);
+        log.info("Brand restored with id {}", id);
     }
 
     private Brand getBrandById(Long id) {

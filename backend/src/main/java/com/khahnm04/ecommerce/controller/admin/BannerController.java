@@ -25,11 +25,10 @@ public class BannerController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<BannerResponse> createBanner(
-            @Valid BannerRequest request,
-            @RequestPart(value = "image", required = false) MultipartFile file
+            @Valid @ModelAttribute BannerRequest request
     ) {
         return ApiResponse.<BannerResponse>builder()
-                .data(bannerService.createBanner(request, file))
+                .data(bannerService.createBanner(request))
                 .message("banner created successfully")
                 .build();
     }
@@ -122,6 +121,14 @@ public class BannerController {
         bannerService.deleteBanner(id);
         return ApiResponse.<Void>builder()
                 .message("deleted banner")
+                .build();
+    }
+
+    @PatchMapping("/{id}/restore")
+    public ApiResponse<Void> restoreBanner(@PathVariable Long id) {
+        bannerService.restoreBanner(id);
+        return ApiResponse.<Void>builder()
+                .message("banner restored successfully")
                 .build();
     }
 

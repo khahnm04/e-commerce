@@ -2,7 +2,6 @@ package com.khahnm04.ecommerce.service.auth.role;
 
 import com.khahnm04.ecommerce.dto.request.auth.RoleRequest;
 import com.khahnm04.ecommerce.dto.response.auth.RoleResponse;
-
 import java.util.List;
 
 public interface RoleService {

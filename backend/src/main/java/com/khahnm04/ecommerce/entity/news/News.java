@@ -19,13 +19,13 @@ public class News extends BaseEntity<Long> {
     @Column(name = "slug", nullable = false, unique = true)
     private String slug;
 
-    @Column(name = "title", length = 500)
+    @Column(name = "title", nullable = false, length = 500)
     private String title;
 
     @Column(name = "image", columnDefinition = "TEXT")
     private String image;
 
-    @Column(name = "content", columnDefinition = "TEXT")
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
 
     @ColumnDefault("'PENDING'")

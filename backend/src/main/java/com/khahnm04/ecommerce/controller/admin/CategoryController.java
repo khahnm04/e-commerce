@@ -25,11 +25,10 @@ public class CategoryController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<CategoryResponse> createCategory(
-            @Valid CategoryRequest request,
-            @RequestPart(value = "image", required = false) MultipartFile file
+            @Valid @ModelAttribute CategoryRequest request
     ) {
         return ApiResponse.<CategoryResponse>builder()
-                .data(categoryService.createCategory(request, file))
+                .data(categoryService.createCategory(request))
                 .message("category created successfully")
                 .build();
     }
@@ -122,6 +121,14 @@ public class CategoryController {
         categoryService.deleteCategory(id);
         return ApiResponse.<Void>builder()
                 .message("deleted category")
+                .build();
+    }
+
+    @PatchMapping("/{id}/restore")
+    public ApiResponse<Void> restoreCategory(@PathVariable Long id) {
+        categoryService.restoreCategory(id);
+        return ApiResponse.<Void>builder()
+                .message("category restored successfully")
                 .build();
     }
 

@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface NewsService {
 
-    NewsResponse createNews(NewsRequest request, MultipartFile file);
+    NewsResponse createNews(NewsRequest request);
     PageResponse<NewsResponse> getAllNews(int page, int size, String sort);
     PageResponse<NewsResponse> getAllDeletedNews(int page, int size, String sort);
     NewsResponse getNewsDetailById(Long id);
@@ -16,5 +16,6 @@ public interface NewsService {
     void updateNewsStatus(Long id, String status);
     void softDeleteNews(Long id);
     void deleteNews(Long id);
+    void restoreNews(Long id);
 
 }

@@ -1,7 +1,6 @@
 package com.khahnm04.ecommerce.entity.category;
 
 import com.khahnm04.ecommerce.common.enums.CategoryStatusEnum;
-import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

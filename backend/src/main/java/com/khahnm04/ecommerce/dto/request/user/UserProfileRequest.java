@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class ProfileRequest implements Serializable {
+public class UserProfileRequest implements Serializable {
 
     @NotBlank(message = "fullName cannot be blank")
     private String fullName;

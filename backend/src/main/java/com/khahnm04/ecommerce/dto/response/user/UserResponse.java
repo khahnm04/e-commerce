@@ -2,20 +2,20 @@ package com.khahnm04.ecommerce.dto.response.user;
 
 import com.khahnm04.ecommerce.common.enums.GenderEnum;
 import com.khahnm04.ecommerce.common.enums.StatusEnum;
+import com.khahnm04.ecommerce.dto.response.BaseResponse;
 import lombok.*;
-import java.io.Serializable;
+import lombok.experimental.SuperBuilder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse implements Serializable {
+public class UserResponse extends BaseResponse<Long> {
 
-    private Long id;
     private String fullName;
     private String email;
     private String phoneNumber;
@@ -24,11 +24,6 @@ public class UserResponse implements Serializable {
     private GenderEnum gender;
     private StatusEnum status;
     private LocalDateTime lastLoginAt;
-    private LocalDateTime createdAt;
-    private Long createdBy;
-    private LocalDateTime updatedAt;
-    private Long updatedBy;
-    private LocalDateTime deletedAt;
     private Set<String> roles;
 
 }

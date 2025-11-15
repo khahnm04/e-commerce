@@ -2,10 +2,10 @@ package com.khahnm04.ecommerce.service.user;
 
 import com.khahnm04.ecommerce.dto.request.user.AddressUserRequest;
 import com.khahnm04.ecommerce.dto.request.user.ChangePasswordRequest;
-import com.khahnm04.ecommerce.dto.request.user.ProfileRequest;
+import com.khahnm04.ecommerce.dto.request.user.UserProfileRequest;
 import com.khahnm04.ecommerce.dto.request.user.UserRequest;
 import com.khahnm04.ecommerce.dto.response.user.AddressUserResponse;
-import com.khahnm04.ecommerce.dto.response.user.ProfileResponse;
+import com.khahnm04.ecommerce.dto.response.user.UserProfileResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
 import com.khahnm04.ecommerce.dto.response.user.UserResponse;
 import com.khahnm04.ecommerce.entity.user.Address;
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     private final AddressMapper addressMapper;
 
     @Override
-    public UserResponse createUser(UserRequest request, MultipartFile file) {
+    public UserResponse createUser(UserRequest request) {
         if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new AppException(ErrorCode.PHONE_NUMBER_EXISTED);
         }
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.fromUserRequestToUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setAvatar(cloudinaryService.upload(file));
+        user.setAvatar(cloudinaryService.upload(request.getAvatar()));
         assignRoleToUser(user, request.getRoles());
 
         User savedUser = userRepository.save(user);
@@ -81,6 +81,15 @@ public class UserServiceImpl implements UserService {
         Page<User> userPage = userRepository.findAllByDeletedAtIsNotNull(pageable);
         Page<UserResponse> dtoPage = userPage.map(this::buildUserResponse);
         return PageResponse.fromPage(dtoPage);
+    }
+
+    @Override
+    public List<AddressUserResponse> getAllAddressesByUserId(Long id) {
+        User user = getUserById(id);
+        List<Address> addresses = user.getAddresses();
+        return addresses.stream()
+                .map(addressMapper::toAddressResponse)
+                .toList();
     }
 
     @Override
@@ -148,13 +157,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ProfileResponse getProfile() {
+    public UserProfileResponse getProfile() {
         User user = getCurrentUser();
         return userMapper.fromUserToProfileResponse(user);
     }
 
     @Override
-    public ProfileResponse updateProfile(ProfileRequest request) {
+    public UserProfileResponse updateProfile(UserProfileRequest request) {
         User user = getCurrentUser();
 
         if (!Objects.equals(user.getEmail(), request.getEmail())

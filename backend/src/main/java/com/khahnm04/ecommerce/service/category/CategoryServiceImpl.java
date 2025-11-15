@@ -18,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -34,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public CategoryResponse createCategory(CategoryRequest request, MultipartFile file) {
+    public CategoryResponse createCategory(CategoryRequest request) {
         if (categoryRepository.existsBySlug(request.getSlug())) {
             throw new AppException(ErrorCode.CATEGORY_EXISTED);
         }
@@ -43,7 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         Category category = categoryMapper.fromCategoryRequestToCategory(request);
-        category.setImage(cloudinaryService.upload(file));
+        category.setImage(cloudinaryService.upload(request.getImage()));
 
         category.setParent(Optional.ofNullable(request.getParentId())
                         .map(this::getCategoryById)
@@ -181,6 +180,14 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = getCategoryById(id);
         categoryRepository.delete(category);
         log.info("Category with id {} has been deleted", id);
+    }
+
+    @Override
+    public void restoreCategory(Long id) {
+        Category category = getCategoryById(id);
+        category.setDeletedAt(null);
+        categoryRepository.save(category);
+        log.info("Category restored with id {}", id);
     }
 
     private Category getCategoryById(Long id) {

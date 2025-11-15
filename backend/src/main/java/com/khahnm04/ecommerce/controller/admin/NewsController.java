@@ -25,11 +25,10 @@ public class NewsController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<NewsResponse> createNews(
-            @Valid NewsRequest request,
-            @RequestPart(value = "image", required = false) MultipartFile file
+            @Valid @ModelAttribute NewsRequest request
     ) {
         return ApiResponse.<NewsResponse>builder()
-                .data(newsService.createNews(request, file))
+                .data(newsService.createNews(request))
                 .message("news created successfully")
                 .build();
     }
@@ -122,6 +121,14 @@ public class NewsController {
         newsService.deleteNews(id);
         return ApiResponse.<Void>builder()
                 .message("deleted news")
+                .build();
+    }
+
+    @PatchMapping("/{id}/restore")
+    public ApiResponse<Void> restoreNews(@PathVariable Long id) {
+        newsService.restoreNews(id);
+        return ApiResponse.<Void>builder()
+                .message("news restored successfully")
                 .build();
     }
 

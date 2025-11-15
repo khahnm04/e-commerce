@@ -1,11 +1,11 @@
 package com.khahnm04.ecommerce.dto.request.category;
 
 import com.khahnm04.ecommerce.common.enums.CategoryStatusEnum;
-import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.common.validation.enums.ValidEnum;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 
@@ -23,6 +23,8 @@ public class CategoryRequest implements Serializable {
     private String name;
 
     private String description;
+
+    private MultipartFile image;
 
     @ValidEnum(name = "status", enumClass = CategoryStatusEnum.class)
     private String status;

@@ -26,11 +26,10 @@ public class BrandController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<BrandResponse> createBrand(
-        @Valid BrandRequest request,
-        @RequestPart(value = "logo", required = false) MultipartFile file
+        @Valid @ModelAttribute BrandRequest request
     ) {
         return ApiResponse.<BrandResponse>builder()
-                .data(brandService.createBrand(request, file))
+                .data(brandService.createBrand(request))
                 .message("brand created successfully")
                 .build();
     }
@@ -123,6 +122,16 @@ public class BrandController {
         brandService.deleteBrand(id);
         return ApiResponse.<Void>builder()
                 .message("deleted brand")
+                .build();
+    }
+
+    @PatchMapping("/{id}/restore")
+    public ApiResponse<Void> restoreUser(
+            @PathVariable Long id
+    ) {
+        brandService.restoreBrand(id);
+        return ApiResponse.<Void>builder()
+                .message("brand restored successfully")
                 .build();
     }
 

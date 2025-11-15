@@ -13,10 +13,12 @@ import com.khahnm04.ecommerce.service.upload.CloudinaryService;
 import com.khahnm04.ecommerce.common.util.SortUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -32,7 +34,7 @@ public class BannerServiceImpl implements BannerService {
     private final CloudinaryService cloudinaryService;
 
     @Override
-    public BannerResponse createBanner(BannerRequest request, MultipartFile file) {
+    public BannerResponse createBanner(BannerRequest request) {
         if (bannerRepository.existsBySlug(request.getSlug())) {
             throw new AppException(ErrorCode.BANNER_EXISTED);
         }
@@ -41,7 +43,7 @@ public class BannerServiceImpl implements BannerService {
         }
 
         Banner banner = bannerMapper.fromBannerRequestToBanner(request);
-        banner.setImage(cloudinaryService.upload(file));
+        banner.setImage(cloudinaryService.upload(request.getImage()));
 
         Banner savedBanner = bannerRepository.save(banner);
         log.info("Banner created with id = {}", savedBanner.getId());
@@ -125,6 +127,14 @@ public class BannerServiceImpl implements BannerService {
         Banner banner = getBannerById(id);
         bannerRepository.delete(banner);
         log.info("Deleted banner with id {}", id);
+    }
+
+    @Override
+    public void restoreBanner(Long id) {
+        Banner banner = getBannerById(id);
+        banner.setDeletedAt(null);
+        bannerRepository.save(banner);
+        log.info("Banner restored with id {}", id);
     }
 
     private Banner getBannerById(Long id) {

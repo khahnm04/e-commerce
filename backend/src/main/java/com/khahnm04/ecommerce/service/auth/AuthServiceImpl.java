@@ -28,7 +28,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -138,8 +137,6 @@ public class AuthServiceImpl implements AuthService {
 
             User user = userRepository.findByIdentifier(signedJWT.getJWTClaimsSet().getSubject())
                     .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
-
-            clearAccessTokenCookie(response);
 
             TokenPayload accessToken = jwtService.generateAccessToken(user);
             addAccessTokenCookies(response, accessToken.getToken());

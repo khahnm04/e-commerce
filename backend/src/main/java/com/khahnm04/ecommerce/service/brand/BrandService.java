@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface BrandService {
 
-    BrandResponse createBrand(BrandRequest request, MultipartFile file);
+    BrandResponse createBrand(BrandRequest request);
     PageResponse<BrandResponse> getAllBrands(int page, int size, String sort);
     PageResponse<BrandResponse> getAllDeletedBrands(int page, int size, String sort);
     BrandResponse getBrandDetailById(Long id);
@@ -16,5 +16,6 @@ public interface BrandService {
     void updateBrandStatus(Long id, String status);
     void softDeleteBrand(Long id);
     void deleteBrand(Long id);
+    void restoreBrand(Long id);
 
 }

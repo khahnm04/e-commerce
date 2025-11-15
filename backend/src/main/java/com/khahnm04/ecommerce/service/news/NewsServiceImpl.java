@@ -32,13 +32,13 @@ public class NewsServiceImpl implements NewsService {
     private final CloudinaryService cloudinaryService;
 
     @Override
-    public NewsResponse createNews(NewsRequest request, MultipartFile file) {
+    public NewsResponse createNews(NewsRequest request) {
         if (newsRepository.existsBySlug(request.getSlug())) {
             throw new AppException(ErrorCode.NEWS_EXISTED);
         }
 
         News news = newsMapper.fromNewsRequestToNews(request);
-        news.setImage(cloudinaryService.upload(file));
+        news.setImage(cloudinaryService.upload(request.getImage()));
 
         News savedNews = newsRepository.save(news);
         log.info("News created with id = {}", savedNews.getId());
@@ -119,6 +119,14 @@ public class NewsServiceImpl implements NewsService {
         News news = getNewsById(id);
         newsRepository.delete(news);
         log.info("Deleted news with id {}", id);
+    }
+
+    @Override
+    public void restoreNews(Long id) {
+        News news = getNewsById(id);
+        news.setDeletedAt(null);
+        newsRepository.save(news);
+        log.info("News restored with id {}", id);
     }
 
     private News getNewsById(Long id) {

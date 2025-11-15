@@ -1,51 +1,37 @@
 package com.khahnm04.ecommerce.mapper;
 
-import com.khahnm04.ecommerce.common.enums.GenderEnum;
-import com.khahnm04.ecommerce.common.enums.StatusEnum;
-import com.khahnm04.ecommerce.dto.request.user.ProfileRequest;
+import com.khahnm04.ecommerce.dto.request.user.UserProfileRequest;
 import com.khahnm04.ecommerce.dto.request.auth.RegisterRequest;
 import com.khahnm04.ecommerce.dto.request.user.UserRequest;
-import com.khahnm04.ecommerce.dto.response.user.ProfileResponse;
+import com.khahnm04.ecommerce.dto.response.user.UserProfileResponse;
 import com.khahnm04.ecommerce.dto.response.user.UserResponse;
 import com.khahnm04.ecommerce.entity.user.User;
 import org.mapstruct.*;
 
-import java.util.Objects;
-
-@Mapper(componentModel = "spring", imports = {StatusEnum.class, GenderEnum.class})
+@Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    default User fromUserRequestToUser(UserRequest request) {
-        if (request == null) return null;
-
-        request.setGender(Objects.requireNonNullElse(request.getGender(), GenderEnum.UNKNOWN));
-        request.setStatus(Objects.requireNonNullElse(request.getStatus(), StatusEnum.ACTIVE));
-
-        User user = User.builder()
-                .gender(request.getGender())
-                .status(request.getStatus())
-                .build();
-
-        updateUser(user, request);
-        return user;
-    }
+    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "avatar", ignore = true)
+    @Mapping(target = "status", constant = "ACTIVE")
+    @Mapping(target = "gender", constant = "UNKNOWN")
+    User fromUserRequestToUser(UserRequest request);
 
     @Mapping(target = "roles", ignore = true)
     UserResponse fromUserToUserResponse(User user);
 
     @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "avatar", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateUser(@MappingTarget User user, UserRequest request);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateProfile(@MappingTarget User user, ProfileRequest request);
+    void updateProfile(@MappingTarget User user, UserProfileRequest request);
 
-    ProfileResponse fromUserToProfileResponse(User user);
+    UserProfileResponse fromUserToProfileResponse(User user);
 
-    @Mapping(target = "status", expression = "java(StatusEnum.ACTIVE)")
-    @Mapping(target = "gender", expression = "java(GenderEnum.UNKNOWN)")
+    @Mapping(target = "status", constant = "ACTIVE")
+    @Mapping(target = "gender", constant = "UNKNOWN")
     User fromRegisterRequestToUser(RegisterRequest request);
-
-    UserRequest fromProfileRequestToUserRequest(ProfileRequest request);
 
 }

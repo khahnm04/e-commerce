@@ -8,6 +8,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
 
+    @Mapping(target = "image", ignore = true)
     @Mapping(target = "status", constant = "ACTIVE")
     Category fromCategoryRequestToCategory(CategoryRequest request);
 
@@ -18,6 +19,7 @@ public interface CategoryMapper {
     @Mapping(target = "parentId", expression = "java(getParentId(category))")
     CategoryResponse toCategoryResponse(Category category);
 
+    @Mapping(target = "image", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateCategory(@MappingTarget Category category, CategoryRequest request);
 

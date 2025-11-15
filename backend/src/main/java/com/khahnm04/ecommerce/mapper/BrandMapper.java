@@ -8,9 +8,11 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface BrandMapper {
 
+    @Mapping(target = "logo", ignore = true)
     @Mapping(target = "status", constant = "ACTIVE")
     Brand fromBrandRequesttoBrand(BrandRequest request);
 
+    @Mapping(target = "logo", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateBrand(@MappingTarget Brand brand, BrandRequest request);
 

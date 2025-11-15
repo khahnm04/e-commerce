@@ -2,6 +2,7 @@ package com.khahnm04.ecommerce.dto.request.news;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -16,7 +17,7 @@ public class NewsRequest {
     @NotBlank(message = "title cannot be blank")
     private String title;
 
-    private String image;
+    private MultipartFile image;
 
     @NotBlank(message = "content cannot be blank")
     private String content;

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder
-public class ProfileResponse implements Serializable {
+public class UserProfileResponse implements Serializable {
 
     private Long id;
     private String fullName;

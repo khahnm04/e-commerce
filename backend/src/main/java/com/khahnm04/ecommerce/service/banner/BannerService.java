@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface BannerService {
 
-    BannerResponse createBanner(BannerRequest request, MultipartFile file);
+    BannerResponse createBanner(BannerRequest request);
     PageResponse<BannerResponse> getAllBanners(int page, int size, String sort);
     PageResponse<BannerResponse> getAllDeletedBanners(int page, int size, String sort);
     BannerResponse getBannerDetailById(Long id);
@@ -16,5 +16,6 @@ public interface BannerService {
     void updateBannerStatus(Long id, String status);
     void softDeleteBanner(Long id);
     void deleteBanner(Long id);
+    void restoreBanner(Long id);
 
 }

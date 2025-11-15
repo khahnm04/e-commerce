@@ -2,10 +2,10 @@ package com.khahnm04.ecommerce.controller.client;
 
 import com.khahnm04.ecommerce.dto.request.user.AddressUserRequest;
 import com.khahnm04.ecommerce.dto.request.user.ChangePasswordRequest;
-import com.khahnm04.ecommerce.dto.request.user.ProfileRequest;
+import com.khahnm04.ecommerce.dto.request.user.UserProfileRequest;
 import com.khahnm04.ecommerce.dto.response.*;
 import com.khahnm04.ecommerce.dto.response.user.AddressUserResponse;
-import com.khahnm04.ecommerce.dto.response.user.ProfileResponse;
+import com.khahnm04.ecommerce.dto.response.user.UserProfileResponse;
 import com.khahnm04.ecommerce.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,18 +24,18 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/profile")
-    public ApiResponse<ProfileResponse> getProfile() {
-        return ApiResponse.<ProfileResponse>builder()
+    public ApiResponse<UserProfileResponse> getProfile() {
+        return ApiResponse.<UserProfileResponse>builder()
                 .data(userService.getProfile())
                 .message("get my profile successfully")
                 .build();
     }
 
     @PutMapping("/profile/update")
-    public ApiResponse<ProfileResponse> updateProfile(
-        @Valid @RequestBody ProfileRequest request
+    public ApiResponse<UserProfileResponse> updateProfile(
+        @Valid @RequestBody UserProfileRequest request
     ) {
-        return ApiResponse.<ProfileResponse>builder()
+        return ApiResponse.<UserProfileResponse>builder()
                 .data(userService.updateProfile(request))
                 .message("updated my profile successfully")
                 .build();

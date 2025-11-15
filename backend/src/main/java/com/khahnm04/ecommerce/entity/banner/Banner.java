@@ -22,7 +22,7 @@ public class Banner extends BaseEntity<Long> {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "image", columnDefinition = "TEXT")
+    @Column(name = "image", nullable = false, columnDefinition = "TEXT")
     private String image;
 
     @ColumnDefault("'ACTIVE'")

@@ -4,6 +4,7 @@ import com.khahnm04.ecommerce.common.enums.StatusEnum;
 import com.khahnm04.ecommerce.dto.request.user.UserRequest;
 import com.khahnm04.ecommerce.dto.response.ApiResponse;
 import com.khahnm04.ecommerce.dto.response.PageResponse;
+import com.khahnm04.ecommerce.dto.response.user.AddressUserResponse;
 import com.khahnm04.ecommerce.dto.response.user.UserResponse;
 import com.khahnm04.ecommerce.service.user.UserService;
 import jakarta.validation.Valid;
@@ -27,11 +28,10 @@ public class AdminUserController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<UserResponse> createUser(
-            @Valid @RequestPart("data") UserRequest request,
-            @RequestPart(value = "avatar", required = false) MultipartFile file
+            @Valid @ModelAttribute UserRequest request
     ) {
         return ApiResponse.<UserResponse>builder()
-                .data(userService.createUser(request, file))
+                .data(userService.createUser(request))
                 .message("user created successfully")
                 .build();
     }
@@ -40,7 +40,7 @@ public class AdminUserController {
     public ApiResponse<List<UserResponse>> getAllUsers(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt,asc") String sort
+            @RequestParam(defaultValue = "createdAt,desc") String sort
     ) {
         PageResponse<UserResponse> pageResponse = userService.getAllUsers(page - 1, size, sort);
         return ApiResponse.<List<UserResponse>>builder()
@@ -54,12 +54,22 @@ public class AdminUserController {
     public ApiResponse<List<UserResponse>> getAllDeletedUsers(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "createdAt,asc") String sort
+            @RequestParam(defaultValue = "createdAt,desc") String sort
     ) {
         PageResponse<UserResponse> pageResponse = userService.getAllDeletedUsers(page - 1, size, sort);
         return ApiResponse.<List<UserResponse>>builder()
                 .meta(pageResponse.getMeta())
                 .data(pageResponse.getData())
+                .message("get all users successfully")
+                .build();
+    }
+
+    @GetMapping("/{id}/addresses")
+    public ApiResponse<List<AddressUserResponse>> getAllAddressesByUserId(
+            @PathVariable Long id
+    ) {
+        return ApiResponse.<List<AddressUserResponse>>builder()
+                .data(userService.getAllAddressesByUserId(id))
                 .message("get all users successfully")
                 .build();
     }
@@ -119,7 +129,7 @@ public class AdminUserController {
                 .build();
     }
 
-    @PostMapping("/{id}/restore")
+    @PatchMapping("/{id}/restore")
     public ApiResponse<Void> restoreUser(
             @PathVariable Long id
     ) {

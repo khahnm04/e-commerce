@@ -8,9 +8,11 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface NewsMapper {
 
+    @Mapping(target = "image", ignore = true)
     @Mapping(target = "status", constant = "PENDING")
     News fromNewsRequestToNews(NewsRequest request);
 
+    @Mapping(target = "image", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateNews(@MappingTarget News news, NewsRequest request);
 

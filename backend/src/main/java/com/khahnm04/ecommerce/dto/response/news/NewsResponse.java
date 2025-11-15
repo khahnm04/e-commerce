@@ -1,5 +1,6 @@
 package com.khahnm04.ecommerce.dto.response.news;
 
+import com.khahnm04.ecommerce.common.enums.NewsStatusEnum;
 import com.khahnm04.ecommerce.dto.response.BaseResponse;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -15,6 +16,6 @@ public class NewsResponse extends BaseResponse<Long> {
     private String title;
     private String image;
     private String content;
-    private String status;
+    private NewsStatusEnum status;
 
 }
