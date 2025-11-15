@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.config;
 
-import com.khahnm04.ecommerce.service.auth.CustomUserDetailsService;
+import com.khahnm04.ecommerce.modules.auth.application.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

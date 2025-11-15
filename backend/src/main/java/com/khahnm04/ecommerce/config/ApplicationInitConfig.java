@@ -1,8 +1,8 @@
 package com.khahnm04.ecommerce.config;
 
-import com.khahnm04.ecommerce.entity.user.User;
-import com.khahnm04.ecommerce.common.enums.RoleEnum;
-import com.khahnm04.ecommerce.repository.UserRepository;
+import com.khahnm04.ecommerce.modules.user.domain.entity.User;
+import com.khahnm04.ecommerce.shared.common.enums.RoleEnum;
+import com.khahnm04.ecommerce.modules.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;

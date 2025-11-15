@@ -1,0 +1,21 @@
+package com.khahnm04.ecommerce.modules.brand.application.service;
+
+import com.khahnm04.ecommerce.modules.brand.request.BrandRequest;
+import com.khahnm04.ecommerce.modules.brand.response.BrandResponse;
+import com.khahnm04.ecommerce.shared.dto.PageResponse;
+import org.springframework.web.multipart.MultipartFile;
+
+public interface BrandService {
+
+    BrandResponse createBrand(BrandRequest request);
+    PageResponse<BrandResponse> getAllBrands(int page, int size, String sort);
+    PageResponse<BrandResponse> getAllDeletedBrands(int page, int size, String sort);
+    BrandResponse getBrandDetailById(Long id);
+    BrandResponse getBrandDetailBySlug(String slug);
+    BrandResponse updateBrand(Long id, BrandRequest request, MultipartFile file);
+    void updateBrandStatus(Long id, String status);
+    void softDeleteBrand(Long id);
+    void deleteBrand(Long id);
+    void restoreBrand(Long id);
+
+}

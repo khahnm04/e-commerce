@@ -3,7 +3,7 @@ package com.khahnm04.ecommerce.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.khahnm04.ecommerce.dto.response.ErrorResponse;
+import com.khahnm04.ecommerce.shared.dto.ErrorResponse;
 import com.khahnm04.ecommerce.exception.ErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

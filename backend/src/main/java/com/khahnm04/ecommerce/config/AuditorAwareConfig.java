@@ -8,7 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 import java.util.Optional;
-import com.khahnm04.ecommerce.entity.user.User;
+import com.khahnm04.ecommerce.modules.user.domain.entity.User;
 
 @Slf4j
 @Component

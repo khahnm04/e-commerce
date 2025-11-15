@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.exception;
 
-import com.khahnm04.ecommerce.dto.response.ErrorResponse;
+import com.khahnm04.ecommerce.shared.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
