@@ -1,6 +1,6 @@
 package com.khahnm04.ecommerce.config;
 
-import com.khahnm04.ecommerce.shared.common.constant.TokenConstants;
+import com.khahnm04.ecommerce.common.constant.TokenConstants;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
