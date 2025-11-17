@@ -55,6 +55,9 @@ public enum ErrorCode {
 
     NEWS_NOT_FOUND(1500, "news not found", HttpStatus.NOT_FOUND),
     NEWS_EXISTED(1501, "news already existed", HttpStatus.CONFLICT),
+
+    PRODUCT_NOT_FOUND(1600, "product not found", HttpStatus.NOT_FOUND),
+    PRODUCT_EXISTED(1601, "product already existed", HttpStatus.CONFLICT),
     ;
 
     private final Integer code;
