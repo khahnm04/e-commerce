@@ -1,3 +1,6 @@
 [submodule "e-commerce-backend"]
 	path = e-commerce-backend
 	url = git@github.com:khahnm04/e-commerce-backend.git
+[submodule "e-commerce-frontend-client"]
+	path = e-commerce-frontend-client
+	url = git@github.com:khahnm04/e-commerce-frontend-client.git
